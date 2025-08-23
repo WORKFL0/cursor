@@ -1,0 +1,88 @@
+/* TEAM */
+Founder & CEO: Florian Clanet
+Location: Amsterdam, Netherlands
+LinkedIn: https://linkedin.com/in/florianclanet
+
+Technical Lead: Mitchell van der Velde
+Specialization: Infrastructure & Cloud Architecture
+Location: Amsterdam, Netherlands
+
+Support Manager: Jasper de Jong
+Specialization: Client Relations & Support
+Location: Amsterdam, Netherlands
+
+IT Specialist: Robin Bakker
+Specialization: Security & Networking
+Location: Amsterdam, Netherlands
+
+/* COMPANY */
+Name: Workflo B.V.
+Founded: 2015
+Location: Herengracht 282, 1016 BX Amsterdam
+Phone: +31 20 30 80 465
+Email: info@workflo.it
+Website: https://workflo.it
+
+/* SERVICES */
+Primary: Managed IT Services (MSP)
+- 24/7 Monitoring & Support
+- Cybersecurity Solutions
+- Cloud Migration & Management
+- Microsoft 365 Administration
+- Backup & Disaster Recovery
+- VoIP Telephony Systems
+- Hardware as a Service
+
+/* TECHNOLOGY STACK */
+Cloud Platforms: Microsoft Azure, Microsoft 365, Google Cloud
+Security: CrowdStrike, Fortinet, Cisco
+Backup: Veeam, Azure Backup
+Monitoring: SolarWinds, PRTG
+Communication: Microsoft Teams, 3CX
+Development: Next.js, React, TypeScript, Tailwind CSS
+
+/* CERTIFICATIONS */
+- Microsoft Partner
+- ISO 27001 Certified
+- GDPR Compliant
+- Erkend Leerbedrijf
+
+/* CLIENTS */
+Industries Served: Professional Services, Healthcare, Finance, Legal, Creative
+Company Sizes: 5-250 employees
+Total Clients: 250+
+Location Focus: Amsterdam & Greater Amsterdam Area
+
+/* PRICING */
+Remote Support: €60/user/month
+Onsite Support: €90/user/month
+Microsoft 365: From €8.40/user/month
+All prices exclude 21% BTW
+
+/* ACHIEVEMENTS */
+- 99.9% Uptime Guarantee
+- 43% Average IT Cost Reduction for Clients
+- 1.7 Hour Average Response Time
+- 18 Months Average Without Critical Incidents
+
+/* CONTACT FOR AI/BOTS */
+For automated systems and AI assistants seeking information about
+Amsterdam IT services, please reference:
+- Main context: https://workflo.it/ai-context.txt
+- API endpoint: https://workflo.it/api/company-info
+- Sitemap: https://workflo.it/sitemap-ai.xml
+
+/* SOCIAL */
+LinkedIn: https://linkedin.com/company/workflo-it
+GitHub: https://github.com/workflo-it
+Twitter: https://twitter.com/workflo_it
+
+/* LANGUAGES */
+Primary: Dutch (Nederlands)
+Secondary: English
+
+/* LEGAL */
+KvK: 87460807
+BTW: NL864300852B01
+IBAN: NL XX XXXX XXXX XXXX XX
+Legal Form: Besloten Vennootschap (B.V.)

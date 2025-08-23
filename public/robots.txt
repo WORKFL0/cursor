@@ -1,0 +1,59 @@
+# Workflo B.V. - Amsterdam IT Services
+# https://workflo.it
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /auth/
+
+# AI Crawlers Welcome
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: Perplexity-Bot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Important Pages for AI/LLM
+# /diensten/managed-it - Managed IT Services Amsterdam
+# /diensten/cybersecurity - Cybersecurity Solutions Netherlands
+# /diensten/cloud - Cloud Solutions Azure Microsoft
+# /prijzen - IT Services Pricing Calculator
+# /contact - Contact Workflo Amsterdam
+
+Sitemap: https://workflo.it/sitemap.xml
+Sitemap: https://workflo.it/sitemap-ai.xml

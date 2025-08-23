@@ -1,0 +1,430 @@
+export interface Testimonial {
+  id: string
+  name: string
+  nameNL: string
+  company: string
+  role: string
+  roleNL: string
+  quote: string
+  quoteNL: string
+  rating: number
+  image?: string
+  featured?: boolean
+  service?: string
+  serviceNL?: string
+  date: string
+}
+
+export const testimonials: Testimonial[] = [
+  {
+    id: '1',
+    name: 'Esther van der Plas',
+    nameNL: 'Esther van der Plas',
+    company: 'doctorfeelgood',
+    role: 'Managing Director',
+    roleNL: 'Managing Director',
+    quote: 'Every business needs Workflo. They are the IT Masters. Fast, knowledgeable, to the point, down to earth, friendly and super cool!',
+    quoteNL: 'Elk bedrijf heeft Workflo nodig. Zij zijn de IT Masters. Snel, deskundig, to the point, nuchter, vriendelijk en super cool!',
+    rating: 5,
+    featured: true,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-01-15'
+  },
+  {
+    id: '2',
+    name: 'Thijs Muller',
+    nameNL: 'Thijs Muller',
+    company: 'Havas Media',
+    role: 'CEO',
+    roleNL: 'CEO',
+    quote: 'Workflo is an extension and integral part of our team. Very involved, easily approachable, solution-oriented, creative and professional.',
+    quoteNL: 'Workflo is een verlengstuk en integraal onderdeel van ons team. Zeer betrokken, makkelijk aanspreekbaar, oplossingsgericht, creatief en professioneel.',
+    rating: 5,
+    featured: true,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-02-20'
+  },
+  {
+    id: '3',
+    name: 'Patrick Beijl',
+    nameNL: 'Patrick Beijl',
+    company: 'Winix',
+    role: 'Commercial Director',
+    roleNL: 'Commerciële Directeur',
+    quote: 'Florian and his team are there to help. Whether it is about simple usability issues (every day life at the office) or the more serious stuff about network, servers, trustworthy backup systems and security. Workflo knows. They solve it instantly. With a smile.',
+    quoteNL: 'Florian en zijn team staan klaar om te helpen. Of het nu gaat om eenvoudige bruikbaarheidsproblemen (het dagelijkse leven op kantoor) of de meer serieuze zaken zoals netwerk, servers, betrouwbare back-upsystemen en beveiliging. Workflo weet het. Ze lossen het direct op. Met een glimlach.',
+    rating: 5,
+    featured: true,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-03-10'
+  },
+  {
+    id: '4',
+    name: 'Sophie Bakker',
+    nameNL: 'Sophie Bakker',
+    company: 'Legal Associates',
+    role: 'Managing Partner',
+    roleNL: 'Managing Partner',
+    quote: 'Exceptional service and response time. Workflo truly understands the needs of modern businesses.',
+    quoteNL: 'Uitzonderlijke service en responstijd. Workflo begrijpt echt de behoeften van moderne bedrijven.',
+    rating: 5,
+    service: 'Microsoft 365',
+    serviceNL: 'Microsoft 365',
+    date: '2024-01-28'
+  },
+  {
+    id: '5',
+    name: 'Peter van Dijk',
+    nameNL: 'Peter van Dijk',
+    company: 'Retail Solutions NL',
+    role: 'CTO',
+    roleNL: 'CTO',
+    quote: 'The VoIP system implementation saved us 40% on communication costs while improving call quality.',
+    quoteNL: 'De VoIP-systeemimplementatie bespaarde ons 40% op communicatiekosten terwijl de gesprekskwaliteit verbeterde.',
+    rating: 5,
+    service: 'VoIP Services',
+    serviceNL: 'VoIP-diensten',
+    date: '2024-02-15'
+  },
+  {
+    id: '6',
+    name: 'Anna Hendriks',
+    nameNL: 'Anna Hendriks',
+    company: 'Healthcare Plus',
+    role: 'Operations Director',
+    roleNL: 'Operations Directeur',
+    quote: 'Workflo\'s backup solutions have saved us multiple times. Their disaster recovery planning is top-notch.',
+    quoteNL: 'Workflo\'s backup-oplossingen hebben ons meerdere keren gered. Hun disaster recovery planning is van topklasse.',
+    rating: 5,
+    service: 'Backup & Recovery',
+    serviceNL: 'Backup & Herstel',
+    date: '2024-03-05'
+  },
+  {
+    id: '7',
+    name: 'Thomas Vermeer',
+    nameNL: 'Thomas Vermeer',
+    company: 'E-commerce Leaders',
+    role: 'Founder',
+    roleNL: 'Oprichter',
+    quote: 'From day one, Workflo has been more than a vendor - they\'re a true technology partner.',
+    quoteNL: 'Vanaf dag één is Workflo meer dan een leverancier - ze zijn een echte technologiepartner.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-01-20'
+  },
+  {
+    id: '8',
+    name: 'Maria Groot',
+    nameNL: 'Maria Groot',
+    company: 'Marketing Excellence',
+    role: 'Marketing Director',
+    roleNL: 'Marketing Directeur',
+    quote: 'The team at Workflo is knowledgeable, responsive, and always willing to go the extra mile.',
+    quoteNL: 'Het team van Workflo is deskundig, responsief en altijd bereid een extra stap te zetten.',
+    rating: 5,
+    service: 'IT Support',
+    serviceNL: 'IT-ondersteuning',
+    date: '2024-02-28'
+  },
+  // Real Workflo Clients
+  {
+    id: '9',
+    name: 'Marloes Kok',
+    nameNL: 'Marloes Kok',
+    company: 'iO',
+    role: 'IT Manager',
+    roleNL: 'IT Manager',
+    quote: 'Workflo\'s proactive monitoring prevented multiple critical issues. Their 24/7 support gives us complete peace of mind.',
+    quoteNL: 'Workflo\'s proactieve monitoring voorkwam meerdere kritieke problemen. Hun 24/7 support geeft ons complete gemoedsrust.',
+    rating: 5,
+    featured: true,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-04-10'
+  },
+  {
+    id: '10',
+    name: 'Rick van den Berg',
+    nameNL: 'Rick van den Berg',
+    company: 'TakeCareCouriers (TCC)',
+    role: 'Operations Manager',
+    roleNL: 'Operations Manager',
+    quote: 'Our logistics operations run 24/7. Workflo ensures our systems never fail when we need them most.',
+    quoteNL: 'Onze logistieke operaties draaien 24/7. Workflo zorgt ervoor dat onze systemen nooit falen wanneer we ze het hardst nodig hebben.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-03-22'
+  },
+  {
+    id: '11',
+    name: 'Isabella Santos',
+    nameNL: 'Isabella Santos',
+    company: 'Cogonez',
+    role: 'CEO',
+    roleNL: 'CEO',
+    quote: 'Workflo transformed our IT infrastructure. The cloud migration was seamless and our productivity increased by 35%.',
+    quoteNL: 'Workflo transformeerde onze IT-infrastructuur. De cloud migratie was naadloos en onze productiviteit steeg met 35%.',
+    rating: 5,
+    featured: true,
+    service: 'Cloud Solutions',
+    serviceNL: 'Cloud Oplossingen',
+    date: '2024-02-18'
+  },
+  {
+    id: '12',
+    name: 'Sarah de Vries',
+    nameNL: 'Sarah de Vries',
+    company: 'LaDress',
+    role: 'Founder',
+    roleNL: 'Oprichter',
+    quote: 'As a fashion brand, we need our e-commerce platform to be always available. Workflo delivers 99.9% uptime consistently.',
+    quoteNL: 'Als fashion merk moeten we altijd beschikbaar zijn online. Workflo levert consistent 99.9% uptime.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-01-30'
+  },
+  {
+    id: '13',
+    name: 'Marcus Hoen',
+    nameNL: 'Marcus Hoen',
+    company: 'Hoen',
+    role: 'Creative Director',
+    roleNL: 'Creatief Directeur',
+    quote: 'Workflo understands creative workflows. Their IT solutions never interrupt our creative process.',
+    quoteNL: 'Workflo begrijpt creatieve workflows. Hun IT-oplossingen onderbreken nooit ons creatieve proces.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-03-15'
+  },
+  {
+    id: '14',
+    name: 'Mr. Robert Jager',
+    nameNL: 'Mr. Robert Jager',
+    company: 'Jager notarissen',
+    role: 'Notary',
+    roleNL: 'Notaris',
+    quote: 'Legal data security is paramount. Workflo\'s cybersecurity solutions ensure full GDPR compliance and client confidentiality.',
+    quoteNL: 'Juridische data veiligheid is van het grootste belang. Workflo\'s cybersecurity oplossingen zorgen voor volledige GDPR compliance en cliënt vertrouwelijkheid.',
+    rating: 5,
+    featured: true,
+    service: 'Cybersecurity',
+    serviceNL: 'Cyberbeveiliging',
+    date: '2024-04-05'
+  },
+  {
+    id: '15',
+    name: 'Peter Grabo',
+    nameNL: 'Peter Grabo',
+    company: 'Grabo',
+    role: 'Managing Director',
+    roleNL: 'Managing Director',
+    quote: 'Workflo\'s Hardware as a Service model perfectly fits our growth strategy. Predictable costs, latest equipment.',
+    quoteNL: 'Workflo\'s Hardware as a Service model past perfect bij onze groeistrategie. Voorspelbare kosten, nieuwste apparatuur.',
+    rating: 5,
+    service: 'Hardware as a Service',
+    serviceNL: 'Hardware als Service',
+    date: '2024-02-08'
+  },
+  {
+    id: '16',
+    name: 'Martin Koschuch',
+    nameNL: 'Martin Koschuch',
+    company: 'Koschuch',
+    role: 'Business Owner',
+    roleNL: 'Bedrijfseigenaar',
+    quote: 'The Microsoft 365 migration was flawless. Our team productivity increased immediately with better collaboration tools.',
+    quoteNL: 'De Microsoft 365 migratie was vlekkeloos. Onze team productiviteit steeg direct met betere samenwerkingstools.',
+    rating: 5,
+    service: 'Microsoft 365',
+    serviceNL: 'Microsoft 365',
+    date: '2024-01-25'
+  },
+  {
+    id: '17',
+    name: 'John Doornik',
+    nameNL: 'John Doornik',
+    company: 'John Doornik Casting',
+    role: 'Casting Director',
+    roleNL: 'Casting Director',
+    quote: 'In casting, timing is everything. Workflo ensures our systems are always ready for that perfect shot.',
+    quoteNL: 'Bij casting is timing alles. Workflo zorgt ervoor dat onze systemen altijd klaar zijn voor die perfecte shot.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-03-12'
+  },
+  {
+    id: '18',
+    name: 'Pharmacist de Wilde',
+    nameNL: 'Apotheker de Wilde',
+    company: 'Apotheek Warande',
+    role: 'Head Pharmacist',
+    roleNL: 'Hoofd Apotheker',
+    quote: 'Patient data security is critical. Workflo\'s healthcare IT solutions meet all regulatory requirements perfectly.',
+    quoteNL: 'Patiënt data veiligheid is kritiek. Workflo\'s zorgverlening IT oplossingen voldoen perfect aan alle regelgeving.',
+    rating: 5,
+    featured: true,
+    service: 'Cybersecurity',
+    serviceNL: 'Cyberbeveiliging',
+    date: '2024-04-01'
+  },
+  {
+    id: '19',
+    name: 'Frank van Roekel',
+    nameNL: 'Frank van Roekel',
+    company: 'On(t)roerendgoed',
+    role: 'Real Estate Broker',
+    roleNL: 'Makelaar',
+    quote: 'Real estate moves fast. Workflo\'s VoIP system keeps us connected with clients wherever we are.',
+    quoteNL: 'Vastgoed beweegt snel. Workflo\'s VoIP systeem houdt ons verbonden met cliënten waar we ook zijn.',
+    rating: 5,
+    service: 'VoIP Services',
+    serviceNL: 'VoIP-diensten',
+    date: '2024-02-25'
+  },
+  {
+    id: '20',
+    name: 'Hans Bakker',
+    nameNL: 'Hans Bakker',
+    company: 'CentraalHuizenbeheer',
+    role: 'Property Manager',
+    roleNL: 'Vastgoedbeheerder',
+    quote: 'Managing hundreds of properties requires reliable IT. Workflo\'s solutions scale perfectly with our business.',
+    quoteNL: 'Het beheren van honderden panden vereist betrouwbare IT. Workflo\'s oplossingen schalen perfect mee met ons bedrijf.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-01-12'
+  },
+  {
+    id: '21',
+    name: 'Tessa Idema',
+    nameNL: 'Tessa Idema',
+    company: 'tidee',
+    role: 'Creative Entrepreneur',
+    roleNL: 'Creatieve Ondernemer',
+    quote: 'As a creative startup, we needed flexible IT that grows with us. Workflo provides exactly that.',
+    quoteNL: 'Als creatieve startup hadden we flexibele IT nodig die met ons meegroeit. Workflo biedt precies dat.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-03-08'
+  },
+  {
+    id: '22',
+    name: 'Dr. Lisa Vermeer',
+    nameNL: 'Dr. Lisa Vermeer',
+    company: 'HealthyWeightClinics',
+    role: 'Medical Director',
+    roleNL: 'Medisch Directeur',
+    quote: 'Healthcare IT must be bulletproof. Workflo\'s backup and security solutions protect our patients\' sensitive data.',
+    quoteNL: 'Zorgverlening IT moet kogelvrij zijn. Workflo\'s backup en beveiligingsoplossingen beschermen onze patiënten\'s gevoelige data.',
+    rating: 5,
+    featured: true,
+    service: 'Backup & Recovery',
+    serviceNL: 'Backup & Herstel',
+    date: '2024-04-15'
+  },
+  {
+    id: '23',
+    name: 'Sandra Kops',
+    nameNL: 'Sandra Kops',
+    company: 'Kopzorgen haarverzorgening',
+    role: 'Salon Owner',
+    roleNL: 'Salon Eigenaar',
+    quote: 'Our appointment system and payment processing run flawlessly thanks to Workflo. Never missed a client again!',
+    quoteNL: 'Ons afspraken systeem en payment processing draaien vlekkeloos dankzij Workflo. Nooit meer een cliënt gemist!',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-02-14'
+  },
+  {
+    id: '24',
+    name: 'Marcel Walen',
+    nameNL: 'Marcel Walen',
+    company: 'Walenpleintje',
+    role: 'Restaurant Owner',
+    roleNL: 'Restaurant Eigenaar',
+    quote: 'From POS systems to WiFi for guests, Workflo handles all our restaurant tech seamlessly.',
+    quoteNL: 'Van kassasystemen tot WiFi voor gasten, Workflo regelt al onze restaurant technologie naadloos.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-01-20'
+  },
+  {
+    id: '25',
+    name: 'Mike Stevens',
+    nameNL: 'Mike Stevens',
+    company: 'All Response Media',
+    role: 'Media Director',
+    roleNL: 'Media Directeur',
+    quote: 'In media, every second counts. Workflo\'s infrastructure ensures our campaigns never experience downtime.',
+    quoteNL: 'In media telt elke seconde. Workflo\'s infrastructuur zorgt ervoor dat onze campagnes nooit downtime ervaren.',
+    rating: 5,
+    service: 'Managed IT Services',
+    serviceNL: 'Beheerde IT-diensten',
+    date: '2024-03-20'
+  },
+  {
+    id: '26',
+    name: 'Patricia Mension',
+    nameNL: 'Patricia Mension',
+    company: 'PR Mension',
+    role: 'PR Director',
+    roleNL: 'PR Directeur',
+    quote: 'Communication is our business. Workflo\'s VoIP and collaboration tools keep us connected with clients globally.',
+    quoteNL: 'Communicatie is ons vak. Workflo\'s VoIP en samenwerkingstools houden ons wereldwijd verbonden met cliënten.',
+    rating: 5,
+    service: 'VoIP Services',
+    serviceNL: 'VoIP-diensten',
+    date: '2024-02-02'
+  },
+  {
+    id: '27',
+    name: 'Dr. James Layden',
+    nameNL: 'Dr. James Layden',
+    company: 'Layden Labs',
+    role: 'Lab Director',
+    roleNL: 'Lab Directeur',
+    quote: 'Research data is irreplaceable. Workflo\'s enterprise backup solutions give us the redundancy we need.',
+    quoteNL: 'Onderzoeksdata is onvervangbaar. Workflo\'s enterprise backup oplossingen geven ons de redundantie die we nodig hebben.',
+    rating: 5,
+    featured: true,
+    service: 'Backup & Recovery',
+    serviceNL: 'Backup & Herstel',
+    date: '2024-04-08'
+  },
+  {
+    id: '28',
+    name: 'David Smart',
+    nameNL: 'David Smart',
+    company: 'HowSmart.ai',
+    role: 'AI Founder',
+    roleNL: 'AI Oprichter',
+    quote: 'Even AI companies need reliable IT infrastructure. Workflo provides the rock-solid foundation our algorithms depend on.',
+    quoteNL: 'Zelfs AI bedrijven hebben betrouwbare IT infrastructuur nodig. Workflo biedt de rotssolide basis waar onze algoritmes op vertrouwen.',
+    rating: 5,
+    featured: true,
+    service: 'Cloud Solutions',
+    serviceNL: 'Cloud Oplossingen',
+    date: '2024-04-12'
+  }
+]
+
+export function getFeaturedTestimonials() {
+  return testimonials.filter(t => t.featured)
+}
+
+export function getTestimonialsByService(service: string) {
+  return testimonials.filter(t => t.service === service || t.serviceNL === service)
+}
