@@ -1,29 +1,33 @@
-# Modern Next.js Starter Template
+# Workflo IT Services: Next.js Platform
 
-A production-ready Next.js 15 starter template with TypeScript, Tailwind CSS, and Shadcn/ui components.
+Een geavanceerd IT-diensten platform voor Workflo B.V., gebouwd met de nieuwste technologieën voor maximale prestaties en gebruikerservaring.
 
-## 🚀 Features
+## 🚀 Belangrijkste Kenmerken
 
-- **Next.js 15** - The latest version with App Router and Turbopack
-- **React 18** - With Server Components and Streaming SSR
-- **TypeScript** - Strict type checking for reliable code
-- **Tailwind CSS v3** - Utility-first CSS framework
-- **Shadcn/ui** - Beautiful and accessible component library
-- **ESLint & Prettier** - Code quality and formatting
-- **Dark Mode** - Built-in dark mode support
-- **SEO Optimized** - Meta tags, Open Graph, and structured data
-- **Responsive Design** - Mobile-first approach
+- **Next.js 15** - Modernste versie met App Router en Turbopack
+- **AI-Geïntegreerd** - Intelligente chatbot en aanbevelingssysteem
+- **React 18** - Server Components en Streaming SSR
+- **TypeScript** - Strikte type-controle voor betrouwbare code
+- **Tailwind CSS** - Utility-first design systeem
+- **Payload CMS** - Krachtige content management
+- **Supabase Auth** - Veilige gebruikersauthenticatie
+- **SEO Geoptimaliseerd** - Geavanceerde meta-tags en structured data
+- **Responsief Design** - Mobile-first benadering
+- **Performance Monitoring** - Geïntegreerde analytics en uptime tracking
 
-## 📦 Tech Stack
+## 📦 Technologie Stack
 
 - **Framework:** Next.js 15.5.0
-- **Language:** TypeScript 5.x
+- **Taal:** TypeScript 5.x
 - **Styling:** Tailwind CSS 3.4.17
-- **Components:** Shadcn/ui with Radix UI
+- **CMS:** Payload CMS
+- **Database:** Supabase PostgreSQL
+- **Authenticatie:** NextAuth V5
+- **Componenten:** Shadcn/ui met Radix UI
 - **Icons:** Lucide React
 - **Font:** Inter (Google Fonts)
-- **Linting:** ESLint 9 with Next.js config
-- **Formatting:** Prettier with Tailwind plugin
+- **Analytics:** Google Analytics, Microsoft Clarity
+- **Monitoring:** Sentry, Uptime Robot
 
 ## 🛠️ Installation
 

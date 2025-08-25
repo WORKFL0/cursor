@@ -1,7 +1,6 @@
 # TODO List - Workflo New Project
 
 ## 🚀 High Priority / Urgent
-- [ ] **Prijzen Calculator** - Interactieve tool voor klanten om kosten te berekenen
 - [ ] **Over Ons pagina** - Bedrijfsinformatie, team, missie/visie
 - [ ] **Diensten/Producten pagina's** - Alle services uitgebreid beschreven
   - [ ] Managed IT Services
@@ -70,7 +69,6 @@
 
 ## 📊 Analytics / Tracking
 - [ ] Google Analytics 4 setup
-- [ ] Microsoft Clarity
 - [ ] Hotjar
 - [ ] LinkedIn Insight Tag
 - [ ] Facebook Pixel
@@ -79,32 +77,39 @@
 ## 🧪 Testing
 - [ ] Cross-browser testing
 - [ ] Formulier validatie testen
-- [ ] 404 pagina maken
+- [ ] 404 pagina maken (with nerd humor please)
 - [ ] Error boundaries toevoegen
 
 ## 📚 Documentation
-- [ ] README.md updaten
+- [x] README.md updaten
+- [x] ARCHITECTURE.md aanmaken
 - [ ] Deployment guide
-- [ ] Component documentatie 
+- [ ] Component documentatie
+- [ ] Inline code documentatie met JSDoc
+- [ ] API documentatie uitbreiden
+- [ ] Documentatie voor nieuwe features toevoegen
 
 ---
 
 ## ✅ Completed / Afgerond
 
-### Week van [datum]
+### Week van 25 augustus 2025
 - [x] Tevredenheidscheck questionnaire systeem gebouwd
 - [x] Werken Bij pagina aangepast naar MBO stages
 - [x] SBB logo en client logos toegevoegd
 - [x] Danger tape verminderd en subtieler gemaakt
 - [x] Rihanna "Work Work Work" grap toegevoegd
 - [x] Email adres aangepast naar work@workflo.nl
+- [x] README.md geüpdatet met Workflo-specifieke details
+- [x] ARCHITECTURE.md aangemaakt met gedetailleerde systeemarchitectuur
+- [ ] Volledige documentatie review
 
 ---
 
 ## 📌 Notes / Notities
 
 ### Belangrijke Info:
-- **Live site**: https://workflo.it
+- **Live site**: not sure atm
 - **Staging**: localhost:3000
 - **Email stages**: work@workflo.nl
 - **Email algemeen**: info@workflo.it
