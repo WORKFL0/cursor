@@ -33,11 +33,104 @@ export interface PricingQuote {
 
 export const serviceCategories: ServiceCategory[] = [
   {
-    id: 'ayce-remote',
-    name: 'AYCE Remote Support',
-    nameNL: 'AYCE Remote Ondersteuning',
-    description: 'All You Can Eat IT support - remote only',
-    descriptionNL: 'All You Can Eat IT ondersteuning - alleen op afstand',
+    id: 'ad-hoc',
+    name: 'Ad-hoc Support',
+    nameNL: 'Ad-hoc Ondersteuning',
+    description: 'Pay-per-hour IT support - You break, we fix',
+    descriptionNL: 'Betaal per uur IT ondersteuning - You break, we fix',
+    icon: '⚡',
+    unit: 'hours',
+    unitNL: 'uren',
+    minQuantity: 1,
+    maxQuantity: 100,
+    basePrice: 0,
+    pricePerUnit: 110,
+    yearlyDiscount: 0,
+    features: [
+      'Pay only for what you use',
+      'Billed after service',
+      '150% rate after 19:00 and weekends',
+      'Lower priority response',
+      'No guaranteed response time',
+      'You break, we fix approach'
+    ],
+    featuresNL: [
+      'Betaal alleen wat je gebruikt',
+      'Achteraf gefactureerd',
+      '150% tarief na 19:00 en weekenden',
+      'Lagere prioriteit respons',
+      'Geen gegarandeerde responstijd',
+      'You break, we fix aanpak'
+    ]
+  },
+  {
+    id: 'prepaid-10',
+    name: 'Pre-Paid 10 Hours',
+    nameNL: 'Pre-Paid 10 Uur',
+    description: 'Prepaid support bundle - Best value',
+    descriptionNL: 'Vooruitbetaald support bundel - Beste waarde',
+    icon: '📦',
+    unit: 'package',
+    unitNL: 'pakket',
+    minQuantity: 1,
+    maxQuantity: 10,
+    basePrice: 1000,
+    pricePerUnit: 0,
+    yearlyDiscount: 0,
+    features: [
+      '10 support hours (€100/hour)',
+      'High priority response',
+      '4-hour guaranteed response time',
+      'Hours never expire',
+      'Monthly balance updates',
+      'Best hourly rate'
+    ],
+    featuresNL: [
+      '10 support uren (€100/uur)',
+      'Hoge prioriteit respons',
+      '4 uur gegarandeerde responstijd',
+      'Uren verlopen nooit',
+      'Maandelijkse saldo updates',
+      'Beste uurtarief'
+    ]
+  },
+  {
+    id: 'prepaid-20',
+    name: 'Pre-Paid 20 Hours',
+    nameNL: 'Pre-Paid 20 Uur',
+    description: 'Prepaid support bundle - Maximum savings',
+    descriptionNL: 'Vooruitbetaald support bundel - Maximale besparing',
+    icon: '🎯',
+    unit: 'package',
+    unitNL: 'pakket',
+    minQuantity: 1,
+    maxQuantity: 10,
+    basePrice: 1800,
+    pricePerUnit: 0,
+    yearlyDiscount: 0,
+    features: [
+      '20 support hours (€90/hour)',
+      'High priority response',
+      '4-hour guaranteed response time',
+      'Hours never expire',
+      'Monthly balance updates',
+      'Lowest hourly rate'
+    ],
+    featuresNL: [
+      '20 support uren (€90/uur)',
+      'Hoge prioriteit respons',
+      '4 uur gegarandeerde responstijd',
+      'Uren verlopen nooit',
+      'Maandelijkse saldo updates',
+      'Laagste uurtarief'
+    ]
+  },
+  {
+    id: 'fixed-fee-remote',
+    name: 'Fixed-Fee Remote Support',
+    nameNL: 'Fixed-Fee Remote Ondersteuning',
+    description: 'Unlimited remote support - All You Can Eat',
+    descriptionNL: 'Onbeperkte remote ondersteuning - All You Can Eat',
     icon: '💻',
     unit: 'users',
     unitNL: 'gebruikers',
@@ -47,30 +140,30 @@ export const serviceCategories: ServiceCategory[] = [
     pricePerUnit: 60,
     yearlyDiscount: 15,
     features: [
-      '24/7 remote monitoring and support',
-      'Proactive maintenance',
-      'Security updates and licenses included',
-      'Remote troubleshooting',
-      'Software licensing management',
-      'Unlimited support tickets',
-      'All security licenses included'
+      'Unlimited remote support',
+      'Support via tickets, email, Teams, WhatsApp, phone',
+      'All security licenses included',
+      'Proactive monitoring',
+      'Regular maintenance',
+      'Complete digital wellbeing responsibility',
+      'Office 365 not included'
     ],
     featuresNL: [
-      '24/7 remote monitoring en ondersteuning',
-      'Proactief onderhoud',
-      'Beveiligingsupdates en licenties inbegrepen',
-      'Probleemoplossing op afstand',
-      'Software licentie beheer',
-      'Onbeperkte support tickets',
-      'Alle beveiligingslicenties inbegrepen'
+      'Onbeperkte remote ondersteuning',
+      'Support via tickets, email, Teams, WhatsApp, telefoon',
+      'Alle beveiligingslicenties inbegrepen',
+      'Proactieve monitoring',
+      'Regelmatig onderhoud',
+      'Complete digitale welzijn verantwoordelijkheid',
+      'Office 365 niet inbegrepen'
     ]
   },
   {
-    id: 'ayce-onsite',
-    name: 'AYCE Onsite Support',
-    nameNL: 'AYCE Onsite Ondersteuning',
-    description: 'All You Can Eat IT support with onsite visits',
-    descriptionNL: 'All You Can Eat IT ondersteuning met ter plaatse bezoeken',
+    id: 'fixed-fee-onsite',
+    name: 'Fixed-Fee Onsite Support',
+    nameNL: 'Fixed-Fee Onsite Ondersteuning',
+    description: 'Unlimited support including onsite visits',
+    descriptionNL: 'Onbeperkte ondersteuning inclusief ter plaatse bezoeken',
     icon: '🏢',
     unit: 'users',
     unitNL: 'gebruikers',
@@ -80,24 +173,55 @@ export const serviceCategories: ServiceCategory[] = [
     pricePerUnit: 90,
     yearlyDiscount: 15,
     features: [
-      '24/7 monitoring and support',
-      'Onsite technical visits included',
-      'Proactive maintenance',
-      'Security updates and licenses included',
-      'Hardware replacement assistance',
-      'Unlimited support tickets',
+      'Unlimited remote & onsite support',
+      'Hardware replacement included',
+      'Support via all channels',
       'All security licenses included',
-      'Priority response time'
+      'Proactive monitoring',
+      'Priority response',
+      'Complete digital wellbeing responsibility',
+      'Office 365 not included'
     ],
     featuresNL: [
-      '24/7 monitoring en ondersteuning',
-      'Ter plaatse bezoeken inbegrepen',
-      'Proactief onderhoud',
-      'Beveiligingsupdates en licenties inbegrepen',
-      'Hardware vervangingsassistentie',
-      'Onbeperkte support tickets',
+      'Onbeperkte remote & ter plaatse ondersteuning',
+      'Hardware vervanging inbegrepen',
+      'Support via alle kanalen',
       'Alle beveiligingslicenties inbegrepen',
-      'Prioriteit reactietijd'
+      'Proactieve monitoring',
+      'Prioriteit respons',
+      'Complete digitale welzijn verantwoordelijkheid',
+      'Office 365 niet inbegrepen'
+    ]
+  },
+  {
+    id: 'server-support',
+    name: 'Server Support',
+    nameNL: 'Server Ondersteuning',
+    description: 'Dedicated server management',
+    descriptionNL: 'Toegewijd server beheer',
+    icon: '🖥️',
+    unit: 'servers',
+    unitNL: 'servers',
+    minQuantity: 1,
+    maxQuantity: 100,
+    basePrice: 0,
+    pricePerUnit: 90,
+    yearlyDiscount: 15,
+    features: [
+      '24/7 server monitoring',
+      'Proactive maintenance',
+      'Security patches',
+      'Performance optimization',
+      'Backup verification',
+      'Incident response'
+    ],
+    featuresNL: [
+      '24/7 server monitoring',
+      'Proactief onderhoud',
+      'Beveiligingsupdates',
+      'Prestatie optimalisatie',
+      'Backup verificatie',
+      'Incident respons'
     ]
   },
   {
@@ -112,8 +236,8 @@ export const serviceCategories: ServiceCategory[] = [
     minQuantity: 1,
     maxQuantity: 1000,
     basePrice: 0,
-    pricePerUnit: 6.00,
-    yearlyDiscount: 10,
+    pricePerUnit: 6.90,
+    yearlyDiscount: 0,
     features: [
       'Web versions of Office apps',
       'Outlook email',
@@ -141,8 +265,8 @@ export const serviceCategories: ServiceCategory[] = [
     minQuantity: 1,
     maxQuantity: 1000,
     basePrice: 0,
-    pricePerUnit: 12.50,
-    yearlyDiscount: 10,
+    pricePerUnit: 14.30,
+    yearlyDiscount: 0,
     features: [
       'Desktop Office apps (Word, Excel, PowerPoint)',
       'Outlook email',
@@ -172,8 +296,8 @@ export const serviceCategories: ServiceCategory[] = [
     minQuantity: 1,
     maxQuantity: 1000,
     basePrice: 0,
-    pricePerUnit: 22.00,
-    yearlyDiscount: 10,
+    pricePerUnit: 25.30,
+    yearlyDiscount: 0,
     features: [
       'Desktop Office apps (Word, Excel, PowerPoint)',
       'Outlook email',

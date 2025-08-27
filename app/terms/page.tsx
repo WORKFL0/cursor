@@ -296,11 +296,11 @@ export default function TermsOfServicePage() {
                   {language === 'nl' ? '6. Aansprakelijkheid' : '6. Liability'}
                 </h2>
                 <div className="space-y-4">
-                  <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
-                    <h3 className="font-semibold text-yellow-900 mb-2">
+                  <div className="bg-workflo-yellow/10 border-l-4 border-workflo-yellow p-4">
+                    <h3 className="font-semibold text-workflo-yellow mb-2">
                       {language === 'nl' ? 'Beperkte aansprakelijkheid' : 'Limited Liability'}
                     </h3>
-                    <p className="text-yellow-800">
+                    <p className="text-workflo-yellow">
                       {language === 'nl' 
                         ? 'De aansprakelijkheid van Workflo is beperkt tot het bedrag van de in het betreffende jaar door de klant betaalde vergoedingen.'
                         : 'Workflo\'s liability is limited to the amount of fees paid by the client in the relevant year.'

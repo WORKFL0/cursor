@@ -34,8 +34,8 @@ export const companyInfo: CompanyInfo = {
   name: 'Workflo B.V.',
   tagline: 'Your IT Should Drive Growth—Not Hold You Back',
   taglineNL: 'Laat IT je groei versnellen, niet vertragen',
-  founded: '2015',
-  employees: '4',
+  founded: '2014',
+  employees: '5',
   location: {
     name: 'Workflo Amsterdam',
     address: 'Koivistokade 3',
@@ -49,8 +49,8 @@ export const companyInfo: CompanyInfo = {
       lng: 4.888571976608
     }
   },
-  description: 'Amsterdam\'s most trusted IT partner since 2015, serving SMEs with comprehensive managed IT services.',
-  descriptionNL: 'Amsterdam\'s meest vertrouwde IT-partner sinds 2015, ten dienste van MKB-bedrijven met complete managed IT-diensten.',
+  description: 'Amsterdam\'s most trusted IT partner since 2014, serving 50+ SMEs with comprehensive managed IT services.',
+  descriptionNL: 'Amsterdam\'s meest vertrouwde IT-partner sinds 2014, ten dienste van 50+ MKB-bedrijven met complete managed IT-diensten.',
   mission: 'To transform technology from a cost center into a growth engine for Amsterdam businesses.',
   missionNL: 'Technologie transformeren van een kostenpost naar een groeimotor voor Amsterdamse bedrijven.',
   values: [
@@ -84,16 +84,19 @@ export const companyInfo: CompanyInfo = {
     }
   ],
   certifications: [
-    'Microsoft Gold Partner',
-    'ISO 27001 Certified',
-    'CompTIA Partner',
-    'Cisco Partner'
+    'Microsoft Cloud Partner (2015)',
+    'Adobe Reseller (2017)',
+    'SBB Internship Company (2021)',
+    'ZorgMail Partner (2023)',
+    'Cisco and Meraki Reseller (2024)'
   ],
   partnerships: [
     'Microsoft',
+    'Adobe', 
+    'Ruckus',
+    'FortiNet',
     'Cisco',
-    'VMware',
-    'Fortinet'
+    'Meraki'
   ]
 }
 
@@ -443,7 +446,7 @@ export const homePageData: HomePageData = {
   clients: [], // Will be populated with actual clients
   stats: [
     {
-      value: '250+',
+      value: '50+',
       label: 'Happy Clients',
       labelNL: 'Tevreden klanten'
     },
@@ -476,24 +479,24 @@ export const servicesPageData: ServicesPageData = {
   processes: [
     {
       step: 1,
-      title: 'Free Consultation',
-      titleNL: 'Gratis gesprek',
-      description: 'We visit you for a free conversation. No obligations. We look at your current situation and explain what we can do.',
-      descriptionNL: 'We komen langs voor een gratis gesprek. Geen verplichtingen. We kijken naar je huidige situatie en vertellen wat we kunnen doen.'
+      title: 'Free Network Scan',
+      titleNL: 'Gratis netwerk-scan',
+      description: 'We visit for a free consultation. No obligations. We look at your current situation and perform a network scan to assess your current IT setup.',
+      descriptionNL: 'We komen langs voor een gratis gesprek. Geen verplichtingen. We kijken naar je huidige situatie en maken een netwerk-scan om te zien wat voor vlees jullie in de kuip hebben.'
     },
     {
       step: 2,
-      title: 'We Arrange Everything',
-      titleNL: 'Wij regelen alles',
-      description: 'If you agree, we arrange everything. New devices, software, security. You don\'t have to worry about anything.',
-      descriptionNL: 'Als je akkoord gaat, regelen wij alles. Nieuwe apparaten, software, beveiliging. Je hoeft je nergens zorgen over te maken.'
+      title: 'Personal Advice',
+      titleNL: 'Persoonlijk advies',
+      description: 'Prefer to take our advice to someone else? No problem! We charge 2 hours for the effort of creating the report and advice. If you agree to work with us, these costs are waived and we arrange everything.',
+      descriptionNL: 'Ga je met dit advies liever naar een ander, geen probleem! Dan rekenen we 2 uur voor de moeite van het maken van dit rapport en het gemaakte advies. Als je akkoord gaat, vervallen deze kosten en regelen wij alles.'
     },
     {
       step: 3,
-      title: 'You Work Worry-Free',
-      titleNL: 'Je werkt zorgeloos verder',
-      description: 'From that moment we ensure everything works. For a fixed price per month. No surprises, no hassle.',
-      descriptionNL: 'Vanaf dat moment zorgen wij dat alles werkt. Voor een vaste prijs per maand. Geen verrassingen, geen gedoe.'
+      title: 'Worry-Free Working',
+      titleNL: 'Zorgeloos werken',
+      description: 'From that moment we ensure everything works and stays safe and secure. For a fixed price per month. No surprises, no hassle.',
+      descriptionNL: 'Vanaf dat moment zorgen wij dat alles werkt. Zorgen wij dat alles veilig is en blijft. Voor een vaste prijs per maand. Geen verrassingen, geen gedoe.'
     }
   ],
   pricing: {
@@ -524,79 +527,81 @@ export const servicesPageData: ServicesPageData = {
 
 export const aboutPageData: AboutPageData = {
   hero: {
-    title: 'IT Without Worries Since 2015',
-    titleNL: 'IT zonder Zorgen sinds 2015',
+    title: 'IT Without Worries Since 2014',
+    titleNL: 'IT zonder Zorgen sinds 2014',
     subtitle: 'From startup to scale-up: we are the technology partner that grows with you',
     subtitleNL: 'Van startup tot scale-up: wij zijn de technologiepartner die met je meegroeit'
   },
   story: {
     title: 'Our Story',
     titleNL: 'Ons Verhaal',
-    content: 'Workflo started in 2015 with a simple mission: IT support that actually works. Founded by a team of IT professionals who were frustrated by the traditional way of working in the IT sector. We saw companies struggling with complex systems, unclear invoices and IT partners who caused more problems than they solved. We wanted to change that.',
-    contentNL: 'Workflo begon in 2015 met een simpele missie: IT-ondersteuning die écht werkt. Opgericht door een team van IT-professionals die gefrustreerd waren door de traditionele manier van werken in de IT-sector. We zagen bedrijven worstelen met complexe systemen, onduidelijke facturen en IT-partners die meer problemen veroorzaakten dan oplosten. Daar wilden we verandering in brengen.'
+    content: 'Workflo started in 2014 with a simple mission: IT support that actually works. Founded by Florian de Haan, who was frustrated by the traditional way of working in the IT sector. We saw companies struggling with complex systems, unclear invoices and IT partners who caused more problems than they solved. We wanted to change that.',
+    contentNL: 'Workflo begon in 2014 met een simpele missie: IT-ondersteuning die écht werkt. Opgericht door Florian de Haan, die gefrustreerd was door de traditionele manier van werken in de IT-sector. We zagen bedrijven worstelen met complexe systemen, onduidelijke facturen en IT-partners die meer problemen veroorzaakten dan oplosten. Daar wilden we verandering in brengen.'
   },
   values: companyInfo.values,
   timeline: [
-    { year: '2015', event: 'Workflo founded in Amsterdam', eventNL: 'Workflo opgericht in Amsterdam' },
-    { year: '2017', event: 'Microsoft Gold Partner certification', eventNL: 'Microsoft Gold Partner certificering' },
-    { year: '2019', event: '100+ satisfied clients reached', eventNL: '100+ tevreden klanten bereikt' },
-    { year: '2021', event: 'ISO 27001 certification achieved', eventNL: 'ISO 27001 certificering behaald' },
-    { year: '2023', event: 'Focused team of 4 professionals', eventNL: 'Gefocust team van 4 professionals' },
-    { year: '2025', event: 'Market leader in Amsterdam region', eventNL: 'Marktleider in Amsterdam regio' }
+    { year: '2014', event: 'Workflo founded by Florian de Haan in Amsterdam', eventNL: 'Workflo opgericht door Florian de Haan in Amsterdam' },
+    { year: '2015', event: 'Microsoft Cloud Partner certification', eventNL: 'Microsoft Cloud Partner certificering' },
+    { year: '2016', event: 'Ruckus and FortiNet reseller partnership', eventNL: 'Ruckus en FortiNet reseller partnerschap' },
+    { year: '2017', event: 'Adobe Reseller certification achieved', eventNL: 'Adobe Reseller certificering behaald' },
+    { year: '2018', event: 'Domain registrar services launched', eventNL: 'Domain registrar diensten gelanceerd' },
+    { year: '2021', event: 'SBB internship company accreditation', eventNL: 'SBB stage bedrijf accreditatie' },
+    { year: '2023', event: 'ZorgMail partner for healthcare sector', eventNL: 'ZorgMail partner voor zorgverlening sector' },
+    { year: '2024', event: 'New Amsterdam office opened, Cisco and Meraki reseller', eventNL: 'Nieuw Amsterdam kantoor geopend, Cisco en Meraki reseller' }
   ],
   team: [
     {
       id: 'florian',
-      name: 'Florian',
-      title: 'Oprichter & Directeur',
-      titleNL: 'Oprichter & Directeur',
-      bio: 'Met 10+ jaar ervaring in IT en een passie voor innovatie, stuur ik Workflo richting de toekomst. Ik zorg voor tevreden klanten en een gemotiveerd team.',
-      bioNL: 'Met 10+ jaar ervaring in IT en een passie voor innovatie, stuur ik Workflo richting de toekomst. Ik zorg voor tevreden klanten en een gemotiveerd team.',
+      name: 'Florian de Haan',
+      title: 'Founder/System Administrator/Consultant/IT Support',
+      titleNL: 'Oprichter/Systeembeheerder/Consultant/IT Support',
+      bio: 'Ik ben Florian, de oprichter van Workflo. Ik ben een gedreven generalist en vind het heerlijk om met nieuwe dingen bezig te zijn en vooral de vertaalslag te maken van idee naar een concreet resultaat.',
+      bioNL: 'Ik ben Florian, de oprichter van Workflo. Ik ben een gedreven generalist en vind het heerlijk om met nieuwe dingen bezig te zijn en vooral de vertaalslag te maken van idee naar een concreet resultaat.',
       photo: '/images/team/florian.jpg',
-      certifications: ['Microsoft Certified', 'Business Management'],
-      specialties: ['Klantrelaties', 'Strategische Planning', 'Business Development'],
-      specialtiesNL: ['Klantrelaties', 'Strategische Planning', 'Business Development']
-    },
-    {
-      id: 'marcello',
-      name: 'Marcello',
-      title: 'IT Engineer',
-      titleNL: 'IT Engineer',
-      bio: 'Als onze cloud en infrastructuur specialist zorg ik ervoor dat systemen optimaal draaien. Van migraties tot dagelijks beheer, ik regel het.',
-      bioNL: 'Als onze cloud en infrastructuur specialist zorg ik ervoor dat systemen optimaal draaien. Van migraties tot dagelijks beheer, ik regel het.',
-      photo: '/images/team/marcello.jpg',
-      certifications: ['Microsoft Azure', 'VMware Certified'],
-      specialties: ['Cloud Beheer', 'Server Onderhoud', 'Automatisering'],
-      specialtiesNL: ['Cloud Beheer', 'Server Onderhoud', 'Automatisering']
-    },
-    {
-      id: 'nam',
-      name: 'Nam',
-      title: 'Support Engineer',
-      titleNL: 'Support Engineer',
-      bio: 'Eerste aanspreekpunt voor onze klanten. Ik los problemen snel op en zorg ervoor dat iedereen productief kan blijven werken.',
-      bioNL: 'Eerste aanspreekpunt voor onze klanten. Ik los problemen snel op en zorg ervoor dat iedereen productief kan blijven werken.',
-      photo: '/images/team/nam.jpg',
-      certifications: ['CompTIA A+', 'ITIL Foundation'],
-      specialties: ['Helpdesk', 'Remote Support', 'Hardware'],
-      specialtiesNL: ['Helpdesk', 'Remote Support', 'Hardware']
+      certifications: ['Microsoft Cloud Partner', 'Business Management'],
+      specialties: ['System Administration', 'Strategic Planning', 'Business Development', 'IT Consulting'],
+      specialtiesNL: ['Systeembeheer', 'Strategische Planning', 'Business Development', 'IT Consultancy']
     },
     {
       id: 'samir',
-      name: 'Samir',
-      title: 'Netwerk & Security Engineer',
-      titleNL: 'Netwerk & Security Engineer',
-      bio: 'Ik bescherm onze klanten tegen cyberdreigingen en zorg voor veilige, snelle netwerken. Van firewall tot backup, beveiliging is mijn expertise.',
-      bioNL: 'Ik bescherm onze klanten tegen cyberdreigingen en zorg voor veilige, snelle netwerken. Van firewall tot backup, beveiliging is mijn expertise.',
+      name: 'Samir Amanzou',
+      title: 'System Administrator/Consultant/IT Support',
+      titleNL: 'Systeembeheerder/Consultant/IT Support',
+      bio: 'Ha, ik ben Samir, en werk inmiddels drie jaar bij Workflo. Ik ben een IT Engineer met 8 jaar ervaring, gespecialiseerd in systeembeheer en projectmanagement.',
+      bioNL: 'Ha, ik ben Samir, en werk inmiddels drie jaar bij Workflo. Ik ben een IT Engineer met 8 jaar ervaring, gespecialiseerd in systeembeheer en projectmanagement.',
       photo: '/images/team/samir.jpg',
-      certifications: ['Security+', 'Cisco CCNA'],
-      specialties: ['Firewalls', 'VPN Setup', 'Security Audits'],
-      specialtiesNL: ['Firewalls', 'VPN Setup', 'Security Audits']
+      certifications: ['IT Engineering', 'Project Management'],
+      specialties: ['System Administration', 'Project Management', 'IT Support'],
+      specialtiesNL: ['Systeembeheer', 'Projectmanagement', 'IT Support']
+    },
+    {
+      id: 'nam',
+      name: 'Nam-Hoon Boots',
+      title: 'Senior System Administrator/Consultant/IT Support',
+      titleNL: 'Senior Systeembeheerder/Consultant/IT Support',
+      bio: 'Ha, ik ben Nam-Hoon, een IT-systeembeheerder met een grote passie voor elektronische apparatuur. Met maar liefst 25 jaar in het vak kun je mij gerust ervaren noemen.',
+      bioNL: 'Ha, ik ben Nam-Hoon, een IT-systeembeheerder met een grote passie voor elektronische apparatuur. Met maar liefst 25 jaar in het vak kun je mij gerust ervaren noemen.',
+      photo: '/images/team/nam.jpg',
+      certifications: ['25 Years IT Experience', 'Electronics Specialist'],
+      specialties: ['System Administration', 'Electronic Equipment', 'IT Support', 'Hardware'],
+      specialtiesNL: ['Systeembeheer', 'Elektronische Apparatuur', 'IT Support', 'Hardware']
+    },
+    {
+      id: 'marcello',
+      name: 'Marcello Macknac',
+      title: 'Junior Infrastructure Engineer/Consultant/IT Support',
+      titleNL: 'Junior Infrastructuur Engineer/Consultant/IT Support',
+      bio: 'Hey, ik ben Marcello, een Infrastructure Engineer die altijd wel bezig is met scripting, networking en engineering.',
+      bioNL: 'Hey, ik ben Marcello, een Infrastructure Engineer die altijd wel bezig is met scripting, networking en engineering.',
+      photo: '/images/team/marcello.jpg',
+      certifications: ['Infrastructure Engineering', 'Networking'],
+      specialties: ['Scripting', 'Networking', 'Engineering', 'Infrastructure'],
+      specialtiesNL: ['Scripting', 'Networking', 'Engineering', 'Infrastructuur']
     }
   ],
   stats: [
     {
-      value: '250+',
+      value: '50+',
       label: 'Satisfied clients',
       labelNL: 'Tevreden klanten'
     },
@@ -727,7 +732,7 @@ export const faqData: FAQ[] = [
     question: 'Are there any setup fees?',
     questionNL: 'Zijn er opstartkosten?',
     answer: 'Setup fees depend on the complexity of your current IT environment and the services required. We provide a detailed quote after our free consultation, so you know exactly what to expect with no surprises.',
-    answerNL: 'Opstartkosten hangen af van de complexiteit van uw huidige IT-omgeving en de benodigde diensten. We geven een gedetailleerde offerte na ons gratis gesprek, zodat u precies weet wat u kunt verwachten zonder verrassingen.',
+    answerNL: 'Opstartkosten hangen af van de complexiteit van jouw huidige IT-omgeving en de benodigde diensten. We geven een gedetailleerde offerte na ons gratis gesprek, zodat je precies weet wat je kunt verwachten zonder verrassingen.',
     category: 'Pricing',
     categoryNL: 'Prijzen',
     order: 2,
@@ -738,7 +743,7 @@ export const faqData: FAQ[] = [
     question: 'Can we get a custom quote?',
     questionNL: 'Kunnen we een offerte op maat krijgen?',
     answer: 'Yes! Every business is unique, and we tailor our solutions to your specific needs and budget. Contact us for a free consultation and custom quote based on your requirements.',
-    answerNL: 'Ja! Elk bedrijf is uniek, en wij stemmen onze oplossingen af op uw specifieke behoeften en budget. Neem contact met ons op voor een gratis gesprek en offerte op maat gebaseerd op uw vereisten.',
+    answerNL: 'Ja! Elk bedrijf is uniek, en wij stemmen onze oplossingen af op jouw specifieke behoeften en budget. Neem contact met ons op voor een gratis gesprek en offerte op maat gebaseerd op jouw vereisten.',
     category: 'Pricing',
     categoryNL: 'Prijzen',
     order: 3,
@@ -773,7 +778,7 @@ export const faqData: FAQ[] = [
     question: 'How do we contact support?',
     questionNL: 'Hoe nemen we contact op met support?',
     answer: 'You can contact our support team via phone, email, or our customer portal. We also provide a dedicated support app for quick issue reporting. All contact methods are available 24/7 for managed service clients.',
-    answerNL: 'U kunt contact opnemen met ons support-team via telefoon, e-mail of ons klantportaal. We bieden ook een speciale support-app voor snelle probleemmelding. Alle contactmethoden zijn 24/7 beschikbaar voor managed service klanten.',
+    answerNL: 'Je kunt contact opnemen met ons support-team via telefoon, e-mail of ons klantportaal. We bieden ook een speciale support-app voor snelle probleemmelding. Alle contactmethoden zijn 24/7 beschikbaar voor managed service klanten.',
     category: 'Support',
     categoryNL: 'Ondersteuning',
     order: 3,

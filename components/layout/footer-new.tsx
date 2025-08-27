@@ -1,217 +1,203 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
-import { MapPin, Phone, Mail, Clock, Award, Shield, Users, ChevronRight, Star, Zap, Building2 } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Award, Shield, Users, Building2, ExternalLink, ArrowRight } from 'lucide-react'
 import { useLanguage } from '@/lib/contexts/language-context'
-import { NewsletterSignup } from '@/components/forms/newsletter-signup'
+import { HubSpotNewsletterSignup } from '@/components/forms/HubSpotNewsletterSignup'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { motion } from 'framer-motion'
 
 export function Footer() {
   const { language } = useLanguage()
   const currentYear = new Date().getFullYear()
 
-  const siteMap = {
-    services: [
-      { name: 'Managed IT Services', href: '/diensten/managed-it', badge: 'Populair' },
-      { name: 'Cloud Oplossingen', href: '/diensten/cloud' },
-      { name: 'Cybersecurity', href: '/diensten/cybersecurity', badge: 'Urgent' },
-      { name: 'Microsoft 365', href: '/diensten/cloud#microsoft' },
-      { name: 'Backup & Recovery', href: '/diensten/managed-it#backup' },
-      { name: 'VoIP Telefonie', href: '/diensten/cloud#voip' },
-    ],
-    solutions: [
-      { name: 'Voor Startups', href: '/oplossingen/startups' },
-      { name: 'Voor MKB', href: '/oplossingen/mkb' },
-      { name: 'Voor Enterprises', href: '/oplossingen/enterprise' },
-      { name: 'Remote Werken', href: '/oplossingen/remote' },
-      { name: 'Hybrid Cloud', href: '/oplossingen/hybrid-cloud' },
-    ],
-    company: [
-      { name: 'Over Workflo', href: '/over-ons' },
-      { name: 'Ons Team', href: '/over-ons#team' },
-      { name: 'Werken Bij', href: '/werken-bij', badge: 'Vacatures' },
-      { name: 'Case Studies', href: '/case-studies' },
-      { name: 'Portfolio', href: '/portfolio' },
-      { name: 'Testimonials', href: '/testimonials' },
-    ],
-    support: [
-      { name: '🚨 Servicedesk', href: 'https://servicedesk.workflo.it/portal', external: true, badge: '24/7' },
-      { name: '📥 Support Tool', href: 'https://get.teamviewer.com/workflo', external: true },
-      { name: '❓ FAQ', href: '/faq' },
-      { name: '📊 System Status', href: 'https://uptime.workflo.it/status/workflo', external: true },
-      { name: '📞 Noodhulp', href: 'tel:+31203080465', badge: 'Direct' },
-      { name: '💬 WhatsApp', href: 'https://wa.me/31203080465?text=Hallo%20Workflo,%20ik%20heb%20een%20vraag', external: true },
-    ],
-    resources: [
-      { name: 'IT Tevredenheidscheck', href: '/tevredenheidscheck', badge: 'Gratis' },
-      { name: 'Prijzen Calculator', href: '/prijzen' },
-      { name: 'Blog & Nieuws', href: '/nieuws' },
-      { name: 'IT Tips', href: '/blog' },
-      { name: 'Referral Programma', href: '/referral', badge: '€50+' },
-      { name: 'Contact', href: '/contact' },
-    ]
+  // Cleaned up navigation structure
+  const footerSections = {
+    services: {
+      title: language === 'nl' ? 'Diensten' : 'Services',
+      links: [
+        { name: 'Managed IT', href: '/diensten/managed-it' },
+        { name: language === 'nl' ? 'Cloud Oplossingen' : 'Cloud Solutions', href: '/diensten/cloud' },
+        { name: 'Cybersecurity', href: '/diensten/cybersecurity' },
+        { name: 'Microsoft 365', href: '/diensten/microsoft-365' },
+        { name: 'VoIP Telefonie', href: '/diensten/voip-telefonie' },
+        { name: language === 'nl' ? 'Alle diensten' : 'All Services', href: '/diensten' }
+      ]
+    },
+    company: {
+      title: language === 'nl' ? 'Bedrijf' : 'Company',
+      links: [
+        { name: language === 'nl' ? 'Over Ons' : 'About Us', href: '/over-ons' },
+        { name: language === 'nl' ? 'Case Studies' : 'Case Studies', href: '/case-studies' },
+        { name: 'Portfolio', href: '/portfolio' },
+        { name: 'Testimonials', href: '/testimonials' },
+        { name: language === 'nl' ? 'Werken Bij Workflo' : 'Careers', href: '/werken-bij' },
+        { name: language === 'nl' ? 'Nieuws' : 'News', href: '/nieuws' }
+      ]
+    },
+    support: {
+      title: language === 'nl' ? 'Support' : 'Support',
+      links: [
+        { name: 'FAQ', href: '/faq' },
+        { name: language === 'nl' ? 'Tevredenheidscheck' : 'Satisfaction Check', href: '/tevredenheidscheck' },
+        { name: language === 'nl' ? 'Prijzen' : 'Pricing', href: '/prijzen' },
+        { name: 'Contact', href: '/contact' }
+      ],
+      external: [
+        { name: 'Servicedesk', href: 'https://servicedesk.workflo.it/portal', label: '24/7' },
+        { name: 'System Status', href: 'https://uptime.workflo.it/status/workflo' }
+      ]
+    }
   }
 
-  const stats = [
-    { icon: Users, value: '250+', label: 'Tevreden Klanten' },
-    { icon: Shield, value: '99.9%', label: 'Uptime Garantie' },
-    { icon: Clock, value: '24/7', label: 'Support Beschikbaar' },
-    { icon: Award, value: '10+', label: 'Jaar Ervaring' },
-  ]
-
   return (
-    <footer className="relative bg-gradient-to-b from-muted/30 to-background">
-      {/* Newsletter Section */}
-      <div className="border-y border-border bg-card">
+    <footer className="bg-gradient-to-b from-workflo-yellow-light/30 via-yellow-50/20 to-background border-t border-workflo-yellow/20">
+      {/* Newsletter Section - Simplified */}
+      <div className="bg-gradient-to-r from-workflo-yellow-light/40 via-yellow-100/30 to-workflo-yellow-light/40 border-b border-workflo-yellow/30">
         <div className="container mx-auto px-4 py-8">
-          <NewsletterSignup variant="full" />
+          <div className="max-w-md mx-auto text-center">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
+              {language === 'nl' ? 'Blijf op de hoogte' : 'Stay Updated'}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              {language === 'nl' ? 'Ontvang IT-tips en bedrijfsupdates' : 'Get IT tips and company updates'}
+            </p>
+            <HubSpotNewsletterSignup variant="compact" />
+          </div>
         </div>
       </div>
 
       {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-16">
-        {/* Simplified Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-12">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          {/* Company Info - Prominent */}
+          <div className="md:col-span-1">
+            <div className="mb-6">
+              <div className="text-2xl font-bold text-foreground mb-2">Workflo</div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {language === 'nl' 
+                  ? 'Amsterdam\'s meest vertrouwde IT-partner sinds 2014. We zorgen dat je technologie je groei versnelt.'
+                  : 'Amsterdam\'s most trusted IT partner since 2014. We ensure your technology accelerates your growth.'
+                }
+              </p>
+            </div>
+            
+            {/* Contact Info - Simplified with link to contact page */}
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <MapPin className="w-4 h-4 flex-shrink-0" />
+                <span>Amsterdam</span>
+              </div>
+              
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Clock className="w-4 h-4 flex-shrink-0" />
+                <span>{language === 'nl' ? 'Ma-Vr: 9:00 - 17:00' : 'Mon-Fri: 9:00 - 17:00'}</span>
+              </div>
+              
+              <Link 
+                href="/contact" 
+                className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors mt-3"
+              >
+                {language === 'nl' ? 'Contactgegevens' : 'Contact details'}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
           {/* Services */}
           <div>
-            <h3 className="font-bold text-lg mb-4 text-foreground">Diensten</h3>
+            <h3 className="font-semibold text-foreground mb-4">{footerSections.services.title}</h3>
             <ul className="space-y-2">
-              <li>
-                <Link href="/diensten/managed-it" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Managed IT Services
-                </Link>
-              </li>
-              <li>
-                <Link href="/diensten/cloud" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Cloud Oplossingen
-                </Link>
-              </li>
-              <li>
-                <Link href="/diensten/cybersecurity" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Cybersecurity
-                </Link>
-              </li>
-              <li>
-                <Link href="/prijzen" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Prijzen
-                </Link>
-              </li>
+              {footerSections.services.links.map((link, index) => (
+                <li key={index}>
+                  <Link 
+                    href={link.href} 
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Company */}
           <div>
-            <h3 className="font-bold text-lg mb-4 text-foreground">Bedrijf</h3>
+            <h3 className="font-semibold text-foreground mb-4">{footerSections.company.title}</h3>
             <ul className="space-y-2">
-              <li>
-                <Link href="/over-ons" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Over Workflo
-                </Link>
-              </li>
-              <li>
-                <Link href="/testimonials" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Testimonials
-                </Link>
-              </li>
-              <li>
-                <Link href="/nieuws" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Nieuws
-                </Link>
-              </li>
-              <li>
-                <Link href="/werken-bij" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Werken Bij
-                </Link>
-              </li>
+              {footerSections.company.links.map((link, index) => (
+                <li key={index}>
+                  <Link 
+                    href={link.href} 
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Support & Resources */}
           <div>
-            <h3 className="font-bold text-lg mb-4 text-foreground">Support</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="https://servicedesk.workflo.it/portal" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Servicedesk
-                </a>
-              </li>
-              <li>
-                <Link href="/faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <a href="tel:+31203080465" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  020-30 80 465
-                </a>
-              </li>
+            <h3 className="font-semibold text-foreground mb-4">{footerSections.support.title}</h3>
+            <ul className="space-y-2 mb-4">
+              {footerSections.support.links.map((link, index) => (
+                <li key={index}>
+                  <Link 
+                    href={link.href} 
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="font-bold text-lg mb-4 text-foreground">Contact</h3>
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <div>
-                <strong className="text-foreground">Workflo B.V.</strong>
-              </div>
-              <div>
-                Koivistokade 3<br />
-                1013 AC Amsterdam
-              </div>
-              <div>
-                <a href="tel:+31203080465" className="hover:text-primary transition-colors">
-                  020-30 80 465
-                </a>
-              </div>
-              <div>
-                <a href="mailto:info@workflo.it" className="hover:text-primary transition-colors">
-                  info@workflo.it
-                </a>
-              </div>
-              <div>
-                <span>Ma-Vr: 8:00 - 18:00</span>
-              </div>
+            
+            {/* External Support Links */}
+            <div className="pt-3 border-t border-border space-y-2">
+              {footerSections.support.external.map((link, index) => (
+                <div key={index}>
+                  <a 
+                    href={link.href} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                  >
+                    {link.name}
+                    <ExternalLink className="w-3 h-3" />
+                    {link.label && (
+                      <span className="ml-1 px-1.5 py-0.5 text-xs bg-primary/10 text-primary rounded">
+                        {link.label}
+                      </span>
+                    )}
+                  </a>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Simple Stats */}
-        <div className="py-8 border-y border-border mb-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {stats.map((stat, index) => (
-              <div key={index}>
-                <stat.icon className="w-6 h-6 mx-auto mb-2 text-primary" />
-                <div className="text-xl font-bold text-foreground">{stat.value}</div>
-                <div className="text-xs text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom Bar with Legal Links */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground">
+        {/* Bottom Section - Clean and minimal */}
+        <div className="flex flex-col md:flex-row justify-between items-center pt-6 text-sm text-muted-foreground">
           <div className="mb-4 md:mb-0">
-            <p>&copy; {currentYear} Workflo B.V. - IT dat gewoon werkt.</p>
-            <p className="mt-1 opacity-75">KvK: 87460807 | BTW: NL864300852B01</p>
+            <p>&copy; {currentYear} Workflo B.V. - {language === 'nl' ? 'IT dat gewoon werkt' : 'IT that simply works'}.</p>
+            <p className="text-xs opacity-75 mt-1">
+              KvK: 87460807 | BTW: NL864300852B01
+            </p>
           </div>
           
-          {/* Subtle Legal Links */}
-          <div className="flex items-center gap-4 text-xs opacity-75 hover:opacity-100 transition-opacity">
+          {/* Legal Links - Subtle */}
+          <div className="flex items-center gap-4 text-sm opacity-60 hover:opacity-100 transition-opacity">
             <Link href="/privacy" className="hover:text-primary transition-colors">
               Privacy
             </Link>
             <span>•</span>
             <Link href="/terms" className="hover:text-primary transition-colors">
-              Voorwaarden
+              {language === 'nl' ? 'Voorwaarden' : 'Terms'}
+            </Link>
+            <span>•</span>
+            <Link href="/disclaimer" className="hover:text-primary transition-colors">
+              Disclaimer
             </Link>
             <span>•</span>
             <Link href="/cookies" className="hover:text-primary transition-colors">

@@ -89,7 +89,7 @@ export function SecurityAlert() {
               <Button 
                 variant="secondary" 
                 size="sm"
-                className="bg-card text-destructive hover:bg-muted font-bold border-2 border-destructive-foreground">
+                className="bg-card text-destructive hover:bg-muted font-bold border-2 border-destructive-foreground"
                 asChild
               >
                 <Link href="/diensten/cybersecurity">

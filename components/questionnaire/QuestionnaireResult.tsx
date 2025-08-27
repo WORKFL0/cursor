@@ -25,7 +25,7 @@ export default function QuestionnaireResult({ result, onRestart }: Questionnaire
       case 'good':
         return <TrendingUp className="w-16 h-16 text-blue-500" />
       case 'needs-improvement':
-        return <AlertCircle className="w-16 h-16 text-yellow-500" />
+        return <AlertCircle className="w-16 h-16 text-workflo-yellow" />
       case 'critical':
         return <XCircle className="w-16 h-16 text-red-500" />
     }
@@ -38,7 +38,7 @@ export default function QuestionnaireResult({ result, onRestart }: Questionnaire
       case 'good':
         return 'bg-blue-50 border-blue-200'
       case 'needs-improvement':
-        return 'bg-yellow-50 border-yellow-200'
+        return 'bg-workflo-yellow/10 border-workflo-yellow/30'
       case 'critical':
         return 'bg-red-50 border-red-200'
     }
@@ -79,7 +79,7 @@ export default function QuestionnaireResult({ result, onRestart }: Questionnaire
       >
         <div className="inline-flex items-center gap-2 bg-muted rounded-full px-4 py-2">
           <span className="text-sm font-medium text-muted-foreground">
-            {language === 'nl' ? 'Uw score:' : 'Your score:'}
+            {language === 'nl' ? 'Je score:' : 'Your score:'}
           </span>
           <span className="text-2xl font-bold text-primary">
             {Math.round(result.score)}%
@@ -139,7 +139,7 @@ export default function QuestionnaireResult({ result, onRestart }: Questionnaire
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={language === 'nl' ? 'Uw e-mailadres' : 'Your email address'}
+                placeholder={language === 'nl' ? 'Je e-mailadres' : 'Your email address'}
                 className="w-full px-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
                 required
               />
@@ -164,7 +164,7 @@ export default function QuestionnaireResult({ result, onRestart }: Questionnaire
               </h3>
               <p className="text-muted-foreground">
                 {language === 'nl' 
-                  ? 'Uw rapport is verstuurd naar ' + email
+                  ? 'Je rapport is verstuurd naar ' + email
                   : 'Your report has been sent to ' + email}
               </p>
             </div>

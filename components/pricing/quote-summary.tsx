@@ -41,7 +41,7 @@ export function QuoteSummary({
         </div>
         <CardDescription>
           {language === 'nl' 
-            ? 'Uw gepersonaliseerde IT-diensten offerte' 
+            ? 'Je gepersonaliseerde IT-diensten offerte' 
             : 'Your personalized IT services quote'
           }
         </CardDescription>

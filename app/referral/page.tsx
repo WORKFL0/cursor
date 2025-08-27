@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
+import { HubSpotNewsletterSignup } from '@/components/forms/HubSpotNewsletterSignup'
 import { 
   Gift, 
   Users, 
@@ -80,8 +81,8 @@ export default function ReferralPage() {
       referrals: 10,
       reward: language === 'nl' ? 'iPad Pro' : 'iPad Pro',
       icon: Award,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100 dark:bg-yellow-900/20'
+      color: 'text-workflo-yellow',
+      bgColor: 'bg-workflo-yellow dark:bg-workflo-yellow/20'
     }
   ]
 
@@ -94,7 +95,7 @@ export default function ReferralPage() {
       toast({
         title: language === 'nl' ? 'Succesvol aangemeld!' : 'Successfully subscribed!',
         description: language === 'nl' 
-          ? 'U ontvangt binnenkort onze nieuwsbrief met exclusieve aanbiedingen.'
+          ? 'Je ontvangt binnenkort onze nieuwsbrief met exclusieve aanbiedingen.'
           : 'You will receive our newsletter with exclusive offers soon.',
       })
       setNewsletterEmail('')
@@ -114,7 +115,7 @@ export default function ReferralPage() {
       toast({
         title: language === 'nl' ? 'Welkom bij het Referral Program!' : 'Welcome to the Referral Program!',
         description: language === 'nl' 
-          ? `Uw persoonlijke referral code is: ${code}`
+          ? `Je persoonlijke referral code is: ${code}`
           : `Your personal referral code is: ${code}`,
       })
       setReferralForm({ name: '', email: '', company: '', phone: '', referredBy: '' })
@@ -190,7 +191,7 @@ export default function ReferralPage() {
             <div className="flex flex-wrap gap-4 justify-center">
               <Badge variant="secondary" className="px-4 py-2">
                 <Users className="w-4 h-4 mr-2" />
-                {language === 'nl' ? '500+ Actieve Verwijzers' : '500+ Active Referrers'}
+                {language === 'nl' ? '50+ Actieve Verwijzers' : '50+ Active Referrers'}
               </Badge>
               <Badge variant="secondary" className="px-4 py-2">
                 <Euro className="w-4 h-4 mr-2" />
@@ -371,55 +372,7 @@ export default function ReferralPage() {
 
               {/* Newsletter Tab */}
               <TabsContent value="newsletter">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>
-                      {language === 'nl' ? 'Ontvang Exclusieve Aanbiedingen' : 'Receive Exclusive Offers'}
-                    </CardTitle>
-                    <CardDescription>
-                      {language === 'nl' 
-                        ? 'Meld je aan voor onze nieuwsbrief en blijf op de hoogte van speciale acties en IT-tips.'
-                        : 'Subscribe to our newsletter and stay informed about special offers and IT tips.'
-                      }
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleNewsletterSubmit} className="space-y-4">
-                      <div>
-                        <Label htmlFor="newsletter-email">
-                          {language === 'nl' ? 'E-mailadres' : 'Email Address'}
-                        </Label>
-                        <Input
-                          id="newsletter-email"
-                          type="email"
-                          placeholder={language === 'nl' ? 'jouw@email.nl' : 'your@email.com'}
-                          value={newsletterEmail}
-                          onChange={(e) => setNewsletterEmail(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input type="checkbox" id="newsletter-consent" required className="rounded" />
-                        <Label htmlFor="newsletter-consent" className="text-sm">
-                          {language === 'nl' 
-                            ? 'Ik ga akkoord met het ontvangen van commerciële e-mails'
-                            : 'I agree to receive commercial emails'
-                          }
-                        </Label>
-                      </div>
-                      <Button type="submit" className="w-full" disabled={isLoading}>
-                        {isLoading ? (
-                          language === 'nl' ? 'Aanmelden...' : 'Subscribing...'
-                        ) : (
-                          <>
-                            <Mail className="w-4 h-4 mr-2" />
-                            {language === 'nl' ? 'Aanmelden voor Nieuwsbrief' : 'Subscribe to Newsletter'}
-                          </>
-                        )}
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
+                <HubSpotNewsletterSignup variant="full" />
               </TabsContent>
 
               {/* Referral Program Tab */}
@@ -445,7 +398,7 @@ export default function ReferralPage() {
                             {language === 'nl' ? 'Je bent aangemeld!' : 'You\'re signed up!'}
                           </h3>
                           <p className="text-muted-foreground dark:text-gray-300 mb-4">
-                            {language === 'nl' ? 'Jouw persoonlijke referral code:' : 'Your personal referral code:'}
+                            {language === 'nl' ? 'Je persoonlijke referral code:' : 'Your personal referral code:'}
                           </p>
                           <div className="flex items-center justify-center gap-2">
                             <code className="text-2xl font-mono font-bold text-primary bg-card dark:bg-gray-800 px-4 py-2 rounded">

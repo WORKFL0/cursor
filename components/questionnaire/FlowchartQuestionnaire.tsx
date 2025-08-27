@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useLanguage } from '@/lib/contexts/language-context'
-import { questions, calculateResult, type Question } from '@/lib/data/questionnaire-data'
+import { questions, calculateResult, calculateResultFromAnswers, type Question, type DetailedAnswer } from '@/lib/data/questionnaire-data'
 import QuestionnaireCard from './QuestionnaireCard'
 import QuestionnaireProgress from './QuestionnaireProgress'
 import QuestionnaireResult from './QuestionnaireResult'
@@ -13,6 +13,7 @@ export default function FlowchartQuestionnaire() {
   const { language } = useLanguage()
   const [currentQuestionId, setCurrentQuestionId] = useState(1)
   const [answers, setAnswers] = useState<number[]>([])
+  const [detailedAnswers, setDetailedAnswers] = useState<DetailedAnswer[]>([])
   const [questionsAnswered, setQuestionsAnswered] = useState<number[]>([])
   const [isComplete, setIsComplete] = useState(false)
   const [showResult, setShowResult] = useState<'satisfied' | 'contact' | null>(null)
@@ -33,7 +34,14 @@ export default function FlowchartQuestionnaire() {
     // Track the answer value (0 = negative, 1 = neutral, 2 = positive)
     const answerValue = currentQuestion.type[optionIndex] === 'positive' ? 2 : 
                        currentQuestion.type[optionIndex] === 'neutral' ? 1 : 0
+    
+    // Store both simple answers and detailed answers
     setAnswers([...answers, answerValue])
+    setDetailedAnswers([...detailedAnswers, {
+      questionId: currentQuestion.id,
+      answerValue,
+      question: currentQuestion
+    }])
     setQuestionsAnswered([...questionsAnswered, currentQuestion.id])
 
     // Determine next step
@@ -51,6 +59,7 @@ export default function FlowchartQuestionnaire() {
   const handleRestart = () => {
     setCurrentQuestionId(1)
     setAnswers([])
+    setDetailedAnswers([])
     setQuestionsAnswered([])
     setIsComplete(false)
     setShowResult(null)
@@ -58,9 +67,9 @@ export default function FlowchartQuestionnaire() {
 
   if (isComplete && showResult) {
     const result = showResult === 'satisfied' 
-      ? calculateResult(answers)
+      ? calculateResult(detailedAnswers)
       : {
-          ...calculateResult(answers),
+          ...calculateResult(detailedAnswers),
           category: 'critical' as const,
           title: language === 'nl' ? 'Tijd voor een upgrade!' : 'Time for an upgrade!',
           titleEN: 'Time for an upgrade!',

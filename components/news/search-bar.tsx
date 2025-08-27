@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X } from 'lucide-react'
 import { useLanguage } from '@/lib/contexts/language-context'
 
@@ -80,6 +80,23 @@ export function SearchBar({ searchQuery, onSearchChange, resultsCount }: SearchB
           )}
         </motion.div>
       )}
+      
+      {/* Search Suggestions or Quick Tips */}
+      <AnimatePresence>
+        {isFocused && !searchQuery && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mt-2 text-xs text-muted-foreground text-center"
+          >
+            {language === 'nl' 
+              ? 'Tip: Zoek op "cybersecurity", "cloud", "AI" of auteur naam'
+              : 'Tip: Try searching for "cybersecurity", "cloud", "AI" or author name'
+            }
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

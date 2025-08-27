@@ -162,10 +162,6 @@ export function ContactForm() {
     setIsSubmitting(true)
 
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Here you would typically send the data to your backend or email service
       const submissionData = {
         ...formData,
         honeypot: undefined, // Remove honeypot from actual submission
@@ -173,34 +169,61 @@ export function ContactForm() {
         userAgent: navigator.userAgent,
         referrer: document.referrer
       }
-      console.log('Form data:', submissionData)
-      
-      toast({
-        title: language === 'nl' ? 'Bericht verzonden!' : 'Message sent!',
-        description: language === 'nl' 
-          ? 'Bedankt voor je bericht. We nemen binnen 24 uur contact met je op.'
-          : 'Thank you for your message. We will contact you within 24 hours.',
+
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
       })
 
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        company: '',
-        subject: '',
-        message: '',
-        services: [],
-        honeypot: ''
-      })
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || `HTTP error! status: ${response.status}`)
+      }
+
+      if (result.success) {
+        toast({
+          title: language === 'nl' ? 'Bericht verzonden!' : 'Message sent!',
+          description: language === 'nl' 
+            ? 'Bedankt voor je bericht. We nemen binnen 24 uur contact met je op.'
+            : 'Thank you for your message. We will contact you within 24 hours.',
+        })
+
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          subject: '',
+          message: '',
+          services: [],
+          honeypot: ''
+        })
+      } else {
+        throw new Error(result.error || 'Unknown error occurred')
+      }
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Form submission error:', error)
+      
+      let errorMessage = language === 'nl' 
+        ? 'Er ging iets mis bij het verzenden. Probeer het later opnieuw of neem direct contact met ons op via 020-30 80 465.'
+        : 'Something went wrong while sending. Please try again later or contact us directly at 020-30 80 465.'
+      
+      // Handle rate limiting
+      if (error.message?.includes('Te veel verzoeken') || error.message?.includes('Rate limit')) {
+        errorMessage = language === 'nl' 
+          ? 'Te veel verzoeken. Wacht even en probeer het opnieuw.'
+          : 'Too many requests. Please wait a moment and try again.'
+      }
+      
       toast({
         title: language === 'nl' ? 'Fout opgetreden' : 'Error occurred',
-        description: language === 'nl' 
-          ? 'Er ging iets mis bij het verzenden. Probeer het later opnieuw of neem direct contact met ons op.'
-          : 'Something went wrong while sending. Please try again later or contact us directly.',
+        description: errorMessage,
         variant: 'destructive'
       })
     } finally {
@@ -216,7 +239,7 @@ export function ContactForm() {
         </CardTitle>
         <p className="text-muted-foreground">
           {language === 'nl' 
-            ? 'Vul het formulier in en we nemen binnen 24 uur contact met u op.'
+            ? 'Vul het formulier in en we nemen binnen 24 uur contact met je op.'
             : 'Fill out the form and we\'ll contact you within 24 hours.'
           }
         </p>
@@ -235,7 +258,7 @@ export function ContactForm() {
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
               className={`mt-1 ${errors.name ? 'border-destructive focus:ring-destructive' : 'focus:ring-primary focus:border-primary'}`}
-              placeholder={language === 'nl' ? 'Uw volledige naam' : 'Your full name'}
+              placeholder={language === 'nl' ? 'Je volledige naam' : 'Your full name'}
             />
             {errors.name && (
               <div className="flex items-center gap-2 mt-1 text-destructive">
@@ -256,7 +279,7 @@ export function ContactForm() {
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
               className={`mt-1 ${errors.email ? 'border-destructive focus:ring-destructive' : 'focus:ring-primary focus:border-primary'}`}
-              placeholder={language === 'nl' ? 'uw@email.nl' : 'your@email.com'}
+              placeholder={language === 'nl' ? 'je@email.nl' : 'your@email.com'}
             />
             {errors.email && (
               <div className="flex items-center gap-2 mt-1 text-destructive">
@@ -277,7 +300,7 @@ export function ContactForm() {
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
               className={`mt-1 ${errors.phone ? 'border-destructive focus:ring-destructive' : 'focus:ring-primary focus:border-primary'}`}
-              placeholder={language === 'nl' ? 'Uw telefoonnummer' : 'Your phone number'}
+              placeholder={language === 'nl' ? 'Je telefoonnummer' : 'Your phone number'}
             />
             {errors.phone && (
               <div className="flex items-center gap-2 mt-1 text-destructive">
@@ -298,7 +321,7 @@ export function ContactForm() {
               value={formData.company}
               onChange={(e) => handleInputChange('company', e.target.value)}
               className={`mt-1 ${errors.company ? 'border-destructive focus:ring-destructive' : 'focus:ring-primary focus:border-primary'}`}
-              placeholder={language === 'nl' ? 'Uw bedrijfsnaam' : 'Your company name'}
+              placeholder={language === 'nl' ? 'Je bedrijfsnaam' : 'Your company name'}
             />
             {errors.company && (
               <div className="flex items-center gap-2 mt-1 text-destructive">

@@ -91,9 +91,14 @@
     @apply bg-background text-foreground;
   }
   
-  /* Smooth transitions for theme changes */
+  /* Smooth transitions for theme changes and better UX */
   * {
-    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Improved link hover states */
+  a:hover {
+    transition: all 0.2s ease;
   }
   
   /* Enhanced focus states for accessibility */
@@ -127,6 +132,18 @@
   /* Safe background gradients using Workflo yellow */
   .gradient-workflo {
     background: linear-gradient(135deg, hsl(var(--workflo-yellow)) 0%, hsl(var(--workflo-yellow-dark)) 100%);
+  }
+
+  .gradient-workflo-soft {
+    background: linear-gradient(135deg, hsl(var(--workflo-yellow-light)) 0%, hsl(var(--workflo-yellow)) 20%, transparent 100%);
+  }
+
+  .gradient-workflo-radial {
+    background: radial-gradient(circle at center, hsl(var(--workflo-yellow-light)) 0%, transparent 70%);
+  }
+
+  .gradient-section-warm {
+    background: linear-gradient(135deg, hsl(var(--workflo-yellow-light)) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   }
 
   /* Safe text gradient for dark text on light backgrounds */
@@ -215,5 +232,132 @@
 
   .bg-grid-gray-100 {
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239CA3AF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* News Page Enhancements */
+  .bg-grid-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M0 20l20-20 20 20-20 20z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  /* Smooth scrolling for better UX */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced focus states for accessibility */
+  .focus-visible\:ring-2:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px hsl(var(--ring));
+  }
+
+  /* Custom scrollbar for webkit browsers */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Enhanced UX utilities */
+  .workflo-card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02];
+  }
+
+  .workflo-button-press {
+    @apply active:scale-95 transition-transform duration-75;
+  }
+
+  .workflo-focus-ring {
+    @apply focus-visible:ring-2 focus-visible:ring-workflo-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Workflo gradient animations */
+  @keyframes workflo-pulse {
+    0%, 100% {
+      background-color: hsl(var(--workflo-yellow));
+    }
+    50% {
+      background-color: hsl(var(--workflo-yellow-dark));
+    }
+  }
+
+  .workflo-pulse {
+    animation: workflo-pulse 2s infinite;
+  }
+
+  /* Interactive hover effects */
+  .workflo-interactive:hover {
+    @apply transform-gpu transition-transform duration-200;
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .workflo-interactive:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Improved card shadows with Workflo branding */
+  .workflo-card-shadow {
+    box-shadow: 
+      0 4px 6px -1px hsl(var(--workflo-yellow) / 0.1),
+      0 2px 4px -1px hsl(var(--workflo-yellow) / 0.06),
+      0 0 0 1px hsl(var(--workflo-yellow) / 0.05);
+  }
+
+  .workflo-card-shadow:hover {
+    box-shadow: 
+      0 20px 25px -5px hsl(var(--workflo-yellow) / 0.15),
+      0 10px 10px -5px hsl(var(--workflo-yellow) / 0.1),
+      0 0 0 1px hsl(var(--workflo-yellow) / 0.1);
   }
 }

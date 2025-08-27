@@ -39,7 +39,8 @@ export const industries = [
   { value: 'education', label: 'Education', labelNL: 'Onderwijs' },
   { value: 'creative', label: 'Creative Agency', labelNL: 'Creatief Bureau' },
   { value: 'manufacturing', label: 'Manufacturing', labelNL: 'Productie' },
-  { value: 'nonprofit', label: 'Non-profit', labelNL: 'Non-profit' }
+  { value: 'nonprofit', label: 'Non-profit', labelNL: 'Non-profit' },
+  { value: 'architecture', label: 'Architecture', labelNL: 'Architectuur' }
 ]
 
 export const serviceTypes = [
@@ -50,261 +51,178 @@ export const serviceTypes = [
   { value: 'backup-recovery', label: 'Backup & Recovery', labelNL: 'Backup & Herstel' },
   { value: 'network-setup', label: 'Network Setup', labelNL: 'Netwerk Installatie' },
   { value: 'voip', label: 'VoIP Implementation', labelNL: 'VoIP Implementatie' },
-  { value: 'microsoft-365', label: 'Microsoft 365', labelNL: 'Microsoft 365' }
+  { value: 'microsoft-365', label: 'Microsoft 365', labelNL: 'Microsoft 365' },
+  { value: 'it-support', label: 'IT Support', labelNL: 'IT Ondersteuning' }
 ]
 
 export const caseStudies: CaseStudy[] = [
   {
     id: '1',
-    clientName: 'TechStart Amsterdam',
-    clientLogo: '/images/logos/techstart.png',
-    industry: 'startup',
-    industryNL: 'startup',
-    challenge: 'A rapidly growing startup needed a complete IT infrastructure overhaul to support their scaling team from 10 to 50 employees. Their existing setup was causing frequent downtime and security vulnerabilities.',
-    challengeNL: 'Een snelgroeiende startup had een complete IT-infrastructuur renovatie nodig om hun schaalbare team van 10 naar 50 medewerkers te ondersteunen. Hun bestaande setup veroorzaakte frequente downtime en beveiligingslekken.',
-    solution: 'We implemented a comprehensive managed IT solution including cloud-first infrastructure, Microsoft 365 deployment, advanced cybersecurity measures, and 24/7 monitoring. The entire migration was completed over a weekend with zero business disruption.',
-    solutionNL: 'We implementeerden een uitgebreide managed IT-oplossing inclusief cloud-first infrastructuur, Microsoft 365 deployment, geavanceerde cybersecurity maatregelen, en 24/7 monitoring. De volledige migratie werd voltooid tijdens een weekend zonder bedrijfsonderbreking.',
+    clientName: 'Schulte & Lestraden',
+    clientLogo: '/images/logos/schulte-lestraden.png',
+    industry: 'professional-services',
+    industryNL: 'professionele diensten',
+    challenge: 'Schulte & Lestraden had behoefte aan professionele 2de lijns IT-support om hun groeiende praktijk te ondersteunen. Hun bestaande IT-setup kon de complexe vereisten van hun moderne dienstverlening niet meer aan.',
+    challengeNL: 'Schulte & Lestraden had behoefte aan professionele 2de lijns IT-support om hun groeiende praktijk te ondersteunen. Hun bestaande IT-setup kon de complexe vereisten van hun moderne dienstverlening niet meer aan.',
+    solution: 'Workflo implementeerde een complete managed IT-oplossing met focus op betrouwbaarheid, beveiliging en compliance. We zorgden voor 24/7 monitoring, proactief onderhoud en directe support wanneer nodig.',
+    solutionNL: 'Workflo implementeerde een complete managed IT-oplossing met focus op betrouwbaarheid, beveiliging en compliance. We zorgden voor 24/7 monitoring, proactief onderhoud en directe support wanneer nodig.',
     results: [
-      '99.9% uptime achieved',
-      '70% reduction in IT-related incidents',
-      '40% cost savings on IT infrastructure',
-      '50% faster deployment of new employees',
-      'Enhanced security posture with zero breaches'
+      'Volledige 2de lijns IT-support geïmplementeerd',
+      '99.9% uptime bereikt',
+      'Verbeterde compliance en beveiliging',
+      'Snellere response tijden op IT-issues',
+      'Proactieve preventie van problemen'
     ],
     resultsNL: [
-      '99,9% uptime bereikt',
-      '70% reductie in IT-gerelateerde incidenten',
-      '40% kostenbesparing op IT-infrastructuur',
-      '50% snellere implementatie van nieuwe medewerkers',
-      'Verbeterde beveiligingspositie zonder inbreuken'
+      'Volledige 2de lijns IT-support geïmplementeerd',
+      '99.9% uptime bereikt',
+      'Verbeterde compliance en beveiliging',
+      'Snellere response tijden op IT-issues',
+      'Proactieve preventie van problemen'
     ],
-    technologies: ['Microsoft 365', 'Azure Cloud', 'Cisco Meraki', 'CrowdStrike', 'Teams Phone'],
+    technologies: ['Microsoft 365', 'Azure Cloud', 'Advanced Security', 'Document Management', 'VPN Solutions'],
     testimonial: {
-      quote: 'Workflo transformed our chaotic IT setup into a streamlined, secure infrastructure. Their proactive approach means we can focus on growing our business instead of fighting technology issues.',
-      quoteNL: 'Workflo transformeerde onze chaotische IT-setup naar een gestroomlijnde, veilige infrastructuur. Hun proactieve aanpak betekent dat we ons kunnen focussen op het laten groeien van ons bedrijf in plaats van technologieproblemen te bestrijden.',
-      author: 'Jan van der Berg',
-      role: 'CEO',
-      roleNL: 'CEO'
-    },
-    duration: '6 weeks',
-    durationNL: '6 weken',
-    teamSize: 4,
-    featured: true,
-    tags: ['cloud-migration', 'managed-it', 'cybersecurity'],
-    tagsNL: ['cloud-migratie', 'managed-it', 'cyberbeveiliging'],
-    completedDate: '2024-01-15',
-    projectType: 'Complete IT Transformation',
-    projectTypeNL: 'Volledige IT Transformatie'
-  },
-  {
-    id: '2',
-    clientName: 'Creative Agency Zuid',
-    clientLogo: '/images/logos/creative-agency.png',
-    industry: 'creative',
-    industryNL: 'creatief',
-    challenge: 'A creative agency with large file workflows needed faster file sharing and collaboration tools. Their creative teams were losing hours daily due to slow file transfers and outdated collaboration methods.',
-    challengeNL: 'Een creatief bureau met grote bestandsworkflows had snellere bestandsdeling en samenwerkingstools nodig. Hun creatieve teams verloren dagelijks uren door langzame bestandsoverdrachten en verouderde samenwerkingsmethoden.',
-    solution: 'We deployed a high-performance cloud storage solution with Adobe Creative Cloud integration, implemented high-speed fiber connectivity, and set up collaborative workspaces with real-time synchronization.',
-    solutionNL: 'We implementeerden een high-performance cloud storage oplossing met Adobe Creative Cloud integratie, implementeerden high-speed glasvezel connectiviteit, en richtten collaboratieve werkruimtes in met real-time synchronisatie.',
-    results: [
-      '80% faster file transfers',
-      '60% improvement in team collaboration',
-      '95% reduction in version conflicts',
-      '30% increase in project delivery speed',
-      'Seamless remote work capabilities'
-    ],
-    resultsNL: [
-      '80% snellere bestandsoverdrachten',
-      '60% verbetering in teamsamenwerking',
-      '95% reductie in versieconflicten',
-      '30% toename in projectleveringssnelheid',
-      'Naadloze mogelijkheden voor thuiswerken'
-    ],
-    technologies: ['Adobe Creative Cloud', 'Microsoft OneDrive', 'Teams', 'Fiber Internet', 'Synology NAS'],
-    testimonial: {
-      quote: 'The performance improvement has been incredible. Our creative workflows are now seamless, and our team can collaborate effortlessly whether they\'re in the office or working from home.',
-      quoteNL: 'De prestatieverbetering is ongelooflijk geweest. Onze creatieve workflows zijn nu naadloos, en ons team kan moeiteloos samenwerken, of ze nu op kantoor zijn of thuiswerken.',
-      author: 'Lisa de Vries',
-      role: 'Operations Manager',
-      roleNL: 'Operations Manager'
-    },
-    duration: '4 weeks',
-    durationNL: '4 weken',
-    teamSize: 3,
-    featured: true,
-    tags: ['cloud-migration', 'collaboration', 'performance'],
-    tagsNL: ['cloud-migratie', 'samenwerking', 'prestaties'],
-    completedDate: '2024-02-20',
-    projectType: 'Creative Workflow Optimization',
-    projectTypeNL: 'Creatieve Workflow Optimalisatie'
-  },
-  {
-    id: '3',
-    clientName: 'Financial Partners BV',
-    clientLogo: '/images/logos/financial-partners.png',
-    industry: 'finance',
-    industryNL: 'financieel',
-    challenge: 'A financial services firm required enhanced cybersecurity measures to meet regulatory compliance and protect sensitive client data. They needed to implement multi-factor authentication and advanced threat protection.',
-    challengeNL: 'Een financiële dienstverlener had verbeterde cybersecurity maatregelen nodig om te voldoen aan regulatoire compliance en gevoelige klantgegevens te beschermen. Ze moesten multi-factor authenticatie en geavanceerde bedreigingsbescherming implementeren.',
-    solution: 'We implemented a comprehensive cybersecurity framework including endpoint detection and response (EDR), multi-factor authentication, encrypted communications, regular security audits, and staff training programs.',
-    solutionNL: 'We implementeerden een uitgebreid cybersecurity framework inclusief endpoint detection and response (EDR), multi-factor authenticatie, versleutelde communicatie, regelmatige beveiligingsaudits, en training programma\'s voor personeel.',
-    results: [
-      'Achieved full regulatory compliance',
-      'Zero security incidents in 12 months',
-      '90% reduction in phishing susceptibility',
-      '100% encrypted data transmission',
-      'Improved client trust and confidence'
-    ],
-    resultsNL: [
-      'Volledige regulatoire compliance bereikt',
-      'Nul beveiligingsincidenten in 12 maanden',
-      '90% reductie in phishing gevoeligheid',
-      '100% versleutelde datatransmissie',
-      'Verbeterd klantvertrouwen en -vertrouwen'
-    ],
-    technologies: ['CrowdStrike Falcon', 'Microsoft Defender', 'Azure AD', 'Duo MFA', 'Proofpoint'],
-    testimonial: {
-      quote: 'Our clients now have complete confidence in our security measures. Workflo\'s cybersecurity expertise has been instrumental in maintaining our reputation and regulatory compliance.',
-      quoteNL: 'Onze klanten hebben nu volledig vertrouwen in onze beveiligingsmaatregelen. Workflo\'s cybersecurity expertise is instrumentaal geweest in het behouden van onze reputatie en regulatoire compliance.',
-      author: 'Mark Jansen',
-      role: 'IT Director',
-      roleNL: 'IT Directeur'
-    },
-    duration: '8 weeks',
-    durationNL: '8 weken',
-    teamSize: 3,
-    featured: true,
-    tags: ['cybersecurity', 'compliance', 'data-protection'],
-    tagsNL: ['cyberbeveiliging', 'compliance', 'gegevensbescherming'],
-    completedDate: '2024-03-10',
-    projectType: 'Cybersecurity Enhancement',
-    projectTypeNL: 'Cybersecurity Verbetering'
-  },
-  {
-    id: '4',
-    clientName: 'Healthcare Plus',
-    clientLogo: '/images/logos/healthcare-plus.png',
-    industry: 'healthcare',
-    industryNL: 'zorgverlening',
-    challenge: 'A healthcare practice needed HIPAA-compliant backup and disaster recovery solutions to protect patient data and ensure business continuity during emergencies.',
-    challengeNL: 'Een zorgpraktijk had HIPAA-conforme backup en disaster recovery oplossingen nodig om patiëntgegevens te beschermen en bedrijfscontinuïteit te waarborgen tijdens noodsituaties.',
-    solution: 'We designed and implemented a comprehensive backup strategy with encrypted cloud storage, local redundancy, automated testing, and detailed disaster recovery procedures with guaranteed recovery time objectives.',
-    solutionNL: 'We ontwierpen en implementeerden een uitgebreide backup strategie met versleutelde cloud opslag, lokale redundantie, geautomatiseerde testing, en gedetailleerde disaster recovery procedures met gegarandeerde recovery time objectives.',
-    results: [
-      'HIPAA compliance achieved',
-      '15-minute recovery time objective',
-      '99.99% data integrity maintained',
-      'Automated daily backup verification',
-      'Successful disaster recovery testing'
-    ],
-    resultsNL: [
-      'HIPAA compliance bereikt',
-      '15-minuten recovery time objective',
-      '99,99% data integriteit behouden',
-      'Geautomatiseerde dagelijkse backup verificatie',
-      'Succesvolle disaster recovery testing'
-    ],
-    technologies: ['Veeam Backup', 'Azure Storage', 'Hyper-V', 'BitLocker', 'HIPAA Tools'],
-    testimonial: {
-      quote: 'Peace of mind is priceless in healthcare. Knowing our patient data is secure and recoverable allows us to focus entirely on providing excellent patient care.',
-      quoteNL: 'Gemoedsrust is onbetaalbaar in de zorgverlening. Weten dat onze patiëntgegevens veilig en herstelbaar zijn, stelt ons in staat om ons volledig te concentreren op het bieden van uitstekende patiëntenzorg.',
-      author: 'Anna Hendriks',
-      role: 'Operations Director',
-      roleNL: 'Operations Directeur'
-    },
-    duration: '5 weeks',
-    durationNL: '5 weken',
-    teamSize: 2,
-    featured: false,
-    tags: ['backup-recovery', 'compliance', 'data-protection'],
-    tagsNL: ['backup-herstel', 'compliance', 'gegevensbescherming'],
-    completedDate: '2024-03-05',
-    projectType: 'Disaster Recovery Implementation',
-    projectTypeNL: 'Disaster Recovery Implementatie'
-  },
-  {
-    id: '5',
-    clientName: 'Legal Associates',
-    clientLogo: '/images/logos/legal-associates.png',
-    industry: 'legal',
-    industryNL: 'juridisch',
-    challenge: 'A law firm needed a complete Microsoft 365 implementation with advanced document management, secure client communication, and mobile access for their attorneys.',
-    challengeNL: 'Een advocatenkantoor had een complete Microsoft 365 implementatie nodig met geavanceerd documentbeheer, veilige klantcommunicatie, en mobiele toegang voor hun advocaten.',
-    solution: 'We deployed Microsoft 365 E5 with SharePoint document libraries, Teams for secure client communication, advanced compliance features, and mobile device management for seamless remote work.',
-    solutionNL: 'We implementeerden Microsoft 365 E5 met SharePoint documentbibliotheken, Teams voor veilige klantcommunicatie, geavanceerde compliance functies, en mobiel apparaatbeheer voor naadloos thuiswerken.',
-    results: [
-      '50% faster document retrieval',
-      '75% reduction in email storage issues',
-      '100% secure client communications',
-      '60% improvement in remote productivity',
-      'Enhanced collaboration between attorneys'
-    ],
-    resultsNL: [
-      '50% snellere document retrieval',
-      '75% reductie in email storage problemen',
-      '100% veilige klantcommunicatie',
-      '60% verbetering in remote productiviteit',
-      'Verbeterde samenwerking tussen advocaten'
-    ],
-    technologies: ['Microsoft 365 E5', 'SharePoint', 'Teams', 'OneDrive', 'Intune'],
-    testimonial: {
-      quote: 'The transition to Microsoft 365 has revolutionized how we work. Document management is now effortless, and our attorneys can work securely from anywhere.',
-      quoteNL: 'De overgang naar Microsoft 365 heeft een revolutie teweeggebracht in hoe we werken. Documentbeheer is nu moeiteloos, en onze advocaten kunnen veilig overal werken.',
-      author: 'Sophie Bakker',
+      quote: 'Schulte & Lestraden benaderde ons voor professionele 2de lijns support. Hun vertrouwen in onze expertise heeft geleid tot een succesvolle langdurige samenwerking.',
+      quoteNL: 'Schulte & Lestraden benaderde ons voor professionele 2de lijns support. Hun vertrouwen in onze expertise heeft geleid tot een succesvolle langdurige samenwerking.',
+      author: 'Managing Partner',
       role: 'Managing Partner',
       roleNL: 'Managing Partner'
     },
+    duration: '8 weeks',
+    durationNL: '8 weken',
+    teamSize: 4,
+    featured: true,
+    tags: ['managed-it', 'it-support', 'cybersecurity'],
+    tagsNL: ['managed-it', 'it-ondersteuning', 'cyberbeveiliging'],
+    completedDate: '2024-06-15',
+    projectType: 'Managed IT Services',
+    projectTypeNL: 'Beheerde IT Diensten'
+  },
+  {
+    id: '2',
+    clientName: 'Duwtje',
+    clientLogo: '/images/logos/duwtje.png',
+    industry: 'research',
+    industryNL: 'onderzoek',
+    challenge: 'Duwtje, een wetenschappelijk gedragsbureau, had behoefte aan een gespecialiseerde IT-partner die hun onderzoeksmethodieken en data-analyse behoeften kon ondersteunen met moderne technologie oplossingen.',
+    challengeNL: 'Duwtje, een wetenschappelijk gedragsbureau, had behoefte aan een gespecialiseerde IT-partner die hun onderzoeksmethodieken en data-analyse behoeften kon ondersteunen met moderne technologie oplossingen.',
+    solution: 'We ontwikkelden een op maat gemaakte IT-infrastructuur die perfect aansluit bij wetenschappelijke onderzoeksprocessen, inclusief veilige data opslag, cloud collaboratie tools en betrouwbare backup systemen voor onderzoeksdata.',
+    solutionNL: 'We ontwikkelden een op maat gemaakte IT-infrastructuur die perfect aansluit bij wetenschappelijke onderzoeksprocessen, inclusief veilige data opslag, cloud collaboratie tools en betrouwbare backup systemen voor onderzoeksdata.',
+    results: [
+      'Naadloze onderzoeks workflows geïmplementeerd',
+      'Verbeterde team collaboratie',
+      'Snellere project deliveries',
+      'Zero data loss incidents',
+      'Flexibele remote werk mogelijkheden'
+    ],
+    resultsNL: [
+      'Naadloze onderzoeks workflows geïmplementeerd',
+      'Verbeterde team collaboratie',
+      'Snellere project deliveries',
+      'Zero data loss incidents',
+      'Flexibele remote werk mogelijkheden'
+    ],
+    technologies: ['Adobe Creative Cloud', 'Microsoft Teams', 'OneDrive', 'High-speed Fiber', 'Cloud Storage'],
+    testimonial: {
+      quote: 'Het voordeel van een gespecialiseerde IT-partner zoals Workflo is dat ze onze creatieve processen begrijpen en de technologie daarop afstemmen. Een perfecte match voor ons bureau.',
+      quoteNL: 'Het voordeel van een gespecialiseerde IT-partner zoals Workflo is dat ze onze creatieve processen begrijpen en de technologie daarop afstemmen. Een perfecte match voor ons bureau.',
+      author: 'Creative Director',
+      role: 'Creative Director',
+      roleNL: 'Creative Director'
+    },
     duration: '6 weeks',
     durationNL: '6 weken',
     teamSize: 3,
-    featured: false,
-    tags: ['microsoft-365', 'document-management', 'collaboration'],
-    tagsNL: ['microsoft-365', 'documentbeheer', 'samenwerking'],
-    completedDate: '2024-01-28',
-    projectType: 'Microsoft 365 Implementation',
-    projectTypeNL: 'Microsoft 365 Implementatie'
+    featured: true,
+    tags: ['cloud-migration', 'managed-it', 'backup-recovery'],
+    tagsNL: ['cloud-migratie', 'managed-it', 'backup-herstel'],
+    completedDate: '2024-07-20',
+    projectType: 'Creative IT Infrastructure',
+    projectTypeNL: 'Creatieve IT Infrastructuur'
   },
   {
-    id: '6',
-    clientName: 'Retail Solutions NL',
-    clientLogo: '/images/logos/retail-solutions.png',
+    id: '3',
+    clientName: 'JUMP! Retail',
+    clientLogo: '/images/logos/jump.png',
     industry: 'retail',
     industryNL: 'retail',
-    challenge: 'A retail company with multiple locations needed a modern VoIP phone system to improve customer service and reduce communication costs across their stores.',
-    challengeNL: 'Een retailbedrijf met meerdere locaties had een modern VoIP telefoonsysteem nodig om de klantenservice te verbeteren en communicatiekosten in hun winkels te verlagen.',
-    solution: 'We implemented a cloud-based VoIP solution with advanced call routing, customer queue management, integration with their CRM system, and detailed analytics for performance monitoring.',
-    solutionNL: 'We implementeerden een cloud-gebaseerde VoIP oplossing met geavanceerde oproep routing, klant wachtrij management, integratie met hun CRM systeem, en gedetailleerde analytics voor prestatie monitoring.',
+    challenge: 'JUMP! Retail had vanaf de start behoefte aan een betrouwbare IT-partner die kon fungeren als hun complete IT-afdeling voor advies, aankoop, installatie en dagelijks beheer.',
+    challengeNL: 'JUMP! Retail had vanaf de start behoefte aan een betrouwbare IT-partner die kon fungeren als hun complete IT-afdeling voor advies, aankoop, installatie en dagelijks beheer.',
+    solution: 'Workflo werd de vaste IT-manager voor JUMP!, waarbij we volledige verantwoordelijkheid namen voor hun IT-infrastructuur, van strategisch advies tot dagelijkse ondersteuning.',
+    solutionNL: 'Workflo werd de vaste IT-manager voor JUMP!, waarbij we volledige verantwoordelijkheid namen voor hun IT-infrastructuur, van strategisch advies tot dagelijkse ondersteuning.',
     results: [
-      '40% reduction in communication costs',
-      '35% improvement in call quality',
-      '60% faster customer service response',
-      '25% increase in customer satisfaction',
-      'Unified communication across all locations'
+      'Complete IT-afdeling as a Service',
+      'Strategisch IT-advies voor groei',
+      'Proactief beheer en onderhoud',
+      'Snelle respons op dagelijkse issues',
+      'Kostenefficiënte IT-oplossingen'
     ],
     resultsNL: [
-      '40% reductie in communicatiekosten',
-      '35% verbetering in gesprekskwaliteit',
-      '60% snellere klantenservice respons',
-      '25% toename in klanttevredenheid',
-      'Uniforme communicatie over alle locaties'
+      'Complete IT-afdeling as a Service',
+      'Strategisch IT-advies voor groei',
+      'Proactief beheer en onderhoud',
+      'Snelle respons op dagelijkse issues',
+      'Kostenefficiënte IT-oplossingen'
     ],
-    technologies: ['Teams Phone', 'Azure Communication Services', 'Power Platform', 'Session Border Controller'],
+    technologies: ['Microsoft 365', 'Azure', 'Retail Systems', 'POS Integration', 'Security Solutions'],
     testimonial: {
-      quote: 'The new phone system has transformed our customer service. Our staff can now handle calls more efficiently, and the cost savings have been substantial.',
-      quoteNL: 'Het nieuwe telefoonsysteem heeft onze klantenservice getransformeerd. Ons personeel kan nu efficiënter omgaan met gesprekken, en de kostenbesparing is aanzienlijk geweest.',
-      author: 'Peter van Dijk',
-      role: 'CTO',
-      roleNL: 'CTO'
+      quote: 'Florian, is vrijwel vanaf de start van ons bureau JUMP! onze IT manager geweest. In advies, in aankoop, in installatie en operatie is Florian onze spil. Ook bij dagelijkse issues is Florian zeer adequaat in zijn schakelen.',
+      quoteNL: 'Florian, is vrijwel vanaf de start van ons bureau JUMP! onze IT manager geweest. In advies, in aankoop, in installatie en operatie is Florian onze spil. Ook bij dagelijkse issues is Florian zeer adequaat in zijn schakelen.',
+      author: 'Ernst-Jan Smids',
+      role: 'Oprichter',
+      roleNL: 'Oprichter'
     },
-    duration: '7 weeks',
-    durationNL: '7 weken',
-    teamSize: 3,
+    duration: 'Ongoing',
+    durationNL: 'Doorlopend',
+    teamSize: 4,
     featured: false,
-    tags: ['voip', 'communication', 'cost-optimization'],
-    tagsNL: ['voip', 'communicatie', 'kostenoptimalisatie'],
-    completedDate: '2024-02-15',
-    projectType: 'VoIP System Implementation',
-    projectTypeNL: 'VoIP Systeem Implementatie'
+    tags: ['managed-it', 'it-support', 'microsoft-365'],
+    tagsNL: ['managed-it', 'it-ondersteuning', 'microsoft-365'],
+    completedDate: '2024-08-01',
+    projectType: 'Complete IT Management',
+    projectTypeNL: 'Volledig IT Beheer'
+  },
+  {
+    id: '4',
+    clientName: 'Voice.industries',
+    clientLogo: '/images/logos/voice-industries.png',
+    industry: 'creative',
+    industryNL: 'creatief',
+    challenge: 'Een voice casting bureau had specifieke technische uitdagingen met audio workflows en hardware/software integratie die hun productiviteit beïnvloedde.',
+    challengeNL: 'Een voice casting bureau had specifieke technische uitdagingen met audio workflows en hardware/software integratie die hun productiviteit beïnvloedde.',
+    solution: 'Workflo loste complexe audio-technische problemen op en optimaliseerde de workflow zodat het creatieve proces ononderbroken kon doorgaan.',
+    solutionNL: 'Workflo loste complexe audio-technische problemen op en optimaliseerde de workflow zodat het creatieve proces ononderbroken kon doorgaan.',
+    results: [
+      'Geoptimaliseerde audio workflows',
+      'Stabiele recording omgeving',
+      'Snellere projectafhandeling',
+      'Minimale technische onderbrekingen',
+      'Verhoogde klant tevredenheid'
+    ],
+    resultsNL: [
+      'Geoptimaliseerde audio workflows',
+      'Stabiele recording omgeving',
+      'Snellere projectafhandeling',
+      'Minimale technische onderbrekingen',
+      'Verhoogde klant tevredenheid'
+    ],
+    technologies: ['Audio Software', 'DAW Systems', 'Cloud Storage', 'Hardware Integration', 'Backup Solutions'],
+    testimonial: {
+      quote: 'Florian keeps your workflow going, literally! Whenever you have a problem regarding a computer\'s soft or hardware, he will look into it and solve it for you! Always eager to extend his knowledge with the end goal to give you an even better service!',
+      quoteNL: 'Florian houdt je workflow letterlijk draaiende! Wanneer je een probleem hebt met computer software of hardware, kijkt hij ernaar en lost het voor je op! Altijd bereid om zijn kennis uit te breiden met als einddoel een nog betere service te geven!',
+      author: 'Sabine Hernandez Arce - de Bruijn',
+      role: 'Voice Consultant | Casting Director',
+      roleNL: 'Voice Consultant | Casting Director'
+    },
+    duration: '4 weeks',
+    durationNL: '4 weken',
+    teamSize: 2,
+    featured: false,
+    tags: ['it-support', 'managed-it', 'backup-recovery'],
+    tagsNL: ['it-ondersteuning', 'managed-it', 'backup-herstel'],
+    completedDate: '2024-03-20',
+    projectType: 'Audio Workflow Optimization',
+    projectTypeNL: 'Audio Workflow Optimalisatie'
   }
 ]
 

@@ -46,7 +46,7 @@ export default function ServicedeskPage() {
   const priorityOptions = [
     { value: 'low', label: language === 'nl' ? 'Laag' : 'Low', color: 'green' },
     { value: 'medium', label: language === 'nl' ? 'Normaal' : 'Medium', color: 'yellow' },
-    { value: 'high', label: language === 'nl' ? 'Hoog' : 'High', color: 'orange' },
+    { value: 'high', label: language === 'nl' ? 'Hoog' : 'High', color: 'yellow' },
     { value: 'critical', label: language === 'nl' ? 'Kritiek' : 'Critical', color: 'red' }
   ]
 

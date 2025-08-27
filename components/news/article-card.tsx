@@ -147,6 +147,8 @@ export function ArticleCard({ article, featured = false, index = 0 }: ArticleCar
             </Link>
           </div>
         </CardContent>
+        {/* Hover overlay effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       </Card>
     </motion.div>
   )

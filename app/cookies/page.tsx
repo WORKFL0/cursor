@@ -81,7 +81,7 @@ export default function CookiePolicyPage() {
             <div className="prose prose-lg max-w-none mb-12">
               <p className="text-xl text-muted-foreground leading-relaxed">
                 {language === 'nl' 
-                  ? 'Deze cookieverklaring legt uit hoe Workflo B.V. cookies en vergelijkbare technologieën gebruikt op onze website om u de beste ervaring te bieden.'
+                  ? 'Deze cookieverklaring legt uit hoe Workflo B.V. cookies en vergelijkbare technologieën gebruikt op onze website om je de beste ervaring te bieden.'
                   : 'This cookie statement explains how Workflo B.V. uses cookies and similar technologies on our website to provide you with the best experience.'
                 }
               </p>
@@ -116,10 +116,10 @@ export default function CookiePolicyPage() {
                 
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-3">
-                    {language === 'nl' ? 'Uw controle' : 'Your control'}
+                    {language === 'nl' ? 'Jouw controle' : 'Your control'}
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
-                    <li>{language === 'nl' ? 'U kunt cookies accepteren of weigeren' : 'You can accept or decline cookies'}</li>
+                    <li>{language === 'nl' ? 'Je kunt cookies accepteren of weigeren' : 'You can accept or decline cookies'}</li>
                     <li>{language === 'nl' ? 'Browserinstellingen aanpassen' : 'Adjust browser settings'}</li>
                     <li>{language === 'nl' ? 'Cookies op elk moment verwijderen' : 'Delete cookies at any time'}</li>
                     <li>{language === 'nl' ? 'Voorkeuren wijzigen' : 'Change preferences'}</li>
@@ -217,7 +217,7 @@ export default function CookiePolicyPage() {
                         {language === 'nl' ? 'Google Analytics - unieke gebruikers identificeren' : 'Google Analytics - identify unique users'}
                       </td>
                       <td className="border border-gray-300 px-4 py-3">
-                        <span className="px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs">
+                        <span className="px-2 py-1 bg-workflo-yellow/20 text-foreground font-medium rounded text-xs">
                           {language === 'nl' ? 'Analytisch' : 'Analytics'}
                         </span>
                       </td>
@@ -253,7 +253,7 @@ export default function CookiePolicyPage() {
                         {language === 'nl' ? 'Hotjar - gebruikersgedrag tracking' : 'Hotjar - user behavior tracking'}
                       </td>
                       <td className="border border-gray-300 px-4 py-3">
-                        <span className="px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs">
+                        <span className="px-2 py-1 bg-workflo-yellow/20 text-foreground font-medium rounded text-xs">
                           {language === 'nl' ? 'Analytisch' : 'Analytics'}
                         </span>
                       </td>
@@ -378,11 +378,11 @@ export default function CookiePolicyPage() {
                   </div>
                 </div>
                 
-                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-6">
-                  <h3 className="font-semibold text-yellow-900 mb-2">
+                <div className="bg-workflo-yellow/10 border-l-4 border-workflo-yellow p-6">
+                  <h3 className="font-semibold text-foreground mb-2">
                     {language === 'nl' ? 'Let op' : 'Please note'}
                   </h3>
-                  <p className="text-yellow-800">
+                  <p className="text-foreground">
                     {language === 'nl' 
                       ? 'Het uitschakelen van cookies kan de functionaliteit van onze website beperken.'
                       : 'Disabling cookies may limit the functionality of our website.'
@@ -399,7 +399,7 @@ export default function CookiePolicyPage() {
               </h2>
               <p className="text-muted-foreground">
                 {language === 'nl' 
-                  ? 'We kunnen dit cookiebeleid van tijd tot tijd bijwerken om wijzigingen in onze praktijken of om andere operationele, juridische of regelgevingredenen weer te geven. We raden u aan om dit beleid regelmatig te controleren.'
+                  ? 'We kunnen dit cookiebeleid van tijd tot tijd bijwerken om wijzigingen in onze praktijken of om andere operationele, juridische of regelgevingredenen weer te geven. We raden je aan om dit beleid regelmatig te controleren.'
                   : 'We may update this cookie policy from time to time to reflect changes to our practices or for other operational, legal or regulatory reasons. We encourage you to review this policy periodically.'
                 }
               </p>

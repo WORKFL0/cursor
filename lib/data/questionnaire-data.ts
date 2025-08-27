@@ -325,95 +325,213 @@ export interface QuestionnaireResult {
   ctaTextEN: string
 }
 
-export const calculateResult = (answers: number[]): QuestionnaireResult => {
+export interface DetailedAnswer {
+  questionId: number
+  answerValue: number
+  question: Question
+}
+
+// Mapping of problem areas to personalized recommendations
+const personalizedRecommendations = {
+  slowResponse: {
+    nl: "Workflo biedt snelle response binnen 4 uur, vaak binnen 30 minuten. Onze 24/7 helpdesk zorgt ervoor dat je nooit lang hoeft te wachten.",
+    en: "Workflo provides fast response within 4 hours, often within 30 minutes. Our 24/7 helpdesk ensures you never have to wait long."
+  },
+  lackExpertise: {
+    nl: "Onze Microsoft-gecertificeerde experts hebben jarenlange ervaring. Wij lossen problemen meteen goed op, zonder gezeur over uitleg.",
+    en: "Our Microsoft-certified experts have years of experience. We solve problems correctly immediately, without hassle about explanations."
+  },
+  securityConcerns: {
+    nl: "Workflo's cybersecurity-specialisten beschermen je bedrijf met enterprise-grade beveiliging, inclusief 24/7 monitoring en proactieve dreigingsdetectie.",
+    en: "Workflo's cybersecurity specialists protect your business with enterprise-grade security, including 24/7 monitoring and proactive threat detection."
+  },
+  reliabilityIssues: {
+    nl: "Met Workflo's proactieve monitoring en onderhoud voorkom je systeemstoringen. Onze uptime-garantie van 99.9% houdt jouw bedrijf draaiende.",
+    en: "With Workflo's proactive monitoring and maintenance, you prevent system failures. Our 99.9% uptime guarantee keeps your business running."
+  },
+  highCosts: {
+    nl: "Workflo biedt transparante, voorspelbare IT-kosten zonder verrassingen. Bespaar tot 30% op je IT-uitgaven met onze efficiënte all-in-one aanpak.",
+    en: "Workflo offers transparent, predictable IT costs without surprises. Save up to 30% on your IT expenses with our efficient all-in-one approach."
+  },
+  poorCommunication: {
+    nl: "Bij Workflo krijg je een persoonlijke IT-manager die proactief communiceert en je altijd op de hoogte houdt van je IT-status.",
+    en: "At Workflo, you get a personal IT manager who communicates proactively and always keeps you informed of your IT status."
+  },
+  limitedSupport: {
+    nl: "Workflo biedt complete 24/7 ondersteuning, inclusief remote support, on-site service en emergency response wanneer je het nodig hebt.",
+    en: "Workflo provides complete 24/7 support, including remote support, on-site service and emergency response when you need it."
+  }
+}
+
+// Backward compatibility function for simple answers
+export const calculateResultFromAnswers = (answers: number[]): QuestionnaireResult => {
+  // Convert simple answers to detailed answers with minimal info
+  const detailedAnswers: DetailedAnswer[] = answers.map((answerValue, index) => ({
+    questionId: index + 1, // Simple mapping
+    answerValue,
+    question: questions[index] || questions[0] // Fallback
+  }))
+  return calculateResult(detailedAnswers)
+}
+
+export const calculateResult = (detailedAnswers: DetailedAnswer[]): QuestionnaireResult => {
   // Calculate score based on answers
+  const answers = detailedAnswers.map(da => da.answerValue)
   const score = answers.reduce((total, answer) => total + answer, 0)
   const maxScore = answers.length * 2 // Maximum 2 points per answer
   const percentage = (score / maxScore) * 100
 
-  if (percentage >= 80) {
+  // Identify problem areas from negative answers (value 0)
+  const problemAreas = new Set<string>()
+  const specificProblems: string[] = []
+  const specificProblemsEN: string[] = []
+
+  detailedAnswers.forEach(({ answerValue, question, questionId }) => {
+    if (answerValue === 0) { // Negative answer
+      // Map specific questions to problem categories
+      switch (questionId) {
+        case 1: // Not satisfied with IT support
+          problemAreas.add('limitedSupport')
+          specificProblems.push("Je bent ontevreden met je huidige IT-ondersteuning")
+          specificProblemsEN.push("You are dissatisfied with your current IT support")
+          break
+        case 2: // Slow response to problems
+          problemAreas.add('slowResponse')
+          specificProblems.push("IT-problemen worden te langzaam opgelost")
+          specificProblemsEN.push("IT problems are solved too slowly")
+          break
+        case 4: // Insufficient expertise
+        case 25: // Employees don't know how to work securely
+          problemAreas.add('lackExpertise')
+          specificProblems.push("Je IT-partner heeft onvoldoende expertise")
+          specificProblemsEN.push("Your IT partner has insufficient expertise")
+          break
+        case 5: // Problems not solved in one go
+        case 23: // Urgent problems not responded to quickly
+          problemAreas.add('slowResponse')
+          break
+        case 6: // Security is very important
+        case 12: // No good security plan
+        case 13: // No cybersecurity training
+        case 24: // Don't trust security measures
+          problemAreas.add('securityConcerns')
+          specificProblems.push("Je hebt zorgen over cybersecurity")
+          specificProblemsEN.push("You have concerns about cybersecurity")
+          break
+        case 7: // Regular performance issues
+        case 9: // Systems fail too often
+        case 16: // Too little IT capacity for growth
+        case 27: // Programs don't work well together
+        case 28: // Can't easily expand IT systems
+          problemAreas.add('reliabilityIssues')
+          specificProblems.push("Je systemen zijn niet betrouwbaar genoeg")
+          specificProblemsEN.push("Your systems are not reliable enough")
+          break
+        case 8: // Too expensive IT services
+        case 18: // Pay for unused services
+        case 22: // Don't get adequate support for the price
+        case 29: // No clear cost explanations
+          problemAreas.add('highCosts')
+          specificProblems.push("Je IT-kosten zijn te hoog of onduidelijk")
+          specificProblemsEN.push("Your IT costs are too high or unclear")
+          break
+        case 10: // No proactive advice
+        case 11: // Not available outside office hours
+        case 30: // Wouldn't recommend current IT support
+          problemAreas.add('poorCommunication')
+          specificProblems.push("Je mist proactieve communicatie van je IT-partner")
+          specificProblemsEN.push("You miss proactive communication from your IT partner")
+          break
+        case 14: // Rarely backup data
+        case 19: // No disaster recovery plan
+        case 20: // Slow recovery from outages
+        case 26: // Can't quickly retrieve data
+          problemAreas.add('reliabilityIssues')
+          specificProblems.push("Je data en backups zijn niet op orde")
+          specificProblemsEN.push("Your data and backups are not in order")
+          break
+      }
+    }
+  })
+
+  // Generate personalized recommendations based on identified problems
+  const personalizedRecs: string[] = []
+  const personalizedRecsEN: string[] = []
+
+  // Always start with the main message
+  const mainMessage = "Neem zo snel mogelijk contact met ons op om je IT naar een hoger niveau te tillen, zodat jij je kunt focussen op andere, belangrijkere zaken. Wij zorgen ervoor dat je IT op een hoger niveau komt."
+  const mainMessageEN = "Take contact with us as soon as possible to elevate your IT to a higher level, so you can focus on other, more important matters. We ensure your IT reaches a higher level."
+
+  personalizedRecs.push(mainMessage)
+  personalizedRecsEN.push(mainMessageEN)
+
+  // Add specific recommendations based on their problems
+  problemAreas.forEach(area => {
+    const rec = personalizedRecommendations[area as keyof typeof personalizedRecommendations]
+    if (rec) {
+      personalizedRecs.push(rec.nl)
+      personalizedRecsEN.push(rec.en)
+    }
+  })
+
+  // If no specific problems identified, add generic professional message
+  if (problemAreas.size === 0) {
+    personalizedRecs.push("Laat Workflo een gratis IT-health check uitvoeren om verborgen risico's en verbeterkansen te identificeren.")
+    personalizedRecsEN.push("Let Workflo perform a free IT health check to identify hidden risks and improvement opportunities.")
+  }
+
+  // Determine category and messaging based on score and problems
+  if (percentage >= 80 && problemAreas.size <= 1) {
     return {
       score: percentage,
       category: 'excellent',
-      title: 'Uitstekende IT-gezondheid!',
-      titleEN: 'Excellent IT Health!',
-      description: 'Je IT-infrastructuur is in uitstekende staat. Je hebt de juiste systemen en ondersteuning.',
-      descriptionEN: 'Your IT infrastructure is in excellent condition. You have the right systems and support.',
-      recommendations: [
-        'Blijf je systemen regelmatig updaten',
-        'Overweeg geavanceerde security maatregelen',
-        'Plan voor toekomstige groei'
-      ],
-      recommendationsEN: [
-        'Keep your systems regularly updated',
-        'Consider advanced security measures',
-        'Plan for future growth'
-      ],
-      ctaText: 'Ontdek onze geavanceerde diensten',
-      ctaTextEN: 'Discover our advanced services'
+      title: 'Goede IT-basis, maar Workflo kan je nog verder helpen!',
+      titleEN: 'Good IT foundation, but Workflo can help you even further!',
+      description: 'Je IT functioneert goed, maar er zijn altijd kansen om nog beter te presteren en toekomstbestendig te worden.',
+      descriptionEN: 'Your IT functions well, but there are always opportunities to perform even better and become future-proof.',
+      recommendations: personalizedRecs,
+      recommendationsEN: personalizedRecsEN,
+      ctaText: 'Ontdek hoe Workflo je kan helpen groeien',
+      ctaTextEN: 'Discover how Workflo can help you grow'
     }
-  } else if (percentage >= 60) {
+  } else if (percentage >= 60 || problemAreas.size <= 2) {
     return {
       score: percentage,
       category: 'good',
-      title: 'Goede basis, maar ruimte voor verbetering',
-      titleEN: 'Good foundation, but room for improvement',
-      description: 'Je IT functioneert redelijk, maar er zijn kansen om efficiëntie en beveiliging te verbeteren.',
-      descriptionEN: 'Your IT functions reasonably well, but there are opportunities to improve efficiency and security.',
-      recommendations: [
-        'Verbeter response tijden',
-        'Implementeer proactief onderhoud',
-        'Optimaliseer je IT-kosten'
-      ],
-      recommendationsEN: [
-        'Improve response times',
-        'Implement proactive maintenance',
-        'Optimize your IT costs'
-      ],
-      ctaText: 'Vraag een gratis IT-scan aan',
-      ctaTextEN: 'Request a free IT scan'
+      title: 'Tijd om je IT naar het volgende niveau te tillen!',
+      titleEN: 'Time to elevate your IT to the next level!',
+      description: 'Je IT werkt, maar laat kansen liggen. Workflo kan deze gebieden direct verbeteren zodat jij je kunt focussen op je kernactiviteiten.',
+      descriptionEN: 'Your IT works, but misses opportunities. Workflo can immediately improve these areas so you can focus on your core activities.',
+      recommendations: personalizedRecs,
+      recommendationsEN: personalizedRecsEN,
+      ctaText: 'Laat Workflo je IT optimaliseren',
+      ctaTextEN: 'Let Workflo optimize your IT'
     }
-  } else if (percentage >= 40) {
+  } else if (percentage >= 40 || problemAreas.size <= 4) {
     return {
       score: percentage,
       category: 'needs-improvement',
-      title: 'Je IT heeft aandacht nodig',
-      titleEN: 'Your IT needs attention',
-      description: 'Er zijn verschillende gebieden waar je IT-infrastructuur verbetering nodig heeft.',
-      descriptionEN: 'There are several areas where your IT infrastructure needs improvement.',
-      recommendations: [
-        'Verbeter je cybersecurity direct',
-        'Implementeer backup procedures',
-        'Overweeg professionele IT-ondersteuning'
-      ],
-      recommendationsEN: [
-        'Improve your cybersecurity immediately',
-        'Implement backup procedures',
-        'Consider professional IT support'
-      ],
-      ctaText: 'Laat ons u helpen',
-      ctaTextEN: 'Let us help you'
+      title: 'Je IT belemmert je bedrijfsvoering - Workflo lost dit op!',
+      titleEN: 'Your IT hinders your business operations - Workflo solves this!',
+      description: 'Meerdere IT-problemen houden je tegen. Stop met IT-frustraties en laat Workflo alles voor je regelen.',
+      descriptionEN: 'Multiple IT problems are holding you back. Stop IT frustrations and let Workflo handle everything for you.',
+      recommendations: personalizedRecs,
+      recommendationsEN: personalizedRecsEN,
+      ctaText: 'Stop IT-problemen - neem direct contact op',
+      ctaTextEN: 'Stop IT problems - contact us immediately'
     }
   } else {
     return {
       score: percentage,
       category: 'critical',
-      title: 'Kritieke IT-situatie',
-      titleEN: 'Critical IT situation',
-      description: 'Je IT-infrastructuur heeft dringend professionele aandacht nodig om risico\'s te minimaliseren.',
-      descriptionEN: 'Your IT infrastructure urgently needs professional attention to minimize risks.',
-      recommendations: [
-        'Neem direct contact op voor hulp',
-        'Beveilig je kritieke data',
-        'Implementeer een noodplan'
-      ],
-      recommendationsEN: [
-        'Contact us immediately for help',
-        'Secure your critical data',
-        'Implement an emergency plan'
-      ],
-      ctaText: 'Neem vandaag nog contact op',
-      ctaTextEN: 'Contact us today'
+      title: 'URGENT: Je IT is een risico voor je bedrijf!',
+      titleEN: 'URGENT: Your IT is a risk to your business!',
+      description: 'Je IT-situatie is kritiek en brengt je bedrijf in gevaar. Workflo kan deze crisis direct oplossen - elke dag wachten kost geld.',
+      descriptionEN: 'Your IT situation is critical and puts your business at risk. Workflo can solve this crisis immediately - every day of waiting costs money.',
+      recommendations: personalizedRecs,
+      recommendationsEN: personalizedRecsEN,
+      ctaText: 'SPOEDCONTACT - Bel nu voor hulp',
+      ctaTextEN: 'EMERGENCY CONTACT - Call now for help'
     }
   }
 }

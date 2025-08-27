@@ -16,7 +16,7 @@ export function generateQuotePDF({ quote, isYearly, language }: PDFQuoteOptions)
   let yPosition = 20
 
   // Colors
-  const primaryColor = '#f59e0b' // Workflo yellow
+  const primaryColor = '#f2f400' // Workflo yellow
   const textColor = '#1f2937'
   const lightGray = '#6b7280'
 

@@ -309,7 +309,7 @@ export default function PrivacyPolicyPage() {
                       </h3>
                       <p className="text-muted-foreground">
                         {language === 'nl' 
-                          ? 'U kunt onjuiste gegevens laten corrigeren'
+                          ? 'Je kunt onjuiste gegevens laten corrigeren'
                           : 'You can have incorrect data corrected'
                         }
                       </p>
@@ -360,7 +360,7 @@ export default function PrivacyPolicyPage() {
                 <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
                   <li>{language === 'nl' ? 'Contractgegevens: 7 jaar na einde contract' : 'Contract data: 7 years after contract end'}</li>
                   <li>{language === 'nl' ? 'Technische logbestanden: 3 maanden' : 'Technical log files: 3 months'}</li>
-                  <li>{language === 'nl' ? 'Marketing-communicatie: tot u zich afmeldt' : 'Marketing communications: until you unsubscribe'}</li>
+                  <li>{language === 'nl' ? 'Marketing-communicatie: tot je je afmeldt' : 'Marketing communications: until you unsubscribe'}</li>
                   <li>{language === 'nl' ? 'Website-analytics: 26 maanden' : 'Website analytics: 26 months'}</li>
                 </ul>
               </section>
@@ -372,7 +372,7 @@ export default function PrivacyPolicyPage() {
                 </h2>
                 <p className="text-muted-foreground">
                   {language === 'nl' 
-                    ? 'Dit privacybeleid kan van tijd tot tijd worden bijgewerkt. Belangrijke wijzigingen zullen we u per e-mail meedelen of prominent op onze website plaatsen.'
+                    ? 'Dit privacybeleid kan van tijd tot tijd worden bijgewerkt. Belangrijke wijzigingen zullen we je per e-mail meedelen of prominent op onze website plaatsen.'
                     : 'This privacy policy may be updated from time to time. We will notify you of significant changes by email or by placing a prominent notice on our website.'
                   }
                 </p>

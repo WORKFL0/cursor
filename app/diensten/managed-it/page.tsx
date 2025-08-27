@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Shield, Zap, TrendingUp, Euro, Clock, CheckCircle, ArrowRight, Users, Settings, BarChart3, AlertTriangle, Lock, TrendingDown } from 'lucide-react'
+import { Shield, Zap, TrendingUp, Euro, Clock, CheckCircle, ArrowRight, Users, Settings, BarChart3, AlertTriangle, Lock, TrendingDown, Calendar, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -40,7 +40,7 @@ export default function ManagedITPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button asChild size="lg" className="text-lg px-8 py-6">
-                <Link href="/tevredenheidscheck">
+                <Link href="/prijzen">
                   Bereken Je IT-Besparing <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -55,19 +55,19 @@ export default function ManagedITPage() {
       </motion.section>
 
       {/* Urgency Alert Section */}
-      <section className="py-8 bg-red-50 dark:bg-red-950/20 border-y-4 border-red-200 dark:border-red-800 relative overflow-hidden">
+      <section className="py-8 bg-primary/5 dark:bg-primary/10 border-y-4 border-primary/20 dark:border-primary relative overflow-hidden">
         <DangerTape variant="warning" className="absolute top-0 left-0 right-0" />
         <DangerTape variant="warning" className="absolute bottom-0 left-0 right-0" />
         <div className="container mx-auto px-4 relative z-10">
-          <Alert className="bg-red-100 dark:bg-red-950 border-red-300 dark:border-red-700">
-            <AlertTriangle className="h-5 w-5 text-red-600" />
-            <AlertDescription className="text-red-900 dark:text-red-100">
+          <Alert className="bg-primary/10 dark:bg-primary/20 border-primary/30 dark:border-primary">
+            <AlertTriangle className="h-5 w-5 text-primary" />
+            <AlertDescription className="text-foreground dark:text-primary-foreground">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                   <p className="font-bold text-lg mb-1">⚠️ WAARSCHUWING: Cybercriminaliteit in Amsterdam stijgt met 300% in 2024</p>
                   <p className="text-sm">43% van Nederlandse MKB bedrijven werd vorig jaar gehackt. Gemiddelde schade: €2.4 miljoen. Is jouw bedrijf beschermd?</p>
                 </div>
-                <Button variant="destructive" size="sm" asChild className="whitespace-nowrap">
+                <Button variant="default" size="sm" asChild className="whitespace-nowrap">
                   <Link href="#security-package">
                     Test Je Beveiliging Nu
                   </Link>
@@ -87,14 +87,14 @@ export default function ManagedITPage() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-card dark:bg-gray-900 p-4 rounded-lg shadow-md border border-red-200 dark:border-red-800"
+                className="bg-card dark:bg-gray-900 p-4 rounded-lg shadow-md border border-primary/20 dark:border-primary"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-red-100 dark:bg-red-900 rounded-lg">
-                    <stat.icon className="w-5 h-5 text-red-600 dark:text-red-400" />
+                  <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg">
+                    <stat.icon className="w-5 h-5 text-primary dark:text-primary" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stat.value}</p>
+                    <p className="text-2xl font-bold text-primary dark:text-primary">{stat.value}</p>
                     <p className="text-sm font-medium text-foreground dark:text-gray-100">{stat.label}</p>
                     <p className="text-xs text-muted-foreground">{stat.subtext}</p>
                   </div>
@@ -226,9 +226,9 @@ export default function ManagedITPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Hoe Workflo Managed IT Werkt</h2>
+            <h2 className="text-3xl font-bold mb-4">Zo werkt het</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Van eerste contact tot continue ondersteuning - je reis naar zorgeloze IT
+              In 3 simpele stappen naar zorgeloze IT
             </p>
           </motion.div>
           
@@ -237,75 +237,52 @@ export default function ManagedITPage() {
               {[
                 {
                   step: "1",
-                  title: "Gratis IT-Assessment",
-                  description: "We analyseren je huidige IT-infrastructuur, identificeren zwakke punten en creëren een op maat gemaakt verbeterplan afgestemd op je bedrijfsbehoeften."
+                  title: "Wij maken een afspraak voor een netwerk-scan",
+                  description: "We komen langs voor een gratis gesprek. Geen verplichtingen. We kijken naar je huidige situatie en maken een netwerk-scan om te zien wat voor vlees jullie in de kuip hebben."
                 },
                 {
                   step: "2", 
-                  title: "Naadloze Onboarding",
-                  description: "Ons team neemt je IT-beheer over zonder verstoring. We documenteren alles, implementeren monitoring en beginnen direct met optimaliseren."
+                  title: "Wij maken een advies aan de hand van onze scan",
+                  description: "Ga je met dit advies liever naar een ander, geen probleem! Dan rekenen we 2 uur voor de moeite van het maken van dit rapport en het gemaakte advies. Als je akkoord gaat, vervallen deze kosten en regelen wij alles. Nieuwe apparaten, software, beveiliging. Je hoeft je nergens zorgen over te maken."
                 },
                 {
                   step: "3",
-                  title: "Continue Verbetering", 
-                  description: "We onderhouden, monitoren en verbeteren je systemen proactief. Regelmatige rapportages houden je geïnformeerd terwijl wij alle technische details afhandelen."
+                  title: "Je werkt zorgeloos verder!", 
+                  description: "Vanaf dat moment zorgen wij dat alles werkt. Zorgen wij dat alles veilig is en blijft. Voor een vaste prijs per maand. Geen verrassingen, geen gedoe."
                 }
-              ].map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ x: -30, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.2, duration: 0.8 }}
-                  viewport={{ once: true }}
-                  className="flex gap-4"
-                >
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="font-bold text-primary-foreground">{step.step}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+              ].map((step, index) => {
+                const iconMap = [Calendar, FileText, CheckCircle]
+                const IconComponent = iconMap[index] || CheckCircle
+                
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ x: -30, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.2, duration: 0.8 }}
+                    viewport={{ once: true }}
+                    className="flex gap-6"
+                  >
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/30">
+                      <IconComponent className="w-8 h-8 text-primary-foreground" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">{step.step}</span>
+                        <h3 className="text-xl font-bold">{step.title}</h3>
+                      </div>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonial */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto"
-          >
-            <Card className="border-l-4 border-l-primary">
-              <CardContent className="p-8">
-                <blockquote className="text-lg text-muted-foreground italic mb-4 leading-relaxed">
-                  "De overstap naar Workflo's managed IT-diensten verminderde onze IT-kosten met 45% en gaf ons de 
-                  flexibiliteit om onze tweede Amsterdam-locatie te openen zonder IT-hoofdpijn. 
-                  Hun proactieve aanpak betekent dat we al 18 maanden geen enkele IT-noodsituatie hebben gehad."
-                </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Users className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold">Petra Janssen</p>
-                    <p className="text-sm text-muted-foreground">CEO, Janssen Architectuur</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Security Package Selection */}
       <section id="security-package" className="py-20 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
@@ -326,7 +303,7 @@ export default function ManagedITPage() {
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Elke dag zonder professionele MSP-bescherming is een gok met je bedrijfscontinuïteit. 
-              Kies nu je pakket en krijg <span className="text-yellow-400 font-bold">direct 24/7 bescherming</span>.
+              Kies nu je pakket en krijg <span className="text-primary font-bold">direct 24/7 bescherming</span>.
             </p>
           </motion.div>
 
@@ -338,23 +315,23 @@ export default function ManagedITPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gray-800 border-2 border-gray-700 hover:border-yellow-400 transition-all duration-300 h-full">
+              <Card className="bg-muted border-2 border-border hover:border-primary transition-all duration-300 h-full">
                 <CardHeader>
                   <div className="flex justify-between items-start mb-4">
-                    <Badge className="bg-blue-600 text-white">Meest Gekozen</Badge>
+                    <Badge className="bg-primary text-primary-foreground">Meest Gekozen</Badge>
                     <div className="text-right">
-                      <p className="text-3xl font-bold text-white">€60</p>
+                      <p className="text-3xl font-bold text-foreground">€60</p>
                       <p className="text-sm text-muted-foreground">per gebruiker/maand</p>
                     </div>
                   </div>
-                  <CardTitle className="text-2xl text-white">Remote Support</CardTitle>
-                  <CardDescription className="text-gray-300">
+                  <CardTitle className="text-2xl text-foreground">Remote Support</CardTitle>
+                  <CardDescription className="text-muted-foreground">
                     Complete IT-ondersteuning op afstand voor moderne bedrijven
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-4 bg-yellow-900/30 border border-yellow-600 rounded-lg">
-                    <p className="text-yellow-400 text-sm font-semibold">
+                  <div className="p-4 bg-primary/20 border border-primary rounded-lg">
+                    <p className="text-primary text-sm font-semibold">
                       ⚡ Perfecte bescherming tegen: Phishing, Malware, Downtime
                     </p>
                   </div>
@@ -375,7 +352,7 @@ export default function ManagedITPage() {
                       </li>
                     ))}
                   </ul>
-                  <Button asChild className="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold" size="lg">
+                  <Button asChild className="w-full" size="lg">
                     <Link href="/prijzen?type=remote">
                       Bereken Je Investering →
                     </Link>
@@ -391,22 +368,22 @@ export default function ManagedITPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-yellow-900/20 to-gray-800 border-2 border-yellow-600 hover:border-yellow-400 transition-all duration-300 relative h-full">
+              <Card className="bg-gradient-to-br from-primary/10 to-muted border-2 border-primary hover:border-primary/80 transition-all duration-300 relative h-full">
                 <div className="absolute -top-1 -right-1">
-                  <Badge className="bg-red-600 text-white animate-pulse">
+                  <Badge className="bg-destructive text-destructive-foreground animate-pulse">
                     Maximum Bescherming
                   </Badge>
                 </div>
                 <CardHeader>
                   <div className="flex justify-between items-start mb-4">
-                    <Badge className="bg-yellow-600 text-black">Enterprise Grade</Badge>
+                    <Badge className="bg-primary text-primary-foreground">Enterprise Grade</Badge>
                     <div className="text-right">
-                      <p className="text-3xl font-bold text-white">€90</p>
+                      <p className="text-3xl font-bold text-foreground">€90</p>
                       <p className="text-sm text-muted-foreground">per gebruiker/maand</p>
                     </div>
                   </div>
-                  <CardTitle className="text-2xl text-white">Onsite + Remote Support</CardTitle>
-                  <CardDescription className="text-gray-300">
+                  <CardTitle className="text-2xl text-foreground">Onsite + Remote Support</CardTitle>
+                  <CardDescription className="text-muted-foreground">
                     Complete bescherming met fysieke aanwezigheid wanneer nodig
                   </CardDescription>
                 </CardHeader>
@@ -428,13 +405,13 @@ export default function ManagedITPage() {
                       "Compliance & Security Audits",
                       "Prioriteit 24/7 noodlijn"
                     ].map((feature, i) => (
-                      <li key={i} className={`flex items-center gap-2 ${i === 0 ? 'text-yellow-400 font-bold' : 'text-gray-300'}`}>
-                        <CheckCircle className={`w-5 h-5 ${i === 0 ? 'text-yellow-500' : 'text-green-500'} flex-shrink-0`} />
+                      <li key={i} className={`flex items-center gap-2 ${i === 0 ? 'text-primary font-bold' : 'text-muted-foreground'}`}>
+                        <CheckCircle className={`w-5 h-5 ${i === 0 ? 'text-primary' : 'text-green-600'} flex-shrink-0`} />
                         <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  <Button asChild className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold" size="lg">
+                  <Button asChild className="w-full" size="lg">
                     <Link href="/prijzen?type=onsite">
                       Start Premium Bescherming →
                     </Link>
@@ -450,7 +427,7 @@ export default function ManagedITPage() {
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             viewport={{ once: true }}
-            className="mt-12 p-6 bg-red-900/20 border border-red-600 rounded-lg"
+            className="mt-12 p-6 bg-destructive/10 border border-destructive rounded-lg"
           >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
               {[
@@ -460,13 +437,13 @@ export default function ManagedITPage() {
                 { label: "Herstelkosten", value: "€45.000+", icon: Euro }
               ].map((stat, i) => (
                 <div key={i} className="flex flex-col items-center">
-                  <stat.icon className="w-6 h-6 text-red-400 mb-2" />
-                  <p className="text-2xl font-bold text-red-400">{stat.value}</p>
+                  <stat.icon className="w-6 h-6 text-destructive mb-2" />
+                  <p className="text-2xl font-bold text-destructive">{stat.value}</p>
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                 </div>
               ))}
             </div>
-            <p className="text-center mt-4 text-yellow-400 font-semibold">
+            <p className="text-center mt-4 text-primary font-semibold">
               ⏰ Elke minuut zonder bescherming verhoogt je risico. Activeer je MSP-schild vandaag nog.
             </p>
           </motion.div>
@@ -499,7 +476,7 @@ export default function ManagedITPage() {
             <h2 className="text-4xl font-bold mb-4">Stop Met Vechten Tegen IT-Problemen. Begin Met Groeien Van Je Bedrijf.</h2>
             <p className="text-xl mb-8 opacity-90">Sluit je aan bij 100+ Amsterdamse bedrijven die Workflo vertrouwen voor hun IT</p>
             <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
-              <Link href="/tevredenheidscheck">
+              <Link href="/contact">
                 Plan Je Gratis IT-Assessment <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

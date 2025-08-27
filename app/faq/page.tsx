@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Search, HelpCircle, Phone, Mail } from 'lucide-react'
+import { ArrowRight, Search, HelpCircle, Phone, Mail, Filter, X, Star, MessageCircle, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { 
   Accordion,
@@ -13,6 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { faqData } from '@/lib/data/workflo-data'
 
@@ -20,24 +22,48 @@ export default function FAQPage() {
   const { language } = useLanguage()
   const { getLocalizedValue } = useLocalizedContent()
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null)
 
-  // Group FAQs by category
-  const categories = [...new Set(faqData.map(faq => language === 'nl' ? faq.categoryNL : faq.category))]
-  
-  const filteredFaqs = faqData.filter(faq => {
-    const question = language === 'nl' ? faq.questionNL : faq.question
-    const answer = language === 'nl' ? faq.answerNL : faq.answer
-    return question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           answer.toLowerCase().includes(searchTerm.toLowerCase())
-  })
+  // Memoized calculations for performance
+  const { categories, filteredFaqs, featuredFaqs } = useMemo(() => {
+    // Group FAQs by category
+    const categories = [...new Set(faqData.map(faq => language === 'nl' ? faq.categoryNL : faq.category))]
+    
+    // Filter FAQs based on search term and category
+    const filteredFaqs = faqData.filter(faq => {
+      const question = language === 'nl' ? faq.questionNL : faq.question
+      const answer = language === 'nl' ? faq.answerNL : faq.answer
+      const category = language === 'nl' ? faq.categoryNL : faq.category
+      
+      const matchesSearch = !searchTerm || 
+        question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        answer.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesCategory = selectedCategory === 'all' || category === selectedCategory
+      
+      return matchesSearch && matchesCategory
+    })
 
-  const featuredFaqs = faqData.filter(faq => faq.featured).slice(0, 4)
+    const featuredFaqs = faqData.filter(faq => faq.featured).slice(0, 6)
+    
+    return { categories, filteredFaqs, featuredFaqs }
+  }, [language, searchTerm, selectedCategory])
 
   const getFaqsByCategory = (category: string) => {
     return filteredFaqs.filter(faq => {
       const faqCategory = language === 'nl' ? faq.categoryNL : faq.category
       return faqCategory === category
     }).sort((a, b) => a.order - b.order)
+  }
+
+  const clearFilters = () => {
+    setSearchTerm('')
+    setSelectedCategory('all')
+  }
+
+  const handleAccordionChange = (value: string) => {
+    setOpenAccordion(openAccordion === value ? null : value)
   }
 
   return (

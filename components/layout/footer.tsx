@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { MapPin, Phone, Mail, Download, ExternalLink } from 'lucide-react'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { companyInfo, navigation } from '@/lib/data/workflo-data'
-import { NewsletterSignup } from '@/components/forms/newsletter-signup'
+import { HubSpotNewsletterSignup } from '@/components/forms/HubSpotNewsletterSignup'
 import { Button } from '@/components/ui/button'
 
 export function Footer() {
@@ -191,7 +191,7 @@ export function Footer() {
                 ? 'Ontvang maandelijks tips, updates en inzichten over IT-beveiliging en productiviteit.'
                 : 'Receive monthly tips, updates and insights about IT security and productivity.'}
             </p>
-            <NewsletterSignup variant="compact" />
+            <HubSpotNewsletterSignup variant="compact" />
           </div>
         </div>
 

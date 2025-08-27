@@ -1,0 +1,142 @@
+name: Bundle Size Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  bundle-size:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+      
+      - name: Build application
+        run: |
+          npm run build
+          npm run bundle-analyzer
+        env:
+          ANALYZE: true
+          BUNDLE_ANALYZE: true
+      
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: |
+            .next/analyze/
+            bundle-analysis.html
+          retention-days: 30
+      
+      - name: Bundle size check
+        uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          package_manager: npm
+          build_script: build
+          skip_step: install
+        continue-on-error: true
+      
+      - name: Comment bundle size
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read build stats
+            const buildStatsPath = '.next/build-manifest.json';
+            let bundleInfo = '## Bundle Size Analysis\n\n';
+            
+            try {
+              if (fs.existsSync(buildStatsPath)) {
+                const buildStats = JSON.parse(fs.readFileSync(buildStatsPath, 'utf8'));
+                bundleInfo += '### Build Statistics\n';
+                bundleInfo += `- Pages: ${Object.keys(buildStats.pages || {}).length}\n`;
+                bundleInfo += `- Static files generated\n\n`;
+              }
+              
+              // Add link to detailed analysis
+              bundleInfo += '### Detailed Analysis\n';
+              bundleInfo += 'Check the "bundle-analysis" artifact for detailed bundle analysis reports.\n\n';
+              bundleInfo += '### Size Limits\n';
+              bundleInfo += '- Main bundle should be < 250KB\n';
+              bundleInfo += '- Each page should be < 100KB\n';
+              bundleInfo += '- Total JavaScript < 500KB\n';
+              
+            } catch (error) {
+              bundleInfo += '⚠️ Could not read build statistics\n';
+            }
+            
+            // Comment on PR
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: bundleInfo
+            });
+
+  lighthouse:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    needs: bundle-size
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Serve application
+        run: npm start &
+        
+      - name: Wait for server
+        run: |
+          timeout 60 bash -c 'until curl -s http://localhost:3000/api/health; do sleep 1; done'
+      
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: './lighthouserc.js'
+          temporaryPublicStorage: true
+          uploadArtifacts: true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30

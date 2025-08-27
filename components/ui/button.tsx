@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        workflo: "bg-workflo-yellow text-foreground shadow-lg hover:bg-workflo-yellow-dark font-semibold border border-border hover:shadow-xl transition-all duration-200",
+        workflo: "bg-workflo-yellow text-foreground shadow-lg hover:bg-workflo-yellow-dark font-semibold border border-border hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 transform-gpu",
       },
       size: {
         default: "h-9 px-4 py-2",

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, CheckCircle, Monitor, Cloud, Shield, Network, Users } from 'lucide-react'
+import { ArrowRight, CheckCircle, Monitor, Cloud, Shield, Network, Users, Calendar, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
@@ -104,19 +104,27 @@ export default function ServicesPage() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {servicesPageData.processes.map((process, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                    <span className="text-2xl font-bold text-black">{process.step}</span>
+              {servicesPageData.processes.map((process, index) => {
+                const iconMap = [Calendar, FileText, CheckCircle]
+                const IconComponent = iconMap[index] || CheckCircle
+                
+                return (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-workflo-yellow/30">
+                      <IconComponent className="w-8 h-8 text-workflo-black" />
+                    </div>
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                      <span className="w-8 h-8 bg-workflo-yellow rounded-full flex items-center justify-center text-workflo-black font-bold text-sm">{process.step}</span>
+                      <h3 className="text-xl font-bold text-foreground">
+                        {getLocalizedValue(process, 'title')}
+                      </h3>
+                    </div>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {getLocalizedValue(process, 'description')}
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-foreground mb-4">
-                    {getLocalizedValue(process, 'title')}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {getLocalizedValue(process, 'description')}
-                  </p>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>
@@ -190,7 +198,7 @@ export default function ServicesPage() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">250+</div>
+                <div className="text-4xl font-bold text-primary mb-2">50+</div>
                 <div className="text-sm opacity-90">
                   {language === 'nl' ? 'Tevreden klanten' : 'Happy clients'}
                 </div>

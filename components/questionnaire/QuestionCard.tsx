@@ -93,7 +93,7 @@ export default function QuestionCard({ question, onAnswer }: QuestionCardProps) 
         <HelpCircle className="h-4 w-4" />
         <span>
           {language === 'nl' 
-            ? 'Uw antwoorden helpen ons om een gepersonaliseerd advies te geven'
+            ? 'Je antwoorden helpen ons om een gepersonaliseerd advies te geven'
             : 'Your answers help us provide personalized advice'}
         </span>
       </motion.div>

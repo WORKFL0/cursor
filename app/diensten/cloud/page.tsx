@@ -1,24 +1,29 @@
+
 'use client'
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Cloud, Globe, Euro, Shield, Zap, RefreshCw, TrendingUp, ArrowRight, CheckCircle, Users, Building } from 'lucide-react'
+import { ArrowRight, CheckCircle, Building, Phone, Mail, Euro, Users, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { MobileFirstSection } from '@/components/sections/mobile-first-section'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { getServiceBySlug, calculateServicePrice } from '@/lib/data/services-data'
 
 export default function CloudServicesPage() {
+  const service = getServiceBySlug('cloud')!
+  const examplePricing = calculateServicePrice(service, 10)
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <motion.section 
-        className="relative py-20 bg-gradient-to-br from-blue-50 via-background to-indigo-50 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20"
+        className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-transparent"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-primary to-indigo-500"></div>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary"></div>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ y: 30, opacity: 0 }}
@@ -27,24 +32,23 @@ export default function CloudServicesPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <Badge variant="secondary" className="mb-4">
-              Schaal Je Bedrijf Zonder IT-Hoofdpijn
+              {service.category === 'infrastructure' ? 'Schaal Je Bedrijf Zonder IT-Hoofdpijn' : service.subtitle}
             </Badge>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Scale Your Business Without Scaling Your IT Headaches
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+              {service.title}
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Groeiende Amsterdamse bedrijven staan voor een keuze: dure on-premise infrastructuur 
-              die snel veroudert, of cloudoplossingen die meegroeien. Slimme bedrijfseigenaren kiezen voor de cloud.
+              {service.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button asChild size="lg" className="text-lg px-8 py-6">
-                <Link href="/tevredenheidscheck">
-                  Gratis Cloud Assessment <ArrowRight className="ml-2 h-5 w-5" />
+                <Link href="/contact">
+                  Gratis Offerte Aanvragen <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
                 <Link href="/prijzen">
-                  Bekijk Cloud Prijzen
+                  Bekijk Prijzen
                 </Link>
               </Button>
             </div>
@@ -52,7 +56,7 @@ export default function CloudServicesPage() {
         </div>
       </motion.section>
 
-      {/* Benefits Grid */}
+      {/* Key Points */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <motion.div
@@ -62,45 +66,52 @@ export default function CloudServicesPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Waarom Amsterdamse Bedrijven Overstappen naar de Cloud</h2>
+            <h2 className="text-3xl font-bold mb-4">Waarom kiezen voor {service.title}?</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Ontdek de voordelen die je bedrijf direct kan ervaren
+              {service.shortDescription}
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                icon: Globe,
-                title: "Werk Overal Vandaan",
-                description: "Toegang tot je data en applicaties veilig vanaf elke locatie. Perfect voor hybride werken en meerdere kantoorlocaties in Amsterdam."
-              },
-              {
-                icon: Euro,
-                title: "Betaal Alleen Wat Je Gebruikt",
-                description: "Geen over-dimensionering van servers meer. Schaal op tijdens drukke periodes, schaal af om kosten te besparen. Perfect voor seizoensgebonden bedrijven."
-              },
-              {
-                icon: Shield,
-                title: "Enterprise-Grade Security",
-                description: "Microsoft en Google investeren miljarden in beveiliging. Krijg dezelfde bescherming als Fortune 500 bedrijven tegen MKB-prijzen."
-              },
-              {
-                icon: Zap,
-                title: "Bliksemsnelle Implementatie",
-                description: "10 nieuwe werkplekken nodig voor je nieuwe Amsterdam kantoor? Zet ze op in uren, niet weken. Geen vertragingen door hardware-inkoop."
-              },
-              {
-                icon: RefreshCw,
-                title: "Automatisch Alles",
-                description: "Updates, backups en onderhoud gebeuren automatisch. Je team blijft productief terwijl wij de technische details afhandelen."
-              },
-              {
-                icon: TrendingUp,
-                title: "Oneindige Schaalbaarheid",
-                description: "Van 5 tot 500 medewerkers, de cloud groeit mee. Geen IT-infrastructuur meer die je bedrijfsgroei tegenhoudt."
-              }
-            ].map((benefit, index) => (
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {service.keyPoints.map((point, index) => (
+              <motion.div
+                key={index}
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: index * 0.1, duration: 0.8 }}
+                viewport={{ once: true }}
+                className="flex items-start gap-4"
+              >
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <CheckCircle className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">{point}</h3>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold mb-4">Wat krijg je met {service.title}?</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Alle functies die je nodig hebt voor moderne cloud-oplossingen
+            </p>
+          </motion.div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {service.features.map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ y: 30, opacity: 0 }}
@@ -110,15 +121,13 @@ export default function CloudServicesPage() {
               >
                 <Card className="h-full hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-lg mb-4 flex items-center justify-center">
-                      <benefit.icon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle className={`h-5 w-5 ${feature.included ? 'text-green-600' : 'text-muted-foreground'}`} />
+                      <CardTitle className="text-lg">{feature.title}</CardTitle>
                     </div>
-                    <CardTitle className="text-xl">{benefit.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-base leading-relaxed">
-                      {benefit.description}
-                    </CardDescription>
+                    <p className="text-muted-foreground">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -127,8 +136,8 @@ export default function CloudServicesPage() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-16 bg-background">
+      {/* Benefits Section */}
+      <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ y: 30, opacity: 0 }}
@@ -137,180 +146,28 @@ export default function CloudServicesPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Complete Cloud Oplossingen voor Elke Behoefte</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Van productiviteit tot infrastructuur - alles wat je nodig hebt in de cloud
-            </p>
+            <h2 className="text-3xl font-bold mb-4">Voordelen voor jouw bedrijf</h2>
           </motion.div>
           
-          <div className="max-w-4xl mx-auto space-y-8">
-            {[
-              {
-                title: "Microsoft 365 & Productiviteit",
-                features: [
-                  "Email, kalender en contacten",
-                  "Teams voor samenwerking", 
-                  "SharePoint voor bestandsdeling",
-                  "OneDrive voor persoonlijke opslag",
-                  "Geavanceerde beveiligingsfuncties",
-                  "Mobile device management",
-                  "Compliance tools (GDPR-ready)",
-                  "24/7 Workflo support inbegrepen"
-                ]
-              },
-              {
-                title: "Cloud Infrastructuur (IaaS)",
-                features: [
-                  "Virtuele servers on-demand",
-                  "Veilige netwerken",
-                  "Load balancing",
-                  "Disaster recovery ingebouwd",
-                  "99.99% uptime SLA",
-                  "Amsterdam datacenters",
-                  "GDPR-compliant opslag",
-                  "24/7 monitoring inbegrepen"
-                ]
-              },
-              {
-                title: "Backup & Disaster Recovery",
-                features: [
-                  "Geautomatiseerde dagelijkse backups",
-                  "30-dagen retentie standaard",
-                  "Directe bestandsherstel",
-                  "Ransomware bescherming",
-                  "Volledige systeemherstel",
-                  "Reguliere recovery testing",
-                  "Compliance rapportage",
-                  "Zero data loss garantie"
-                ]
-              }
-            ].map((service, index) => (
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {service.benefits.map((benefit, index) => (
               <motion.div
                 key={index}
                 initial={{ x: index % 2 === 0 ? -30 : 30, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
-                transition={{ delay: index * 0.2, duration: 0.8 }}
+                transition={{ delay: index * 0.1, duration: 0.8 }}
                 viewport={{ once: true }}
+                className="flex items-start gap-3"
               >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-2xl">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                          <span className="text-muted-foreground">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                <Star className="h-5 w-5 text-workflo-yellow flex-shrink-0 mt-0.5" />
+                <p className="text-muted-foreground">{benefit}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ROI Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold mb-4">Kostenvoordeel Cloud vs On-Premise</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Voor een typisch MKB bedrijf met 10-25 medewerkers
-            </p>
-          </motion.div>
-          
-          <div className="max-w-3xl mx-auto">
-            <Card className="shadow-lg">
-              <CardContent className="p-8">
-                <div className="grid md:grid-cols-2 gap-8 mb-8">
-                  <div>
-                    <h3 className="text-xl font-bold mb-4 text-red-600 dark:text-red-400">On-Premise Server (Traditioneel)</h3>
-                    <ul className="space-y-2 text-muted-foreground">
-                      <li className="flex items-center gap-2">
-                        <span className="text-red-500">❌</span>
-                        Server hardware: €8.000-12.000
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span className="text-red-500">❌</span>
-                        Windows Server licenties: €3.000/jaar
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span className="text-red-500">❌</span>
-                        Backup oplossing: €2.000/jaar
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span className="text-red-500">❌</span>
-                        Stroomverbruik: €1.200/jaar
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span className="text-red-500">❌</span>
-                        IT onderhoud: €5.000/jaar
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span className="text-red-500">❌</span>
-                        Vervangen om de 5 jaar
-                      </li>
-                    </ul>
-                    <div className="mt-4 p-3 bg-red-50 dark:bg-red-950/30 rounded">
-                      <p className="font-bold text-red-700 dark:text-red-400">Jaar 1: €19.200 + hardware</p>
-                      <p className="text-sm">Per jaar: €11.200 + afschrijving</p>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold mb-4 text-green-600 dark:text-green-400">Cloud met Workflo</h3>
-                    <ul className="space-y-2 text-muted-foreground">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        Microsoft 365: €12.50/gebruiker
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        Azure storage: €50/maand
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        Backup inbegrepen
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        Workflo beheer: €90/gebruiker
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        24/7 monitoring & support
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        Schaalbaar zonder investering
-                      </li>
-                    </ul>
-                    <div className="mt-4 p-3 bg-green-50 dark:bg-green-950/30 rounded">
-                      <p className="font-bold text-green-700 dark:text-green-400">15 gebruikers: €1.537/maand</p>
-                      <p className="text-sm">Inclusief alles, direct operationeel</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold">Geen grote investering vooraf nodig</p>
-                  <p className="text-muted-foreground mt-2">Plus flexibiliteit, beveiliging en gemoedsrust</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Migration Process */}
+      {/* Pricing Section */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
@@ -320,61 +177,60 @@ export default function CloudServicesPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Zero-Verstoring Cloud Migratie</h2>
+            <h2 className="text-3xl font-bold mb-4">Transparante Prijzen</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Je overstap naar de cloud zonder onderbreking van je bedrijf
+              Geen verrassingen, alleen eerlijke prijzen
             </p>
           </motion.div>
           
-          <div className="max-w-3xl mx-auto">
-            <div className="space-y-6">
-              {[
-                {
-                  step: "1",
-                  title: "Gratis Cloud Assessment",
-                  description: "We analyseren je huidige infrastructuur en creëren een aangepast migratieplan dat verstoring minimaliseert en ROI maximaliseert."
-                },
-                {
-                  step: "2",
-                  title: "Gefaseerde Migratie",
-                  description: "We verplaatsen je systemen in fasen, waarbij we ervoor zorgen dat elk onderdeel perfect werkt voordat we verdergaan. Je bedrijf stopt nooit."
-                },
-                {
-                  step: "3",
-                  title: "Training & Support",
-                  description: "Je team krijgt uitgebreide training. Plus, onze 24/7 support zorgt ervoor dat vragen onmiddellijk worden beantwoord."
-                },
-                {
-                  step: "4",
-                  title: "Continue Optimalisatie", 
-                  description: "Na migratie monitoren en optimaliseren we je cloudomgeving continu voor prestaties en kostenefficiëntie."
-                }
-              ].map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ x: -30, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.1, duration: 0.8 }}
-                  viewport={{ once: true }}
-                  className="flex gap-4 items-start"
-                >
-                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="font-bold text-white">{step.step}</span>
+          <div className="max-w-md mx-auto">
+            <Card className="shadow-lg">
+              <CardHeader className="text-center">
+                <div className="text-4xl font-bold text-primary mb-2">
+                  €{service.pricing.basePrice}
+                  <span className="text-sm font-normal text-muted-foreground ml-1">per gebruiker/maand</span>
+                </div>
+                <CardTitle className="text-2xl">{service.title}</CardTitle>
+                <CardDescription>{service.shortDescription}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span>Setup kosten</span>
+                    <span className="font-semibold">€{service.pricing.setup}</span>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold mb-2">{step.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {step.description}
-                    </p>
+                  <div className="border-t pt-4">
+                    <p className="text-sm text-muted-foreground mb-4">Voorbeeld voor 10 gebruikers:</p>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span>Maandelijks (10 users)</span>
+                        <span>€{examplePricing.monthly}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Setup (eenmalig)</span>
+                        <span>€{examplePricing.setup}</span>
+                      </div>
+                      {examplePricing.discount > 0 && (
+                        <div className="flex justify-between text-green-600">
+                          <span>Volume korting</span>
+                          <span>-€{examplePricing.discount}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                  <Button asChild className="w-full" size="lg">
+                    <Link href="/prijzen">
+                      Bereken Je Prijs <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Testimonial */}
+      {/* FAQ Section */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <motion.div
@@ -382,35 +238,86 @@ export default function CloudServicesPage() {
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto"
+            className="text-center mb-12"
           >
-            <Card className="border-l-4 border-l-blue-500">
-              <CardContent className="p-8">
-                <blockquote className="text-lg text-muted-foreground italic mb-4 leading-relaxed">
-                  "Overstappen naar de cloud met Workflo verminderde onze IT-kosten met 45% en gaf ons de flexibiliteit 
-                  om onze tweede Amsterdam locatie te openen zonder IT-setup hoofdpijn. Wat vroeger weken duurde, duurt nu uren. 
-                  Het beste deel? Alles werkt gewoon."
-                </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                    <Building className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <h2 className="text-3xl font-bold mb-4">Veelgestelde Vragen</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Antwoorden op de meest gestelde vragen over {service.title}
+            </p>
+          </motion.div>
+          
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {service.faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Contact Section */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <h2 className="text-3xl font-bold mb-4">Interesse in {service.title}?</h2>
+            <p className="text-muted-foreground mb-8">
+              Neem contact op voor een persoonlijk advies en offerte op maat
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-5 w-5 text-primary" />
+                    <CardTitle>Bellen</CardTitle>
                   </div>
-                  <div>
-                    <p className="font-semibold">Petra Janssen</p>
-                    <p className="text-sm text-muted-foreground">CEO, Janssen Architecture</p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">Direct contact met onze specialisten</p>
+                  <Button asChild className="w-full">
+                    <Link href="tel:+31203080465">
+                      020-30 80 465
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-5 w-5 text-primary" />
+                    <CardTitle>Offerte Aanvragen</CardTitle>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">Ontvang binnen 24 uur een offerte</p>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/contact">
+                      Contact Formulier
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Mobile-First Section */}
-      <MobileFirstSection language="nl" />
-
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white relative overflow-hidden">
+      <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
         <motion.div
           className="absolute inset-0 opacity-10"
           animate={{ 
@@ -432,13 +339,20 @@ export default function CloudServicesPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold mb-4">Klaar om aan te sluiten bij de Cloud Revolutie?</h2>
-            <p className="text-xl mb-8 opacity-90">Zie hoeveel je kunt besparen met onze gratis cloud assessment</p>
-            <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
-              <Link href="/tevredenheidscheck">
-                Plan Je Cloud Strategie Sessie <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
+            <h2 className="text-4xl font-bold mb-4">Start vandaag met {service.title}</h2>
+            <p className="text-xl mb-8 opacity-90">Ontdek hoe {service.shortDescription.toLowerCase()}</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
+                <Link href="/contact">
+                  Gratis Offerte Aanvragen <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="text-lg px-8 py-6 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+                <Link href="/prijzen">
+                  Bereken Je Prijs
+                </Link>
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>

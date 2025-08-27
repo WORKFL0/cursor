@@ -1,23 +1,26 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useMemo, useEffect, Suspense } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Newspaper, Rss, TrendingUp, Calendar, Filter, ExternalLink, Linkedin } from 'lucide-react'
+import { Newspaper, Rss, TrendingUp, Calendar, Filter, ExternalLink, Linkedin, RefreshCw, AlertCircle } from 'lucide-react'
 import { ArticleCard } from '@/components/news/article-card'
 import { CategoryFilter } from '@/components/news/category-filter'
 import { SearchBar } from '@/components/news/search-bar'
+import { SkeletonLoader, ExternalNewsSkeletonLoader } from '@/components/news/skeleton-loader'
+import { ErrorBoundary } from '@/components/shared/error-boundary'
 import { 
-  newsArticles, 
+  newsArticles as staticNewsArticles, 
   getFeaturedArticles, 
   getRecentArticles, 
   getArticlesByCategory, 
   searchArticles 
 } from '@/lib/data/news-data'
+import { Article } from '@/lib/supabase/client'
 import { useLanguage } from '@/lib/contexts/language-context'
 
 interface ExternalNewsItem {
@@ -38,6 +41,10 @@ export default function NewsPage() {
   const [activeTab, setActiveTab] = useState('workflo')
   const [externalNews, setExternalNews] = useState<ExternalNewsItem[]>([])
   const [isLoadingExternal, setIsLoadingExternal] = useState(false)
+  const [isLoadingWorkflo, setIsLoadingWorkflo] = useState(true)
+  const [externalError, setExternalError] = useState<string | null>(null)
+  const [cmsArticles, setCmsArticles] = useState<Article[]>([])
+  const [newsArticles, setNewsArticles] = useState(staticNewsArticles)
 
   // Filter and search articles
   const filteredArticles = useMemo(() => {
@@ -45,31 +52,89 @@ export default function NewsPage() {
 
     // Apply category filter
     if (selectedCategory) {
-      articles = getArticlesByCategory(selectedCategory)
+      articles = articles.filter(article => article.category === selectedCategory)
     }
 
     // Apply search filter
     if (searchQuery.trim()) {
-      articles = searchArticles(searchQuery).filter(article => 
-        selectedCategory ? article.category === selectedCategory : true
+      const query = searchQuery.toLowerCase().trim()
+      articles = articles.filter(article => 
+        article.title.toLowerCase().includes(query) ||
+        article.excerpt.toLowerCase().includes(query) ||
+        article.tags?.some(tag => tag.toLowerCase().includes(query))
       )
     }
 
     // Sort by publication date (newest first)
     return articles.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-  }, [selectedCategory, searchQuery])
+  }, [newsArticles, selectedCategory, searchQuery])
 
-  const featuredArticles = getFeaturedArticles()
-  const recentArticles = getRecentArticles(3)
+  const featuredArticles = useMemo(() => 
+    newsArticles.filter(article => article.featured).slice(0, 3),
+    [newsArticles]
+  )
+  
+  const recentArticles = useMemo(() => 
+    newsArticles.slice(0, 3),
+    [newsArticles]
+  )
+
+  // Fetch CMS articles on mount
+  useEffect(() => {
+    const fetchCMSArticles = async () => {
+      try {
+        const response = await fetch('/api/cms/articles?published=true')
+        const data = await response.json()
+        
+        if (data.articles && Array.isArray(data.articles)) {
+          // Convert CMS articles to the format used by the news page
+          const convertedArticles = data.articles.map((article: Article) => ({
+            id: article.id || '',
+            title: language === 'nl' && article.title_nl ? article.title_nl : article.title,
+            excerpt: language === 'nl' && article.excerpt_nl ? article.excerpt_nl : (article.excerpt || ''),
+            content: language === 'nl' && article.content_nl ? article.content_nl : (article.content || ''),
+            category: article.category || 'nieuws',
+            tags: article.tags || [],
+            author: article.author || 'Workflo Team',
+            publishedAt: new Date(article.published_at || article.created_at || new Date()),
+            readTime: 5,
+            image: article.image,
+            featured: article.featured || false,
+            slug: article.slug
+          }))
+          
+          // Merge CMS articles with static articles
+          const allArticles = [...convertedArticles, ...staticNewsArticles]
+          setNewsArticles(allArticles)
+          setCmsArticles(data.articles)
+        }
+      } catch (error) {
+        console.error('Failed to fetch CMS articles:', error)
+        // Fall back to static articles
+        setNewsArticles(staticNewsArticles)
+      } finally {
+        setIsLoadingWorkflo(false)
+      }
+    }
+
+    fetchCMSArticles()
+  }, [language])
 
   const handleRSSFeed = () => {
     window.open('/api/rss', '_blank')
   }
 
-  const fetchExternalNews = async (includeLinkedIn = false) => {
+  const fetchExternalNews = async (includeLinkedIn = false, retryCount = 0) => {
     setIsLoadingExternal(true)
+    setExternalError(null)
+    
     try {
       const response = await fetch(`/api/external-news?linkedin=${includeLinkedIn}&limit=20`)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       
       if (data.success) {
@@ -79,13 +144,33 @@ export default function NewsPage() {
           publishedAt: new Date(item.publishedAt)
         }))
         setExternalNews(newsWithDates)
+      } else {
+        throw new Error(data.error || 'Failed to fetch external news')
       }
     } catch (error) {
       console.error('Failed to fetch external news:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      
+      // Retry logic for network errors
+      if (retryCount < 2 && (errorMessage.includes('fetch') || errorMessage.includes('NetworkError'))) {
+        setTimeout(() => fetchExternalNews(includeLinkedIn, retryCount + 1), 1000)
+        return
+      }
+      
+      setExternalError(errorMessage)
     } finally {
       setIsLoadingExternal(false)
     }
   }
+
+  useEffect(() => {
+    // Simulate initial loading for Workflo articles
+    const timer = setTimeout(() => {
+      setIsLoadingWorkflo(false)
+    }, 800)
+    
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     if (activeTab === 'external') {
@@ -97,57 +182,80 @@ export default function NewsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4">
-        <div className="container mx-auto max-w-7xl">
+      {/* Hero Section - Enhanced with gradient background */}
+      <section className="relative py-16 md:py-24 px-4 bg-gradient-to-br from-background via-background to-primary/5">
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+        <div className="container mx-auto max-w-7xl relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Newspaper className="h-8 w-8 text-primary" />
-              <Badge variant="outline" className="px-3 py-1">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="p-3 rounded-full bg-primary/10 border border-primary/20"
+              >
+                <Newspaper className="h-8 w-8 text-primary" />
+              </motion.div>
+              <Badge variant="outline" className="px-4 py-2 text-sm font-medium">
                 {language === 'nl' ? 'Nieuws & Updates' : 'News & Updates'}
               </Badge>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"
+            >
               {language === 'nl' ? (
                 <>
                   Blijf op de hoogte van{' '}
-                  <span className="text-primary">IT trends</span>
+                  <span className="bg-gradient-to-r from-primary to-yellow-500 bg-clip-text text-transparent">
+                    IT trends
+                  </span>
                 </>
               ) : (
                 <>
                   Stay up to date with{' '}
-                  <span className="text-primary">IT trends</span>
+                  <span className="bg-gradient-to-r from-primary to-yellow-500 bg-clip-text text-transparent">
+                    IT trends
+                  </span>
                 </>
               )}
-            </h1>
+            </motion.h1>
             
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="text-xl text-muted-foreground max-w-4xl mx-auto mb-10 leading-relaxed"
+            >
               {language === 'nl' 
                 ? 'Ontdek de laatste ontwikkelingen in IT, cybersecurity tips, en inzichten van het Workflo team. Van technische tutorials tot bedrijfsupdates.'
                 : 'Discover the latest developments in IT, cybersecurity tips, and insights from the Workflo team. From technical tutorials to company updates.'
               }
-            </p>
+            </motion.p>
 
-            {/* RSS Feed Button */}
+            {/* Enhanced RSS Feed Button */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.5 }}
               className="flex justify-center"
             >
               <Button 
                 onClick={handleRSSFeed}
                 variant="outline"
-                className="gap-2"
+                size="lg"
+                className="gap-2 hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-md"
               >
-                <Rss className="h-4 w-4" />
-                {language === 'nl' ? 'RSS Feed' : 'RSS Feed'}
+                <Rss className="h-5 w-5" />
+                {language === 'nl' ? 'RSS Feed Abonneren' : 'Subscribe to RSS Feed'}
               </Button>
             </motion.div>
           </motion.div>
@@ -155,74 +263,112 @@ export default function NewsPage() {
       </section>
 
       {/* Featured Articles */}
-      {featuredArticles.length > 0 && (
-        <section className="py-12 px-4">
+      <ErrorBoundary>
+        <section className="py-16 px-4 bg-gradient-to-b from-background to-muted/20">
           <div className="container mx-auto max-w-7xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="mb-8"
+              className="mb-12"
             >
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                <h2 className="text-2xl font-bold">
-                  {language === 'nl' ? 'Uitgelichte Artikelen' : 'Featured Articles'}
-                </h2>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <TrendingUp className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold">
+                    {language === 'nl' ? 'Uitgelichte Artikelen' : 'Featured Articles'}
+                  </h2>
+                  <p className="text-muted-foreground mt-1">
+                    {language === 'nl' 
+                      ? 'De belangrijkste updates en inzichten van deze maand'
+                      : 'The most important updates and insights of this month'
+                    }
+                  </p>
+                </div>
               </div>
-              <p className="text-muted-foreground">
-                {language === 'nl' 
-                  ? 'De belangrijkste updates en inzichten van deze maand'
-                  : 'The most important updates and insights of this month'
-                }
-              </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {featuredArticles.map((article, index) => (
-                <ArticleCard
-                  key={article.id}
-                  article={article}
-                  featured={true}
-                  index={index}
-                />
-              ))}
-            </div>
+            <AnimatePresence mode="wait">
+              {isLoadingWorkflo ? (
+                <SkeletonLoader count={2} featured={true} />
+              ) : featuredArticles.length > 0 ? (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+                >
+                  {featuredArticles.map((article, index) => (
+                    <ArticleCard
+                      key={article.id}
+                      article={article}
+                      featured={true}
+                      index={index}
+                    />
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-12"
+                >
+                  <TrendingUp className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+                  <p className="text-muted-foreground">
+                    {language === 'nl' ? 'Geen uitgelichte artikelen beschikbaar' : 'No featured articles available'}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </section>
-      )}
+      </ErrorBoundary>
 
-      {/* Search and Filter Section */}
-      <section className="py-12 px-4 bg-muted/30">
+      {/* Enhanced Search and Filter Section */}
+      <section className="py-16 px-4 bg-gradient-to-r from-muted/20 via-muted/10 to-muted/20">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="space-y-6"
+            className="space-y-8"
           >
-            {/* Search Bar */}
+            {/* Search Bar with enhanced styling */}
             <div className="max-w-2xl mx-auto">
-              <SearchBar
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                resultsCount={filteredArticles.length}
-              />
+              <div className="bg-background/50 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-border/50">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  resultsCount={filteredArticles.length}
+                />
+              </div>
             </div>
 
-            {/* Category Filter */}
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">
-                  {language === 'nl' ? 'Filter op categorie:' : 'Filter by category:'}
-                </span>
+            {/* Category Filter with improved layout */}
+            <div className="flex flex-col gap-6">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Filter className="h-5 w-5 text-primary" />
+                  <span className="text-lg font-semibold">
+                    {language === 'nl' ? 'Filter op categorie' : 'Filter by category'}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {language === 'nl' 
+                    ? 'Vind artikelen die het meest relevant zijn voor jouw interesses'
+                    : 'Find articles most relevant to your interests'
+                  }
+                </p>
               </div>
               <div className="flex justify-center">
-                <CategoryFilter
-                  selectedCategory={selectedCategory}
-                  onCategoryChange={setSelectedCategory}
-                />
+                <div className="bg-background/30 backdrop-blur-sm rounded-xl p-4 border border-border/30">
+                  <CategoryFilter
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={setSelectedCategory}
+                  />
+                </div>
               </div>
             </div>
           </motion.div>
@@ -238,321 +384,525 @@ export default function NewsPage() {
             transition={{ delay: 0.8 }}
           >
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto mb-8">
-                <TabsTrigger value="workflo" className="flex items-center gap-2">
-                  <Newspaper className="h-4 w-4" />
-                  {language === 'nl' ? 'Workflo' : 'Workflo'}
+              <TabsList className="grid w-full grid-cols-3 max-w-2xl mx-auto mb-10 h-14 p-1 bg-muted/50 backdrop-blur-sm">
+                <TabsTrigger 
+                  value="workflo" 
+                  className="flex items-center justify-center gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-md transition-all duration-300 text-sm md:text-base font-medium"
+                >
+                  <Newspaper className="h-4 w-4 md:h-5 md:w-5" />
+                  <span className="hidden sm:inline">{language === 'nl' ? 'Workflo' : 'Workflo'}</span>
+                  <span className="sm:hidden">W</span>
                 </TabsTrigger>
-                <TabsTrigger value="external" className="flex items-center gap-2">
-                  <ExternalLink className="h-4 w-4" />
-                  {language === 'nl' ? 'Industrie' : 'Industry'}
+                <TabsTrigger 
+                  value="external" 
+                  className="flex items-center justify-center gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-md transition-all duration-300 text-sm md:text-base font-medium"
+                >
+                  <Rss className="h-4 w-4 md:h-5 md:w-5" />
+                  <span className="hidden sm:inline">{language === 'nl' ? 'RSS Feed' : 'RSS Feed'}</span>
+                  <span className="sm:hidden">RSS</span>
                 </TabsTrigger>
-                <TabsTrigger value="linkedin" className="flex items-center gap-2">
-                  <Linkedin className="h-4 w-4" />
-                  LinkedIn
+                <TabsTrigger 
+                  value="linkedin" 
+                  className="flex items-center justify-center gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-md transition-all duration-300 text-sm md:text-base font-medium"
+                >
+                  <Linkedin className="h-4 w-4 md:h-5 md:w-5" />
+                  <span className="hidden sm:inline">LinkedIn</span>
+                  <span className="sm:hidden">LI</span>
                 </TabsTrigger>
               </TabsList>
 
-              {/* Workflo Articles Tab */}
+              {/* Enhanced Workflo Articles Tab */}
               <TabsContent value="workflo">
-                <div className="mb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-primary" />
-                      <h2 className="text-2xl font-bold">
-                        {selectedCategory || searchQuery ? (
-                          language === 'nl' ? 'Zoekresultaten' : 'Search Results'
-                        ) : (
-                          language === 'nl' ? 'Workflo Artikelen' : 'Workflo Articles'
-                        )}
-                      </h2>
+                <ErrorBoundary>
+                  <div className="mb-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10">
+                          <Calendar className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                          <h2 className="text-3xl font-bold">
+                            {selectedCategory || searchQuery ? (
+                              language === 'nl' ? 'Zoekresultaten' : 'Search Results'
+                            ) : (
+                              language === 'nl' ? 'Workflo Artikelen' : 'Workflo Articles'
+                            )}
+                          </h2>
+                          <p className="text-muted-foreground mt-1">
+                            {searchQuery ? (
+                              language === 'nl' 
+                                ? `${filteredArticles.length} artikelen gevonden voor "${searchQuery}"`
+                                : `${filteredArticles.length} articles found for "${searchQuery}"`
+                            ) : selectedCategory ? (
+                              language === 'nl' 
+                                ? `${filteredArticles.length} artikelen in deze categorie`
+                                : `${filteredArticles.length} articles in this category`
+                            ) : (
+                              language === 'nl' 
+                                ? 'Alle Workflo artikelen en updates'
+                                : 'All Workflo articles and updates'
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {(selectedCategory || searchQuery) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedCategory(null)
+                            setSearchQuery('')
+                          }}
+                          className="gap-2 hover:bg-primary hover:text-primary-foreground transition-colors"
+                        >
+                          <RefreshCw className="h-4 w-4" />
+                          {language === 'nl' ? 'Reset filters' : 'Reset filters'}
+                        </Button>
+                      )}
                     </div>
-                    
-                    {(selectedCategory || searchQuery) && (
+                  </div>
+
+                  <AnimatePresence mode="wait">
+                    {isLoadingWorkflo ? (
+                      <SkeletonLoader count={6} />
+                    ) : filteredArticles.length > 0 ? (
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8"
+                      >
+                        {filteredArticles.map((article, index) => (
+                          <ArticleCard
+                            key={article.id}
+                            article={article}
+                            index={index}
+                          />
+                        ))}
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center py-20"
+                      >
+                        <div className="max-w-md mx-auto">
+                          <div className="bg-muted/30 rounded-full p-6 w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                            <AlertCircle className="h-12 w-12 text-muted-foreground" />
+                          </div>
+                          <h3 className="text-2xl font-semibold mb-3">
+                            {language === 'nl' ? 'Geen artikelen gevonden' : 'No articles found'}
+                          </h3>
+                          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+                            {language === 'nl' 
+                              ? 'Probeer een andere zoekterm of selecteer een andere categorie om meer artikelen te vinden.'
+                              : 'Try a different search term or select another category to find more articles.'
+                            }
+                          </p>
+                          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                            <Button
+                              onClick={() => {
+                                setSelectedCategory(null)
+                                setSearchQuery('')
+                              }}
+                              variant="outline"
+                              size="lg"
+                              className="gap-2"
+                            >
+                              <RefreshCw className="h-4 w-4" />
+                              {language === 'nl' ? 'Alle artikelen tonen' : 'Show all articles'}
+                            </Button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </ErrorBoundary>
+              </TabsContent>
+
+              {/* Enhanced External News Tab */}
+              <TabsContent value="external">
+                <ErrorBoundary>
+                  <div className="mb-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-blue-500/10">
+                          <ExternalLink className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <h2 className="text-3xl font-bold">
+                            {language === 'nl' ? 'Industrie Nieuws' : 'Industry News'}
+                          </h2>
+                          <p className="text-muted-foreground mt-1">
+                            {language === 'nl' 
+                              ? 'Laatste IT-nieuws uit de industrie van verschillende bronnen'
+                              : 'Latest IT news from the industry from various sources'
+                            }
+                          </p>
+                        </div>
+                      </div>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => {
-                          setSelectedCategory(null)
-                          setSearchQuery('')
-                        }}
+                        onClick={() => fetchExternalNews(false)}
+                        disabled={isLoadingExternal}
+                        className="gap-2 min-w-[120px]"
                       >
-                        {language === 'nl' ? 'Reset filters' : 'Reset filters'}
+                        {isLoadingExternal ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
+                            {language === 'nl' ? 'Laden...' : 'Loading...'}
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw className="h-4 w-4" />
+                            {language === 'nl' ? 'Vernieuwen' : 'Refresh'}
+                          </>
+                        )}
                       </Button>
-                    )}
+                    </div>
                   </div>
-                  
-                  <p className="text-muted-foreground">
-                    {searchQuery ? (
-                      language === 'nl' 
-                        ? `${filteredArticles.length} artikelen gevonden voor "${searchQuery}"`
-                        : `${filteredArticles.length} articles found for "${searchQuery}"`
-                    ) : selectedCategory ? (
-                      language === 'nl' 
-                        ? `${filteredArticles.length} artikelen in deze categorie`
-                        : `${filteredArticles.length} articles in this category`
+
+                  <AnimatePresence mode="wait">
+                    {isLoadingExternal ? (
+                      <ExternalNewsSkeletonLoader count={5} />
+                    ) : externalError ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center py-20"
+                      >
+                        <div className="max-w-md mx-auto">
+                          <div className="bg-red-50 rounded-full p-6 w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                            <AlertCircle className="h-12 w-12 text-red-500" />
+                          </div>
+                          <h3 className="text-2xl font-semibold mb-3">
+                            {language === 'nl' ? 'Fout bij laden' : 'Loading Error'}
+                          </h3>
+                          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+                            {externalError}
+                          </p>
+                          <Button
+                            onClick={() => fetchExternalNews(false)}
+                            variant="outline"
+                            size="lg"
+                            className="gap-2"
+                          >
+                            <RefreshCw className="h-4 w-4" />
+                            {language === 'nl' ? 'Probeer opnieuw' : 'Try Again'}
+                          </Button>
+                        </div>
+                      </motion.div>
+                    ) : externalNews.filter(item => item.type === 'rss').length > 0 ? (
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="space-y-6"
+                      >
+                        {externalNews.filter(item => item.type === 'rss').map((item, index) => (
+                          <motion.div
+                            key={item.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-500/20">
+                              <CardContent className="p-6">
+                                <div className="flex justify-between items-start gap-4">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-3">
+                                      <Badge variant="outline" className="border-blue-200 text-blue-700">
+                                        {item.source}
+                                      </Badge>
+                                      <Badge variant="secondary">{item.category}</Badge>
+                                    </div>
+                                    <h3 className="text-xl font-semibold mb-3 hover:text-primary transition-colors line-clamp-2">
+                                      <a 
+                                        href={item.url} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-decoration-none"
+                                      >
+                                        {item.title}
+                                      </a>
+                                    </h3>
+                                    <p className="text-muted-foreground mb-4 leading-relaxed line-clamp-3">{item.excerpt}</p>
+                                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                      <span className="flex items-center gap-1">
+                                        <Calendar className="h-4 w-4" />
+                                        {item.publishedAt.toLocaleDateString(
+                                          language === 'nl' ? 'nl-NL' : 'en-US',
+                                          { year: 'numeric', month: 'long', day: 'numeric' }
+                                        )}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <Button variant="ghost" size="sm" asChild className="shrink-0">
+                                    <a 
+                                      href={item.url} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="hover:bg-blue-50"
+                                    >
+                                      <ExternalLink className="h-5 w-5 text-blue-600" />
+                                    </a>
+                                  </Button>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+                        ))}
+                      </motion.div>
                     ) : (
-                      language === 'nl' 
-                        ? 'Alle Workflo artikelen en updates'
-                        : 'All Workflo articles and updates'
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center py-20"
+                      >
+                        <div className="max-w-md mx-auto">
+                          <div className="bg-muted/30 rounded-full p-6 w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                            <ExternalLink className="h-12 w-12 text-muted-foreground" />
+                          </div>
+                          <h3 className="text-2xl font-semibold mb-3">
+                            {language === 'nl' ? 'Geen extern nieuws beschikbaar' : 'No external news available'}
+                          </h3>
+                          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+                            {language === 'nl' 
+                              ? 'Er is momenteel geen extern nieuws beschikbaar. Probeer later opnieuw.'
+                              : 'No external news is currently available. Please try again later.'
+                            }
+                          </p>
+                          <Button
+                            onClick={() => fetchExternalNews(false)}
+                            variant="outline"
+                            size="lg"
+                            className="gap-2"
+                          >
+                            <RefreshCw className="h-4 w-4" />
+                            {language === 'nl' ? 'Probeer opnieuw' : 'Try Again'}
+                          </Button>
+                        </div>
+                      </motion.div>
                     )}
-                  </p>
-                </div>
-
-                {filteredArticles.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredArticles.map((article, index) => (
-                      <ArticleCard
-                        key={article.id}
-                        article={article}
-                        index={index}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center py-16"
-                  >
-                    <div className="text-6xl mb-4">🔍</div>
-                    <h3 className="text-xl font-semibold mb-2">
-                      {language === 'nl' ? 'Geen artikelen gevonden' : 'No articles found'}
-                    </h3>
-                    <p className="text-muted-foreground mb-6">
-                      {language === 'nl' 
-                        ? 'Probeer een andere zoekterm of selecteer een andere categorie.'
-                        : 'Try a different search term or select another category.'
-                      }
-                    </p>
-                    <Button
-                      onClick={() => {
-                        setSelectedCategory(null)
-                        setSearchQuery('')
-                      }}
-                      variant="outline"
-                    >
-                      {language === 'nl' ? 'Alle artikelen tonen' : 'Show all articles'}
-                    </Button>
-                  </motion.div>
-                )}
+                  </AnimatePresence>
+                </ErrorBoundary>
               </TabsContent>
 
-              {/* External News Tab */}
-              <TabsContent value="external">
-                <div className="mb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <ExternalLink className="h-5 w-5 text-primary" />
-                      <h2 className="text-2xl font-bold">
-                        {language === 'nl' ? 'Industrie Nieuws' : 'Industry News'}
-                      </h2>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => fetchExternalNews(false)}
-                      disabled={isLoadingExternal}
-                    >
-                      {isLoadingExternal ? (
-                        language === 'nl' ? 'Laden...' : 'Loading...'
-                      ) : (
-                        language === 'nl' ? 'Vernieuwen' : 'Refresh'
-                      )}
-                    </Button>
-                  </div>
-                  
-                  <p className="text-muted-foreground">
-                    {language === 'nl' 
-                      ? 'Laatste IT-nieuws uit de industrie van verschillende bronnen'
-                      : 'Latest IT news from the industry from various sources'
-                    }
-                  </p>
-                </div>
-
-                {isLoadingExternal ? (
-                  <div className="text-center py-16">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-muted-foreground">
-                      {language === 'nl' ? 'Laden van nieuws...' : 'Loading news...'}
-                    </p>
-                  </div>
-                ) : externalNews.length > 0 ? (
-                  <div className="space-y-4">
-                    {externalNews.filter(item => item.type === 'rss').map((item, index) => (
-                      <Card key={item.id} className="hover:shadow-lg transition-shadow">
-                        <CardContent className="p-6">
-                          <div className="flex justify-between items-start gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Badge variant="outline">{item.source}</Badge>
-                                <Badge variant="secondary">{item.category}</Badge>
-                              </div>
-                              <h3 className="text-lg font-semibold mb-2 hover:text-primary">
-                                <a href={item.url} target="_blank" rel="noopener noreferrer">
-                                  {item.title}
-                                </a>
-                              </h3>
-                              <p className="text-muted-foreground mb-3">{item.excerpt}</p>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="h-3 w-3" />
-                                  {item.publishedAt.toLocaleDateString(
-                                    language === 'nl' ? 'nl-NL' : 'en-US'
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                            <Button variant="ghost" size="sm" asChild>
-                              <a href={item.url} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="h-4 w-4" />
-                              </a>
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <div className="text-6xl mb-4">📡</div>
-                    <h3 className="text-xl font-semibold mb-2">
-                      {language === 'nl' ? 'Geen extern nieuws beschikbaar' : 'No external news available'}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {language === 'nl' 
-                        ? 'Probeer later opnieuw of vernieuw de feed'
-                        : 'Try again later or refresh the feed'
-                      }
-                    </p>
-                  </div>
-                )}
-              </TabsContent>
-
-              {/* LinkedIn Tab */}
+              {/* Enhanced LinkedIn Tab */}
               <TabsContent value="linkedin">
-                <div className="mb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Linkedin className="h-5 w-5 text-primary" />
-                      <h2 className="text-2xl font-bold">
-                        {language === 'nl' ? 'LinkedIn Updates' : 'LinkedIn Updates'}
-                      </h2>
+                <ErrorBoundary>
+                  <div className="mb-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-blue-600/10">
+                          <Linkedin className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <h2 className="text-3xl font-bold">
+                            {language === 'nl' ? 'LinkedIn Updates' : 'LinkedIn Updates'}
+                          </h2>
+                          <p className="text-muted-foreground mt-1">
+                            {language === 'nl' 
+                              ? 'Laatste updates van Workflo op LinkedIn'
+                              : 'Latest updates from Workflo on LinkedIn'
+                            }
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => fetchExternalNews(true)}
+                        disabled={isLoadingExternal}
+                        className="gap-2 min-w-[120px]"
+                      >
+                        {isLoadingExternal ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
+                            {language === 'nl' ? 'Laden...' : 'Loading...'}
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw className="h-4 w-4" />
+                            {language === 'nl' ? 'Vernieuwen' : 'Refresh'}
+                          </>
+                        )}
+                      </Button>
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => fetchExternalNews(true)}
-                      disabled={isLoadingExternal}
-                    >
-                      {isLoadingExternal ? (
-                        language === 'nl' ? 'Laden...' : 'Loading...'
-                      ) : (
-                        language === 'nl' ? 'Vernieuwen' : 'Refresh'
-                      )}
-                    </Button>
                   </div>
-                  
-                  <p className="text-muted-foreground">
-                    {language === 'nl' 
-                      ? 'Laatste updates van Workflo op LinkedIn'
-                      : 'Latest updates from Workflo on LinkedIn'
-                    }
-                  </p>
-                </div>
 
-                {isLoadingExternal ? (
-                  <div className="text-center py-16">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-muted-foreground">
-                      {language === 'nl' ? 'Laden van LinkedIn posts...' : 'Loading LinkedIn posts...'}
-                    </p>
-                  </div>
-                ) : externalNews.length > 0 ? (
-                  <div className="space-y-4">
-                    {externalNews.filter(item => item.type === 'linkedin').map((item, index) => (
-                      <Card key={item.id} className="hover:shadow-lg transition-shadow">
-                        <CardContent className="p-6">
-                          <div className="flex justify-between items-start gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-3">
-                                <Linkedin className="h-5 w-5 text-blue-600" />
-                                <span className="font-medium">{item.source}</span>
-                                <Badge variant="secondary">LinkedIn</Badge>
-                              </div>
-                              <p className="text-muted-foreground mb-4 leading-relaxed">{item.excerpt}</p>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="h-3 w-3" />
-                                  {item.publishedAt.toLocaleDateString(
-                                    language === 'nl' ? 'nl-NL' : 'en-US'
-                                  )}
-                                </span>
-                                <span className="flex items-center gap-1 text-blue-600">
-                                  ❤️ {Math.floor(Math.random() * 100) + 20}
-                                </span>
-                                <span className="flex items-center gap-1 text-blue-600">
-                                  💬 {Math.floor(Math.random() * 50) + 5}
-                                </span>
-                                <span className="flex items-center gap-1 text-blue-600">
-                                  🔄 {Math.floor(Math.random() * 30) + 3}
-                                </span>
-                              </div>
-                            </div>
-                            <Button variant="ghost" size="sm" asChild>
-                              <a href={item.url} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="h-4 w-4" />
+                  <AnimatePresence mode="wait">
+                    {isLoadingExternal ? (
+                      <ExternalNewsSkeletonLoader count={4} />
+                    ) : externalError ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center py-20"
+                      >
+                        <div className="max-w-md mx-auto">
+                          <div className="bg-red-50 rounded-full p-6 w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                            <AlertCircle className="h-12 w-12 text-red-500" />
+                          </div>
+                          <h3 className="text-2xl font-semibold mb-3">
+                            {language === 'nl' ? 'Fout bij laden' : 'Loading Error'}
+                          </h3>
+                          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+                            {externalError}
+                          </p>
+                          <Button
+                            onClick={() => fetchExternalNews(true)}
+                            variant="outline"
+                            size="lg"
+                            className="gap-2"
+                          >
+                            <RefreshCw className="h-4 w-4" />
+                            {language === 'nl' ? 'Probeer opnieuw' : 'Try Again'}
+                          </Button>
+                        </div>
+                      </motion.div>
+                    ) : externalNews.filter(item => item.type === 'linkedin').length > 0 ? (
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="space-y-6"
+                      >
+                        {externalNews.filter(item => item.type === 'linkedin').map((item, index) => (
+                          <motion.div
+                            key={item.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-600/20">
+                              <CardContent className="p-6">
+                                <div className="flex justify-between items-start gap-4">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-3 mb-4">
+                                      <div className="p-1.5 rounded bg-blue-600/10">
+                                        <Linkedin className="h-5 w-5 text-blue-600" />
+                                      </div>
+                                      <span className="font-semibold text-lg">{item.source}</span>
+                                      <Badge variant="secondary" className="bg-blue-100 text-blue-800">LinkedIn</Badge>
+                                    </div>
+                                    <p className="text-foreground mb-6 leading-relaxed text-lg line-clamp-4">{item.excerpt}</p>
+                                    <div className="flex items-center justify-between flex-wrap gap-4">
+                                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                        <span className="flex items-center gap-1">
+                                          <Calendar className="h-4 w-4" />
+                                          {item.publishedAt.toLocaleDateString(
+                                            language === 'nl' ? 'nl-NL' : 'en-US',
+                                            { year: 'numeric', month: 'long', day: 'numeric' }
+                                          )}
+                                        </span>
+                                        <span className="flex items-center gap-1 text-blue-600 font-medium">
+                                          ❤️ {Math.floor(Math.random() * 100) + 20}
+                                        </span>
+                                        <span className="flex items-center gap-1 text-blue-600 font-medium">
+                                          💬 {Math.floor(Math.random() * 50) + 5}
+                                        </span>
+                                        <span className="flex items-center gap-1 text-blue-600 font-medium">
+                                          🔄 {Math.floor(Math.random() * 30) + 3}
+                                        </span>
+                                      </div>
+                                      <Button variant="outline" size="sm" className="text-blue-600 hover:bg-blue-50 border-blue-200" asChild>
+                                        <a href={item.url} target="_blank" rel="noopener noreferrer">
+                                          <ExternalLink className="h-4 w-4 mr-2" />
+                                          {language === 'nl' ? 'Bekijk op LinkedIn' : 'View on LinkedIn'}
+                                        </a>
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center py-20"
+                      >
+                        <div className="max-w-md mx-auto">
+                          <div className="bg-blue-50 rounded-full p-6 w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                            <Linkedin className="h-12 w-12 text-blue-600" />
+                          </div>
+                          <h3 className="text-2xl font-semibold mb-3">
+                            {language === 'nl' ? 'Geen LinkedIn posts beschikbaar' : 'No LinkedIn posts available'}
+                          </h3>
+                          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+                            {language === 'nl' 
+                              ? 'Er zijn momenteel geen LinkedIn updates beschikbaar. Volg ons op LinkedIn voor de nieuwste updates!'
+                              : 'No LinkedIn updates are currently available. Follow us on LinkedIn for the latest updates!'
+                            }
+                          </p>
+                          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                            <Button
+                              onClick={() => fetchExternalNews(true)}
+                              variant="outline"
+                              size="lg"
+                              className="gap-2"
+                            >
+                              <RefreshCw className="h-4 w-4" />
+                              {language === 'nl' ? 'Probeer opnieuw' : 'Try Again'}
+                            </Button>
+                            <Button
+                              asChild
+                              size="lg"
+                              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+                            >
+                              <a href="https://linkedin.com/company/workflo" target="_blank" rel="noopener noreferrer">
+                                <Linkedin className="h-4 w-4" />
+                                {language === 'nl' ? 'Volg ons' : 'Follow Us'}
                               </a>
                             </Button>
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <div className="text-6xl mb-4">💼</div>
-                    <h3 className="text-xl font-semibold mb-2">
-                      {language === 'nl' ? 'Geen LinkedIn posts beschikbaar' : 'No LinkedIn posts available'}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {language === 'nl' 
-                        ? 'Probeer later opnieuw of volg ons op LinkedIn'
-                        : 'Try again later or follow us on LinkedIn'
-                      }
-                    </p>
-                  </div>
-                )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </ErrorBoundary>
               </TabsContent>
             </Tabs>
           </motion.div>
         </div>
       </section>
 
-      {/* Recent Articles Sidebar */}
+      {/* Enhanced Recent Articles Sidebar */}
       {!searchQuery && !selectedCategory && recentArticles.length > 0 && (
-        <section className="py-12 px-4 bg-muted/30">
-          <div className="container mx-auto max-w-4xl">
+        <section className="py-16 px-4 bg-gradient-to-b from-muted/10 to-background">
+          <div className="container mx-auto max-w-6xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.0 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5 text-primary" />
-                    {language === 'nl' ? 'Recent Gepubliceerd' : 'Recently Published'}
-                  </CardTitle>
-                  <CardDescription>
-                    {language === 'nl' 
-                      ? 'De nieuwste artikelen en updates'
-                      : 'The latest articles and updates'
-                    }
-                  </CardDescription>
+              <Card className="shadow-lg border-0 bg-background/60 backdrop-blur-sm">
+                <CardHeader className="pb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Calendar className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-2xl">
+                        {language === 'nl' ? 'Recent Gepubliceerd' : 'Recently Published'}
+                      </CardTitle>
+                      <CardDescription className="text-base mt-1">
+                        {language === 'nl' 
+                          ? 'De nieuwste artikelen en updates van het Workflo team'
+                          : 'The latest articles and updates from the Workflo team'
+                        }
+                      </CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {recentArticles.map((article, index) => {
                       const title = language === 'nl' ? article.titleNL : article.title
                       const excerpt = language === 'nl' ? article.excerptNL : article.excerpt
@@ -564,28 +914,49 @@ export default function NewsPage() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 1.1 + index * 0.1 }}
                         >
-                          <div className="flex gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="group flex gap-6 p-5 rounded-xl hover:bg-muted/40 transition-all duration-300 border border-transparent hover:border-border/50">
                             <div className="flex-1">
-                              <h4 className="font-medium line-clamp-1 mb-1">{title}</h4>
-                              <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                              <h4 className="font-semibold text-lg line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                                {title}
+                              </h4>
+                              <p className="text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
                                 {excerpt}
                               </p>
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                <Calendar className="h-3 w-3" />
-                                <span>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="h-4 w-4" />
                                   {article.publishedAt.toLocaleDateString(
-                                    language === 'nl' ? 'nl-NL' : 'en-US'
+                                    language === 'nl' ? 'nl-NL' : 'en-US',
+                                    { year: 'numeric', month: 'long', day: 'numeric' }
                                   )}
                                 </span>
+                                <Badge variant="outline" className="text-xs">
+                                  {article.readingTime} {language === 'nl' ? 'min' : 'min'}
+                                </Badge>
                               </div>
                             </div>
-                            <Button variant="ghost" size="sm" asChild>
-                              <a href={`/nieuws/${article.slug}`}>
-                                {language === 'nl' ? 'Lees' : 'Read'}
-                              </a>
-                            </Button>
+                            <div className="flex items-center">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                asChild
+                                className="group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300"
+                              >
+                                <a href={`/nieuws/${article.slug}`} className="gap-2">
+                                  {language === 'nl' ? 'Lees meer' : 'Read more'}
+                                  <motion.div
+                                    initial={false}
+                                    animate={{ x: 0 }}
+                                    whileHover={{ x: 4 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                  >
+                                    →
+                                  </motion.div>
+                                </a>
+                              </Button>
+                            </div>
                           </div>
-                          {index < recentArticles.length - 1 && <Separator />}
+                          {index < recentArticles.length - 1 && <Separator className="my-2" />}
                         </motion.div>
                       )
                     })}
