@@ -176,30 +176,29 @@ export class SupabaseArticleService {
    */
   static async createArticle(article: ArticleInsert): Promise<ApiResponse<Article>> {
     if (!this.supabase) return { success: false, error: "Database not configured" };
-    try {(articleData: ArticleInsert, userId?: string): Promise<ApiResponse<Article>> {
     try {
       // Generate slug if not provided
-      if (!articleData.slug) {
-        articleData.slug = this.generateSlug(articleData.title)
+      if (!article.slug) {
+        article.slug = this.generateSlug(article.title)
       }
 
       // Ensure slug is unique
-      articleData.slug = await this.ensureUniqueSlug(articleData.slug)
+      article.slug = await this.ensureUniqueSlug(article.slug)
 
       // Set created_by if user provided
       if (userId) {
-        articleData.created_by = userId
-        articleData.updated_by = userId
+        article.created_by = userId
+        article.updated_by = userId
       }
 
       // Set published_at if publishing
-      if (articleData.published && !articleData.published_at) {
-        articleData.published_at = new Date().toISOString()
+      if (article.published && !article.published_at) {
+        article.published_at = new Date().toISOString()
       }
 
       const { data, error } = await this.supabase
         .from('articles')
-        .insert(articleData)
+        .insert(article)
         .select(`
           *,
           cms_users!articles_created_by_fkey (
@@ -219,8 +218,8 @@ export class SupabaseArticleService {
       }
 
       // Update tag usage counts
-      if (articleData.tags && articleData.tags.length > 0) {
-        await this.updateTagUsageCounts([], articleData.tags)
+      if (article.tags && article.tags.length > 0) {
+        await this.updateTagUsageCounts([], article.tags)
       }
 
       return { success: true, data }
@@ -235,14 +234,9 @@ export class SupabaseArticleService {
    */
   static async updateArticle(id: string, updates: ArticleUpdate): Promise<ApiResponse<Article>> {
     if (!this.supabase) return { success: false, error: "Database not configured" };
-    try {(
-    articleId: string, 
-    updateData: ArticleUpdate, 
-    userId?: string
-  ): Promise<ApiResponse<Article>> {
     try {
       // Get current article for comparison
-      const currentArticle = await this.getArticle(articleId)
+      const currentArticle = await this.getArticle(id)
       if (!currentArticle.success || !currentArticle.data) {
         return { success: false, error: 'Article not found' }
       }
@@ -251,28 +245,28 @@ export class SupabaseArticleService {
 
       // Update modified fields
       if (userId) {
-        updateData.updated_by = userId
+        updates.updated_by = userId
       }
 
       // Handle publishing
-      if (updateData.published && !currentArticle.data.published) {
-        updateData.published_at = new Date().toISOString()
-      } else if (updateData.published === false) {
-        updateData.published_at = null
+      if (updates.published && !currentArticle.data.published) {
+        updates.published_at = new Date().toISOString()
+      } else if (updates.published === false) {
+        updates.published_at = null
       }
 
       // Generate new slug if title changed
-      if (updateData.title && updateData.title !== currentArticle.data.title) {
-        if (!updateData.slug) {
-          updateData.slug = this.generateSlug(updateData.title)
+      if (updates.title && updates.title !== currentArticle.data.title) {
+        if (!updates.slug) {
+          updates.slug = this.generateSlug(updates.title)
         }
-        updateData.slug = await this.ensureUniqueSlug(updateData.slug, articleId)
+        updates.slug = await this.ensureUniqueSlug(updates.slug, id)
       }
 
       const { data, error } = await this.supabase
         .from('articles')
-        .update(updateData)
-        .eq('id', articleId)
+        .update(updates)
+        .eq('id', id)
         .select(`
           *,
           cms_users!articles_created_by_fkey (
@@ -292,7 +286,7 @@ export class SupabaseArticleService {
       }
 
       // Update tag usage counts if tags changed
-      const newTags = updateData.tags || oldTags
+      const newTags = updates.tags || oldTags
       if (JSON.stringify(oldTags.sort()) !== JSON.stringify(newTags.sort())) {
         await this.updateTagUsageCounts(oldTags, newTags)
       }
