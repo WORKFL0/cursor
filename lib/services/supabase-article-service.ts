@@ -22,6 +22,9 @@ export class SupabaseArticleService {
    */
   static async getArticles(filters: ArticleFilters = {}): Promise<PaginatedResponse<Article>> {
     try {
+      if (!this.supabase) {
+        return { data: [], total: 0, page: 1, pageSize: 10, totalPages: 0 }
+      }
       const {
         published,
         featured,
@@ -171,7 +174,9 @@ export class SupabaseArticleService {
   /**
    * Create new article
    */
-  static async createArticle(articleData: ArticleInsert, userId?: string): Promise<ApiResponse<Article>> {
+  static async createArticle(article: ArticleInsert): Promise<ApiResponse<Article>> {
+    if (!this.supabase) return { success: false, error: "Database not configured" };
+    try {(articleData: ArticleInsert, userId?: string): Promise<ApiResponse<Article>> {
     try {
       // Generate slug if not provided
       if (!articleData.slug) {
@@ -228,7 +233,9 @@ export class SupabaseArticleService {
   /**
    * Update existing article
    */
-  static async updateArticle(
+  static async updateArticle(id: string, updates: ArticleUpdate): Promise<ApiResponse<Article>> {
+    if (!this.supabase) return { success: false, error: "Database not configured" };
+    try {(
     articleId: string, 
     updateData: ArticleUpdate, 
     userId?: string

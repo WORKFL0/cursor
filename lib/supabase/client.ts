@@ -23,7 +23,8 @@ export const supabase = isSupabaseConfigured
 export const createAdminClient = () => {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!serviceRoleKey || !supabaseUrl) {
-    throw new Error('Supabase admin client requires service role key and URL')
+    console.warn('Supabase admin client not configured - missing service role key or URL')
+    return null
   }
   
   return createClient<Database>(supabaseUrl, serviceRoleKey, {
