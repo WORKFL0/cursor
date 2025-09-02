@@ -4,11 +4,7 @@
   "github": {
     "enabled": true
   },
-  "functions": {
-    "app/api/**/*": {
-      "maxDuration": 30
-    }
-  },
+  "regions": ["ams1"],
   "headers": [
     {
       "source": "/(.*)",
