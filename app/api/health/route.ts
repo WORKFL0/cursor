@@ -43,14 +43,20 @@ export async function GET(request: NextRequest) {
     let databaseStatus: 'pass' | 'warn' | 'fail' = 'pass'
     try {
       // Try to import and test Supabase connection
-      const { supabase } = await import('@/src/lib/supabase')
-      const { error } = await supabase
-        .from('users')
-        .select('count', { count: 'exact', head: true })
-        .limit(1)
-      if (error) {
-        console.warn('Database health check failed:', error.message)
-        databaseStatus = 'fail'
+      const { supabase, isSupabaseConfigured } = await import('@/src/lib/supabase')
+      
+      if (!isSupabaseConfigured || !supabase) {
+        console.warn('Database health check skipped: Supabase not configured')
+        databaseStatus = 'warn'
+      } else {
+        const { error } = await supabase
+          .from('users')
+          .select('count', { count: 'exact', head: true })
+          .limit(1)
+        if (error) {
+          console.warn('Database health check failed:', error.message)
+          databaseStatus = 'fail'
+        }
       }
     } catch (importError) {
       console.warn('Database import failed:', importError)
@@ -141,7 +147,19 @@ export async function GET(request: NextRequest) {
 export async function HEAD() {
   try {
     // Quick database ping
-    const { supabase } = await import('@/src/lib/supabase')
+    const { supabase, isSupabaseConfigured } = await import('@/src/lib/supabase')
+    
+    if (!isSupabaseConfigured || !supabase) {
+      // Application is ready but database is not configured
+      return new NextResponse(null, { 
+        status: 200,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'X-Health-Check': 'ready-no-db'
+        }
+      })
+    }
+    
     const { error } = await supabase
       .from('users')
       .select('count', { count: 'exact', head: true })
@@ -151,7 +169,7 @@ export async function HEAD() {
       status: error ? 503 : 200,
       headers: {
         'Cache-Control': 'no-cache',
-        'X-Health-Check': 'ready'
+        'X-Health-Check': error ? 'not-ready' : 'ready'
       }
     })
   } catch {

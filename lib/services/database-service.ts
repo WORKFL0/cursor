@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/src/lib/supabase'
+import { createSupabaseAdmin } from '@/src/lib/supabase'
 
 export interface Article {
   id?: number
@@ -43,7 +43,19 @@ class DatabaseService {
   private readonly tableName = 'articles'
 
   constructor() {
-    this.ensureTableExists()
+    // Only try to ensure table exists if Supabase is configured
+    const admin = createSupabaseAdmin()
+    if (admin) {
+      this.ensureTableExists()
+    }
+  }
+
+  private getAdminClient() {
+    const admin = createSupabaseAdmin()
+    if (!admin) {
+      throw new Error('Supabase admin client not configured')
+    }
+    return admin
   }
 
   /**
@@ -51,8 +63,9 @@ class DatabaseService {
    */
   private async ensureTableExists() {
     try {
+      const admin = this.getAdminClient()
       // Check if table exists
-      const { data: tables, error: checkError } = await supabaseAdmin
+      const { data: tables, error: checkError } = await admin
         .from('information_schema.tables')
         .select('table_name')
         .eq('table_name', this.tableName)
@@ -65,7 +78,7 @@ class DatabaseService {
 
       if (!tables || tables.length === 0) {
         // Create the table
-        const { error: createError } = await supabaseAdmin.rpc('create_articles_table')
+        const { error: createError } = await admin.rpc('create_articles_table')
         
         if (createError && !createError.message.includes('already exists')) {
           // Create table with SQL if RPC doesn't work
@@ -142,7 +155,8 @@ class DatabaseService {
     `
 
     try {
-      const { error } = await supabaseAdmin.rpc('exec_sql', { sql: createTableSQL })
+      const admin = this.getAdminClient()
+      const { error } = await admin.rpc('exec_sql', { sql: createTableSQL })
       
       if (error) {
         console.error('Error creating articles table:', error)
@@ -190,7 +204,8 @@ class DatabaseService {
     featured?: boolean
   } = {}): Promise<{ data: Article[], error?: string, count?: number }> {
     try {
-      let query = supabaseAdmin.from(this.tableName).select('*', { count: 'exact' })
+      const admin = this.getAdminClient()
+      let query = admin.from(this.tableName).select('*', { count: 'exact' })
 
       // Apply filters
       if (options.published !== undefined) {
@@ -226,13 +241,15 @@ class DatabaseService {
 
       if (error) {
         console.error('Error fetching articles:', error)
-        return { data: [], error: error.message }
+        const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { data: [], error: errorMessage }
       }
 
       return { data: data || [], count }
     } catch (error: unknown) {
       console.error('Database error in getArticles:', error)
-      return { data: [], error: error.message }
+      const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { data: [], error: errorMessage }
     }
   }
 
@@ -241,20 +258,23 @@ class DatabaseService {
    */
   public async getArticleById(id: number): Promise<{ data?: Article, error?: string }> {
     try {
-      const { data, error } = await supabaseAdmin
+      const admin = this.getAdminClient()
+      const { data, error } = await admin
         .from(this.tableName)
         .select('*')
         .eq('id', id)
         .single()
 
       if (error) {
-        return { error: error.message }
+        const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
       }
 
       return { data }
     } catch (error: unknown) {
       console.error('Database error in getArticleById:', error)
-      return { error: error.message }
+      const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
     }
   }
 
@@ -263,20 +283,23 @@ class DatabaseService {
    */
   public async getArticleBySlug(slug: string): Promise<{ data?: Article, error?: string }> {
     try {
-      const { data, error } = await supabaseAdmin
+      const admin = this.getAdminClient()
+      const { data, error } = await admin
         .from(this.tableName)
         .select('*')
         .eq('slug', slug)
         .single()
 
       if (error) {
-        return { error: error.message }
+        const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
       }
 
       return { data }
     } catch (error: unknown) {
       console.error('Database error in getArticleBySlug:', error)
-      return { error: error.message }
+      const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
     }
   }
 
@@ -301,7 +324,8 @@ class DatabaseService {
         reading_time: readingTime
       }
 
-      const { data, error } = await supabaseAdmin
+      const admin = this.getAdminClient()
+      const { data, error } = await admin
         .from(this.tableName)
         .insert([article])
         .select()
@@ -311,13 +335,15 @@ class DatabaseService {
         if (error.code === '23505') { // Unique constraint violation
           return { error: 'An article with this slug already exists' }
         }
-        return { error: error.message }
+        const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
       }
 
       return { data }
     } catch (error: unknown) {
       console.error('Database error in createArticle:', error)
-      return { error: error.message }
+      const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
     }
   }
 
@@ -339,7 +365,8 @@ class DatabaseService {
         (updates as any).reading_time = this.calculateReadingTime(updates.content)
       }
 
-      const { data, error } = await supabaseAdmin
+      const admin = this.getAdminClient()
+      const { data, error } = await admin
         .from(this.tableName)
         .update(updates)
         .eq('id', id)
@@ -350,13 +377,15 @@ class DatabaseService {
         if (error.code === '23505') { // Unique constraint violation
           return { error: 'An article with this slug already exists' }
         }
-        return { error: error.message }
+        const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
       }
 
       return { data }
     } catch (error: unknown) {
       console.error('Database error in updateArticle:', error)
-      return { error: error.message }
+      const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { error: errorMessage }
     }
   }
 
@@ -365,19 +394,22 @@ class DatabaseService {
    */
   public async deleteArticle(id: number): Promise<{ success: boolean, error?: string }> {
     try {
-      const { error } = await supabaseAdmin
+      const admin = this.getAdminClient()
+      const { error } = await admin
         .from(this.tableName)
         .delete()
         .eq('id', id)
 
       if (error) {
-        return { success: false, error: error.message }
+        const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { success: false, error: errorMessage }
       }
 
       return { success: true }
     } catch (error: unknown) {
       console.error('Database error in deleteArticle:', error)
-      return { success: false, error: error.message }
+      const errorMessage = error instanceof Error ? error.message : 'Database not configured'
+      return { success: false, error: errorMessage }
     }
   }
 
@@ -439,18 +471,19 @@ class DatabaseService {
     error?: string
   }> {
     try {
+      const admin = this.getAdminClient()
       // Get total counts
-      const { data: totalData, error: totalError } = await supabaseAdmin
+      const { data: totalData, error: totalError } = await admin
         .from(this.tableName)
         .select('id', { count: 'exact' })
 
-      const { data: publishedData, error: publishedError } = await supabaseAdmin
+      const { data: publishedData, error: publishedError } = await admin
         .from(this.tableName)
         .select('id', { count: 'exact' })
         .eq('published', true)
 
       // Get category counts
-      const { data: categoryData, error: categoryError } = await supabaseAdmin
+      const { data: categoryData, error: categoryError } = await admin
         .from(this.tableName)
         .select('category')
 
@@ -493,7 +526,7 @@ class DatabaseService {
         publishedArticles: 0,
         draftArticles: 0,
         categories: [],
-        error: error.message
+        error: error instanceof Error ? error.message : 'Database not configured'
       }
     }
   }

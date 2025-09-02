@@ -35,7 +35,17 @@ async function checkDatabase(): Promise<ServiceStatus> {
       }
     }
 
-    const { supabase } = await import('@/src/lib/supabase')
+    const { supabase, isSupabaseConfigured } = await import('@/src/lib/supabase')
+    
+    if (!isSupabaseConfigured || !supabase) {
+      return {
+        name: 'Database (Supabase)',
+        status: 'down',
+        responseTime: Date.now() - start,
+        lastChecked: new Date().toISOString(),
+        error: 'Supabase not configured - missing environment variables'
+      }
+    }
     
     // Simple query to test connection - use a more generic approach
     const { data, error } = await supabase

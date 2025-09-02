@@ -1,4 +1,4 @@
-import { supabase, supabaseAdmin } from './supabase'
+import { supabase, createSupabaseAdmin, isSupabaseConfigured } from './supabase'
 import type { AuthUser, AuthSession } from '../types/supabase'
 
 /**
@@ -9,11 +9,32 @@ import type { AuthUser, AuthSession } from '../types/supabase'
 
 export class SupabaseAuthManager {
   /**
+   * Check if Supabase is configured and ready
+   */
+  private static checkConfiguration() {
+    if (!isSupabaseConfigured || !supabase) {
+      throw new Error('Supabase is not configured. Please check your environment variables.')
+    }
+    return supabase
+  }
+
+  /**
+   * Get admin client with configuration check
+   */
+  private static getAdminClient() {
+    const adminClient = createSupabaseAdmin()
+    if (!adminClient) {
+      throw new Error('Supabase admin client is not configured. Please check your service role key.')
+    }
+    return adminClient
+  }
+  /**
    * Sign up a new user with Supabase Auth
    */
   static async signUp(email: string, password: string, metadata?: Record<string, any>) {
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const client = this.checkConfiguration()
+      const { data, error } = await client.auth.signUp({
         email,
         password,
         options: {
@@ -35,7 +56,8 @@ export class SupabaseAuthManager {
    */
   static async signIn(email: string, password: string) {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const client = this.checkConfiguration()
+      const { data, error } = await client.auth.signInWithPassword({
         email,
         password
       })
@@ -54,7 +76,8 @@ export class SupabaseAuthManager {
    */
   static async signOut() {
     try {
-      const { error } = await supabase.auth.signOut()
+      const client = this.checkConfiguration()
+      const { error } = await client.auth.signOut()
       if (error) throw error
 
       return { success: true }
@@ -69,7 +92,8 @@ export class SupabaseAuthManager {
    */
   static async getSession() {
     try {
-      const { data: { session }, error } = await supabase.auth.getSession()
+      const client = this.checkConfiguration()
+      const { data: { session }, error } = await client.auth.getSession()
       if (error) throw error
 
       return { success: true, session }
@@ -84,7 +108,8 @@ export class SupabaseAuthManager {
    */
   static async getUser() {
     try {
-      const { data: { user }, error } = await supabase.auth.getUser()
+      const client = this.checkConfiguration()
+      const { data: { user }, error } = await client.auth.getUser()
       if (error) throw error
 
       return { success: true, user }
@@ -144,7 +169,8 @@ export class SupabaseAuthManager {
    */
   static async resetPassword(email: string) {
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      const client = this.checkConfiguration()
+      const { error } = await client.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth/reset-password`
       })
 
@@ -162,7 +188,8 @@ export class SupabaseAuthManager {
    */
   static async updatePassword(newPassword: string) {
     try {
-      const { error } = await supabase.auth.updateUser({
+      const client = this.checkConfiguration()
+      const { error } = await client.auth.updateUser({
         password: newPassword
       })
 
@@ -180,7 +207,8 @@ export class SupabaseAuthManager {
    */
   static async updateUserMetadata(metadata: Record<string, any>) {
     try {
-      const { data, error } = await supabase.auth.updateUser({
+      const client = this.checkConfiguration()
+      const { data, error } = await client.auth.updateUser({
         data: metadata
       })
 
@@ -197,7 +225,8 @@ export class SupabaseAuthManager {
    * Listen to authentication state changes
    */
   static onAuthStateChange(callback: (event: string, session: AuthSession | null) => void) {
-    return supabase.auth.onAuthStateChange(callback)
+    const client = this.checkConfiguration()
+    return client.auth.onAuthStateChange(callback)
   }
 
   /**
@@ -205,7 +234,8 @@ export class SupabaseAuthManager {
    */
   static async adminCreateUser(email: string, password: string, metadata?: Record<string, any>) {
     try {
-      const { data, error } = await supabaseAdmin.auth.admin.createUser({
+      const adminClient = this.getAdminClient()
+      const { data, error } = await adminClient.auth.admin.createUser({
         email,
         password,
         user_metadata: metadata
@@ -225,7 +255,8 @@ export class SupabaseAuthManager {
    */
   static async adminDeleteUser(userId: string) {
     try {
-      const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
+      const adminClient = this.getAdminClient()
+      const { error } = await adminClient.auth.admin.deleteUser(userId)
       if (error) throw error
 
       return { success: true }
