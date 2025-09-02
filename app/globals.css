@@ -32,15 +32,15 @@
     /* Additional semantic colors for better UX */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 98%;
+    --warning: 45 93% 47%; /* Changed to Workflo yellow */
+    --warning-foreground: 0 0% 9%;
     --info: 221 83% 53%;
     --info-foreground: 0 0% 98%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 45 93% 47%; /* Workflo yellow */
+    --chart-2: 173 58% 39%; /* Teal */
+    --chart-3: 197 37% 24%; /* Blue-grey */
+    --chart-4: 45 70% 55%; /* Lighter Workflo yellow variant */
+    --chart-5: 0 0% 45%; /* Neutral grey */
   }
 
   .dark {
@@ -71,15 +71,15 @@
     /* Dark mode semantic colors */
     --success: 142 71% 45%;
     --success-foreground: 0 0% 98%;
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 98%;
+    --warning: 45 85% 58%; /* Changed to Workflo yellow for dark mode */
+    --warning-foreground: 0 0% 9%;
     --info: 221 83% 53%;
     --info-foreground: 0 0% 98%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 45 85% 58%; /* Workflo yellow for dark mode */
+    --chart-2: 160 60% 45%; /* Teal-green */
+    --chart-3: 220 70% 50%; /* Blue instead of orange */
+    --chart-4: 45 60% 65%; /* Lighter Workflo yellow variant */
+    --chart-5: 0 0% 60%; /* Neutral grey */
   }
 }
 

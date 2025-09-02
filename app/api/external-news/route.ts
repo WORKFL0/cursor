@@ -78,21 +78,31 @@ export async function GET(request: Request) {
     }
 
     // Include LinkedIn posts if requested
-    if (includeLinkedIn) {
+    if (includeLinkedIn && workfloLinkedInPosts && workfloLinkedInPosts.length > 0) {
+      console.log('Including LinkedIn posts:', workfloLinkedInPosts.length) // Debug log
+      
       const linkedInItems: ExternalNewsItem[] = workfloLinkedInPosts.map(post => ({
         id: post.id,
-        title: `${post.author}`,
-        excerpt: post.content.length > 200 ? post.content.substring(0, 200) + '...' : post.content,
+        title: post.author || 'Workflo B.V.',
+        excerpt: post.content || 'No content available',
         url: post.url,
         publishedAt: post.publishedAt,
-        source: 'Workflo LinkedIn',
+        source: post.author || 'Workflo LinkedIn',
         category: 'social',
-        type: 'linkedin'
+        type: 'linkedin' as const
       }))
+      
+      console.log('LinkedIn items created:', linkedInItems.length) // Debug log
       
       if (!category || category === 'social') {
         allNews.push(...linkedInItems)
+        console.log('LinkedIn posts added to allNews. Total items now:', allNews.length) // Debug log
       }
+    } else {
+      console.log('LinkedIn posts not included:', { 
+        includeLinkedIn, 
+        postsAvailable: workfloLinkedInPosts?.length || 0 
+      }) // Debug log
     }
 
     // Sort by publication date (newest first) and limit results

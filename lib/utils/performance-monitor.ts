@@ -320,7 +320,7 @@ export class PerformanceMonitor {
   private logMetric(name: string, value: number, unit: string, status: string) {
     const colors = {
       good: '#16a34a',
-      'needs-improvement': '#ea580c', 
+      'needs-improvement': '#d9db00', 
       poor: '#dc2626',
       info: '#2563eb'
     }

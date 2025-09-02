@@ -31,7 +31,7 @@ export const workfloLinkedInPosts: LinkedInPost[] = [
     content: '🎯 Just completed another successful Microsoft 365 migration for an Amsterdam creative agency! 📈 The results: 50% faster file sharing, seamless remote collaboration, and zero lost emails during the transition. This is why proper planning and execution matter! #Microsoft365 #DigitalTransformation #WorkfloSuccess',
     // REPLACE WITH REAL URL: Go to https://www.linkedin.com/company/workflo/posts/ and copy a real post URL
     url: 'https://www.linkedin.com/company/workflo/',
-    publishedAt: new Date('2024-03-22'),
+    publishedAt: new Date('2025-08-26'),
     likes: 67,
     comments: 18,
     shares: 12,
@@ -44,7 +44,7 @@ export const workfloLinkedInPosts: LinkedInPost[] = [
     content: '🔒 Cybersecurity Reality Check: 73% of small businesses think they\'re "too small" to be targeted. Wrong! 💡 We just helped a 15-person Amsterdam company recover from a ransomware attempt. The difference? They had our endpoint protection and backup strategy in place. Total recovery time: 2 hours instead of 2 weeks. #CyberSecurity #SMBSecurity #DisasterRecovery',
     // REPLACE WITH REAL URL
     url: 'https://www.linkedin.com/company/workflo-it/',
-    publishedAt: new Date('2024-03-20'),
+    publishedAt: new Date('2025-08-24'),
     likes: 89,
     comments: 31,
     shares: 24,
@@ -57,7 +57,7 @@ export const workfloLinkedInPosts: LinkedInPost[] = [
     content: '💻 Hardware as a Service is changing the game for Amsterdam businesses! 📊 Our latest client survey shows: ✅ 40% reduction in IT costs ✅ Always up-to-date equipment ✅ Predictable monthly expenses ✅ Zero maintenance headaches. Want to know how? Let\'s talk! #HardwareAsAService #ITCostOptimization #ManagedIT',
     // REPLACE WITH REAL URL
     url: 'https://www.linkedin.com/company/workflo-it/',
-    publishedAt: new Date('2024-03-18'),
+    publishedAt: new Date('2025-08-22'),
     likes: 45,
     comments: 15,
     shares: 8,

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { MapPin, Phone, Mail, Clock, Award, Shield, Users, Building2, ExternalLink, ArrowRight } from 'lucide-react'
 import { useLanguage } from '@/lib/contexts/language-context'
 import { HubSpotNewsletterSignup } from '@/components/forms/HubSpotNewsletterSignup'
@@ -72,7 +73,20 @@ export function Footer() {
           {/* Company Info - Prominent */}
           <div className="md:col-span-1">
             <div className="mb-6">
-              <div className="text-2xl font-bold text-foreground mb-2">Workflo</div>
+              <Image
+                src="/images/workflo-logo-dark.png"
+                alt="Workflo"
+                width={120}
+                height={60}
+                className="mb-4 dark:hidden"
+              />
+              <Image
+                src="/images/workflo-logo-new.png"
+                alt="Workflo"
+                width={120}
+                height={60}
+                className="mb-4 hidden dark:block"
+              />
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {language === 'nl' 
                   ? 'Amsterdam\'s meest vertrouwde IT-partner sinds 2014. We zorgen dat je technologie je groei versnelt.'

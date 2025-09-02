@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   
   // Color schemes based on type
   const colorSchemes = {
-    client: { bg: 'linear-gradient(135deg, #f2f400 0%, #d97706 100%)', color: '#000' },
+    client: { bg: 'linear-gradient(135deg, #f2f400 0%, #b8bf00 100%)', color: '#000' },
     office: { bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: '#fff' },
     service: { bg: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff' },
     logo: { bg: 'linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%)', color: '#374151' }

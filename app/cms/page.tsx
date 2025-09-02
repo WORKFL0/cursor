@@ -67,24 +67,39 @@ export default function CMSPage() {
   const fetchArticles = useCallback(async () => {
     setLoading(true)
     try {
-      const response = await fetch('/api/cms/articles')
+      const response = await fetch('/api/cms/articles?limit=100&orderBy=updated_at&orderDirection=desc')
       const data = await response.json()
       
-      if (data.success && data.articles) {
-        setArticles(data.articles)
+      if (data.success && data.data) {
+        // Convert Supabase format to component format
+        const convertedArticles = data.data.map((article: any) => ({
+          id: article.id,
+          title: article.title,
+          slug: article.slug,
+          excerpt: article.excerpt || '',
+          content: article.content || '',
+          author: article.author || 'Workflo Team',
+          category: article.category || 'Nieuws',
+          tags: article.tags || [],
+          image: article.image_url,
+          published: article.published,
+          publishedDate: article.published_at || article.created_at,
+          createdAt: article.created_at,
+          updatedAt: article.updated_at
+        }))
         
-        if (data.useClientStorage) {
-          showMessage('success', 'Artikelen geladen uit browser opslag - gegevens blijven lokaal opgeslagen')
-        } else if (data.warning) {
-          showMessage('success', `Artikelen geladen: ${data.warning}`)
+        setArticles(convertedArticles)
+        
+        if (data.message?.includes('mock')) {
+          showMessage('success', `${convertedArticles.length} artikelen geladen (test data)`)
         } else {
-          showMessage('success', `${data.articles.length} artikelen geladen uit database`)
+          showMessage('success', `${convertedArticles.length} artikelen geladen uit Supabase database`)
         }
       } else {
         // Fallback to localStorage
         const storedArticles = ArticleStorage.getArticles()
         setArticles(storedArticles as any[])
-        showMessage('error', 'Fout bij ophalen artikelen - lokale opslag gebruikt')
+        showMessage('error', 'Database niet beschikbaar - lokale opslag gebruikt')
       }
     } catch (error) {
       console.error('Failed to fetch articles:', error)
@@ -120,34 +135,46 @@ export default function CMSPage() {
 
     setLoading(true)
     try {
+      // Prepare data for Supabase format
+      const articleData = {
+        title: newArticle.title,
+        excerpt: newArticle.excerpt,
+        content: newArticle.content,
+        author: newArticle.author || 'Workflo Team',
+        category: newArticle.category || 'Nieuws',
+        tags: newArticle.tags || [],
+        published: newArticle.published || false,
+        image_url: newArticle.image || null,
+        featured: false
+      }
+
       const response = await fetch('/api/cms/articles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newArticle),
+        body: JSON.stringify(articleData),
       })
       const data = await response.json()
       
-      if (data.success && data.article) {
-        // Save to localStorage if needed
-        if (data.useClientStorage) {
-          const savedArticle = ArticleStorage.saveArticle({
-            title: newArticle.title!,
-            slug: newArticle.slug || newArticle.title!.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-            excerpt: newArticle.excerpt!,
-            content: newArticle.content!,
-            author: newArticle.author || 'Workflo Team',
-            category: newArticle.category || 'Nieuws',
-            tags: newArticle.tags || [],
-            published: newArticle.published || false,
-            featured: false,
-            image: newArticle.image
-          })
-          setArticles([savedArticle as any, ...articles])
-          showMessage('success', 'Artikel opgeslagen in browser - gebruik database voor permanente opslag')
-        } else {
-          setArticles([data.article, ...articles])
-          showMessage('success', 'Artikel succesvol opgeslagen in database')
+      if (data.success && data.data) {
+        // Convert and add to articles list
+        const convertedArticle = {
+          id: data.data.id,
+          title: data.data.title,
+          slug: data.data.slug,
+          excerpt: data.data.excerpt || '',
+          content: data.data.content || '',
+          author: data.data.author || 'Workflo Team',
+          category: data.data.category || 'Nieuws',
+          tags: data.data.tags || [],
+          image: data.data.image_url,
+          published: data.data.published,
+          publishedDate: data.data.published_at || data.data.created_at,
+          createdAt: data.data.created_at,
+          updatedAt: data.data.updated_at
         }
+        
+        setArticles([convertedArticle, ...articles])
+        showMessage('success', data.message || 'Artikel succesvol opgeslagen')
         
         // Reset form
         setNewArticle({
@@ -162,10 +189,52 @@ export default function CMSPage() {
         setTagInput('')
         setActiveTab('list')
       } else {
+        // Handle authentication errors
+        if (data.error && data.error.includes('Authentication')) {
+          showMessage('error', 'Je moet ingelogd zijn om artikelen aan te maken')
+          router.push('/cms/login')
+          return
+        }
+        
         throw new Error(data.error || 'Onbekende fout bij opslaan')
       }
     } catch (error: any) {
       showMessage('error', `Fout bij opslaan artikel: ${error.message}`)
+      
+      // Fallback to localStorage for development
+      if (error.message.includes('Authentication') || error.message.includes('401')) {
+        try {
+          const savedArticle = ArticleStorage.saveArticle({
+            title: newArticle.title!,
+            slug: newArticle.slug || newArticle.title!.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+            excerpt: newArticle.excerpt!,
+            content: newArticle.content!,
+            author: newArticle.author || 'Workflo Team',
+            category: newArticle.category || 'Nieuws',
+            tags: newArticle.tags || [],
+            published: newArticle.published || false,
+            featured: false,
+            image: newArticle.image
+          })
+          setArticles([savedArticle as any, ...articles])
+          showMessage('success', 'Artikel opgeslagen lokaal - log in voor database opslag')
+          
+          // Reset form
+          setNewArticle({
+            title: '',
+            excerpt: '',
+            content: '',
+            author: 'Workflo Team',
+            category: 'Nieuws',
+            tags: [],
+            published: false,
+          })
+          setTagInput('')
+          setActiveTab('list')
+        } catch (localError) {
+          console.error('Local storage also failed:', localError)
+        }
+      }
     }
     setLoading(false)
   }
@@ -439,7 +508,7 @@ export default function CMSPage() {
                             ) : (
                               <Badge variant="secondary">
                                 <EyeOff className="w-3 h-3 mr-1" />
-                                Concept
+                                Niet gepubliceerd
                               </Badge>
                             )}
                             <Badge variant="outline">{article.category}</Badge>

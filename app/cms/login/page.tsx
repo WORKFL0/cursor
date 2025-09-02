@@ -14,6 +14,7 @@ export default function CMSLoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,19 +23,33 @@ export default function CMSLoginPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/cms/auth', {
+      // Use email format for login (username@workflo.it or just use the username as email)
+      const email = username.includes('@') ? username : `${username}@workflo.it`
+      
+      const response = await fetch('/api/cms/auth/simple-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ 
+          email: email,
+          password: password 
+        }),
       })
 
       const data = await response.json()
 
       if (response.ok && data.success) {
-        // Redirect to CMS dashboard
-        router.push('/cms')
+        // Store token if provided
+        if (data.token) {
+          localStorage.setItem('cms-token', data.token)
+        }
+        setSuccess('Login succesvol! Doorverwijzen...')
+        setError('')
+        // Add small delay and use window.location for more reliable redirect
+        setTimeout(() => {
+          window.location.href = '/cms'
+        }, 500)
       } else {
         setError(data.error || 'Ongeldige inloggegevens')
       }
@@ -63,6 +78,13 @@ export default function CMSLoginPage() {
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            
+            {success && (
+              <Alert className="bg-green-50 text-green-900 border-green-200">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{success}</AlertDescription>
               </Alert>
             )}
 

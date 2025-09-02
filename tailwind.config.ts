@@ -69,8 +69,8 @@ const config: Config = {
   			yellow: {
   				'50': '#fffef0',
   				'100': '#fffdd1',
-  				'200': '#fffba3',
-  				'300': '#f8f56b',
+  				'200': '#fff9a3',
+  				'300': '#ffd500', // Pure yellow instead of orangish
   				'400': 'hsl(var(--workflo-yellow))',
   				'500': 'hsl(var(--workflo-yellow-dark))',
   			},

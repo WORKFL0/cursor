@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { Database } from '@/lib/types/database'
 
 // Create a single supabase client for interacting with your database
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
@@ -9,7 +10,7 @@ export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
 
 // Create client only if configured
 export const supabase = isSupabaseConfigured 
-  ? createClient(supabaseUrl, supabaseAnonKey, {
+  ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
@@ -18,62 +19,52 @@ export const supabase = isSupabaseConfigured
     })
   : null
 
+// Create admin client for server-side operations (with service role key)
+export const createAdminClient = () => {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!serviceRoleKey || !supabaseUrl) {
+    throw new Error('Supabase admin client requires service role key and URL')
+  }
+  
+  return createClient<Database>(supabaseUrl, serviceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  })
+}
+
 // Log configuration status
 if (typeof window === 'undefined') {
   console.log('Supabase Configuration Status:', {
     configured: isSupabaseConfigured,
     url: supabaseUrl ? '✓ Set' : '✗ Missing',
-    anonKey: supabaseAnonKey ? '✓ Set' : '✗ Missing'
+    anonKey: supabaseAnonKey ? '✓ Set' : '✗ Missing',
+    serviceRole: process.env.SUPABASE_SERVICE_ROLE_KEY ? '✓ Set' : '✗ Missing'
   })
 }
 
-// Database types
-export interface Article {
-  id?: string
-  title: string
-  title_nl?: string
-  slug: string
-  excerpt?: string
-  excerpt_nl?: string
-  content?: string
-  content_nl?: string
-  author?: string
-  category?: string
-  tags?: string[]
-  image?: string
-  published?: boolean
-  featured?: boolean
-  source?: 'cms' | 'rss' | 'linkedin'
-  external_url?: string
-  published_at?: string
-  created_at?: string
-  updated_at?: string
-}
-
-export interface LinkedInPost {
-  id?: string
-  post_id: string
-  author: string
-  content: string
-  url: string
-  likes?: number
-  comments?: number
-  shares?: number
-  published_at?: string
-  imported_at?: string
-  synced_to_articles?: boolean
-}
-
-export interface RSSItem {
-  id?: string
-  feed_url: string
-  guid: string
-  title: string
-  description?: string
-  link?: string
-  pub_date?: string
-  author?: string
-  category?: string
-  imported_at?: string
-  synced_to_articles?: boolean
-}
+// Re-export types from database types
+export type {
+  Article,
+  ArticleInsert,
+  ArticleUpdate,
+  CMSUser,
+  CMSUserInsert,
+  CMSUserUpdate,
+  ArticleCategory,
+  ArticleTag,
+  MediaFile,
+  RSSFeed,
+  RSSItem,
+  LinkedInPost,
+  AuditLog,
+  UserSession,
+  CMSSession,
+  ArticleFilters,
+  ArticleStats,
+  ApiResponse,
+  PaginatedResponse,
+  UserRole,
+  ArticleSource
+} from '@/lib/types/database'

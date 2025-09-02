@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -57,9 +58,22 @@ export function Header() {
             className="flex items-center group transition-transform duration-200 hover:scale-105"
             aria-label="Workflo Home"
           >
-            <div className="text-2xl font-bold bg-gradient-to-r from-workflo-yellow via-workflo-yellow-dark to-primary bg-clip-text text-transparent drop-shadow-sm">
-              Workflo
-            </div>
+            <Image
+              src="/images/workflo-logo-dark.png"
+              alt="Workflo"
+              width={120}
+              height={60}
+              className="h-12 w-auto dark:hidden"
+              priority
+            />
+            <Image
+              src="/images/workflo-logo-new.png"
+              alt="Workflo"
+              width={120}
+              height={60}
+              className="h-12 w-auto hidden dark:block"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}

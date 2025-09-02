@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { MapPin, Phone, Mail, Download, ExternalLink } from 'lucide-react'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { companyInfo, navigation } from '@/lib/data/workflo-data'
@@ -21,7 +22,20 @@ export function Footer() {
           {/* Company Info & Contact */}
           <div className="lg:col-span-2">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold text-foreground mb-3">Workflo</h3>
+              <Image
+                src="/images/workflo-logo-dark.png"
+                alt="Workflo Logo"
+                width={140}
+                height={70}
+                className="mb-4 dark:hidden"
+              />
+              <Image
+                src="/images/workflo-logo-new.png"
+                alt="Workflo Logo"
+                width={140}
+                height={70}
+                className="mb-4 hidden dark:block"
+              />
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
                 {language === 'nl' 
                   ? 'Jouw betrouwbare IT-partner in Amsterdam. Wij zorgen ervoor dat jouw technologie gewoon werkt, zodat jij je kunt concentreren op wat echt belangrijk is voor jouw bedrijf.' 

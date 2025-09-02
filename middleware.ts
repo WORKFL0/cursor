@@ -13,10 +13,11 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Protect CMS API routes (except auth and status)
+  // Protect CMS API routes (except auth, status, and articles for development)
   if (request.nextUrl.pathname.startsWith('/api/cms') && 
       !request.nextUrl.pathname.startsWith('/api/cms/auth') &&
-      !request.nextUrl.pathname.startsWith('/api/cms/status')) {
+      !request.nextUrl.pathname.startsWith('/api/cms/status') &&
+      !request.nextUrl.pathname.startsWith('/api/cms/articles')) {
     const authCookie = request.cookies.get('cms-auth')
     
     // If not authenticated, return 401

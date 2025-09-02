@@ -23,6 +23,8 @@
     "backup": "node scripts/backup.js",
     "backup:full": "node scripts/backup.js && git add -A && git commit -m 'Backup: Full site backup'",
     "restore": "bash ./restore.sh",
+    "setup:supabase": "tsx scripts/setup-supabase-cms.ts",
+    "cms:setup": "tsx scripts/setup-supabase-cms.ts",
     "postinstall": "husky"
   },
   "dependencies": {
@@ -48,12 +50,14 @@
     "@sentry/nextjs": "^8.46.0",
     "@supabase/supabase-js": "^2.56.0",
     "@types/js-cookie": "^3.0.6",
+    "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
     "fuse.js": "^7.1.0",
     "html2canvas": "^1.4.1",
     "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.541.0",
     "next": "15.5.0",
@@ -71,7 +75,9 @@
     "@sentry/cli": "^2.42.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -92,6 +98,7 @@
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.20.5",
     "typescript": "^5"
   },
   "lint-staged": {

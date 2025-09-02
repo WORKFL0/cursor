@@ -83,35 +83,112 @@ export default function NewsPage() {
   useEffect(() => {
     const fetchCMSArticles = async () => {
       try {
-        const response = await fetch('/api/cms/articles?published=true')
-        const data = await response.json()
+        // Fetch from Supabase-backed API
+        const response = await fetch('/api/cms/articles?published=true&limit=50&orderBy=published_at&orderDirection=desc')
         
-        if (data.articles && Array.isArray(data.articles)) {
-          // Convert CMS articles to the format used by the news page
-          const convertedArticles = data.articles.map((article: Article) => ({
-            id: article.id || '',
-            title: language === 'nl' && article.title_nl ? article.title_nl : article.title,
-            excerpt: language === 'nl' && article.excerpt_nl ? article.excerpt_nl : (article.excerpt || ''),
-            content: language === 'nl' && article.content_nl ? article.content_nl : (article.content || ''),
-            category: article.category || 'nieuws',
-            tags: article.tags || [],
-            author: article.author || 'Workflo Team',
-            publishedAt: new Date(article.published_at || article.created_at || new Date()),
-            readTime: 5,
-            image: article.image,
-            featured: article.featured || false,
-            slug: article.slug
-          }))
+        if (response.ok) {
+          const data = await response.json()
+          console.log('Supabase CMS Response:', data) // Debug log
           
-          // Merge CMS articles with static articles
-          const allArticles = [...convertedArticles, ...staticNewsArticles]
-          setNewsArticles(allArticles)
-          setCmsArticles(data.articles)
+          if (data.success && data.data && Array.isArray(data.data)) {
+            // Convert Supabase articles to the format used by the news page
+            const convertedArticles = data.data.map((article: Article) => ({
+              id: article.id || '',
+              title: article.title,
+              titleNL: article.title_nl || article.title,
+              excerpt: article.excerpt || '',
+              excerptNL: article.excerpt_nl || article.excerpt || '',
+              content: article.content || '',
+              contentNL: article.content_nl || article.content || '',
+              category: article.category || 'Nieuws',
+              tags: article.tags || [],
+              author: article.author || 'Workflo Team',
+              publishedAt: new Date(article.published_at || article.created_at || new Date()),
+              readTime: Math.max(1, Math.ceil((article.content?.length || 0) / 1000)), // Rough reading time calculation
+              readingTime: Math.max(1, Math.ceil((article.content?.length || 0) / 1000)),
+              image: article.image_url,
+              featured: article.featured || false,
+              slug: article.slug
+            }))
+            
+            console.log('Converted Supabase articles:', convertedArticles) // Debug log
+            
+            // Merge Supabase articles with static articles, prioritizing Supabase content
+            const allArticles = [...convertedArticles, ...staticNewsArticles]
+            setNewsArticles(allArticles)
+            setCmsArticles(data.data)
+            
+            // Show success message if using database
+            if (!data.message?.includes('mock')) {
+              console.log('Successfully loaded articles from Supabase database')
+            }
+          } else if (data.data && Array.isArray(data.data)) {
+            // Handle mock data fallback
+            console.log('Using fallback data:', data.message)
+            const convertedMockArticles = data.data.map((article: any) => ({
+              id: article.id || '',
+              title: article.title,
+              titleNL: article.titleNL || article.title,
+              excerpt: article.excerpt || '',
+              excerptNL: article.excerptNL || article.excerpt || '',
+              content: article.content || '',
+              contentNL: article.contentNL || article.content || '',
+              category: article.category || 'Nieuws',
+              tags: article.tags || [],
+              author: article.author || 'Workflo Team',
+              publishedAt: new Date(article.publishedAt || new Date()),
+              readTime: article.readTime || 5,
+              readingTime: article.readingTime || article.readTime || 5,
+              image: article.image,
+              featured: article.featured || false,
+              slug: article.slug
+            }))
+            
+            const allArticles = [...convertedMockArticles, ...staticNewsArticles]
+            setNewsArticles(allArticles)
+          }
+        } else {
+          throw new Error(`API returned ${response.status}: ${response.statusText}`)
         }
       } catch (error) {
-        console.error('Failed to fetch CMS articles:', error)
-        // Fall back to static articles
+        console.error('Supabase API failed, using static articles only:', error)
+        
+        // Fallback to static articles only
         setNewsArticles(staticNewsArticles)
+        
+        // Optional: Try localStorage as last resort
+        try {
+          const { ArticleStorage } = await import('@/lib/storage/article-storage')
+          const storedArticles = ArticleStorage.searchArticles({ published: true })
+          
+          if (storedArticles.articles.length > 0) {
+            const convertedArticles = storedArticles.articles.map((article: any) => ({
+              id: article.id || '',
+              title: article.title,
+              titleNL: article.titleNL || article.title,
+              excerpt: article.excerpt || '',
+              excerptNL: article.excerptNL || article.excerpt || '',
+              content: article.content || '',
+              contentNL: article.contentNL || article.content || '',
+              category: article.category || 'Nieuws',
+              tags: article.tags || [],
+              author: article.author || 'Workflo Team',
+              publishedAt: new Date(article.publishedAt || article.published_at || article.created_at || new Date()),
+              readTime: article.readTime || 5,
+              readingTime: article.readingTime || article.readTime || 5,
+              image: article.image,
+              featured: article.featured || false,
+              slug: article.slug
+            }))
+            
+            const allArticles = [...convertedArticles, ...staticNewsArticles]
+            setNewsArticles(allArticles)
+            setCmsArticles(storedArticles.articles as any)
+          }
+        } catch (storageError) {
+          console.error('localStorage fallback also failed:', storageError)
+          // Keep static articles as final fallback
+        }
       } finally {
         setIsLoadingWorkflo(false)
       }
@@ -137,12 +214,15 @@ export default function NewsPage() {
       
       const data = await response.json()
       
+      console.log('External news response:', data) // Debug log
+      
       if (data.success) {
         // Convert date strings back to Date objects
         const newsWithDates = data.data.map((item: any) => ({
           ...item,
           publishedAt: new Date(item.publishedAt)
         }))
+        console.log('External news with dates:', newsWithDates) // Debug log
         setExternalNews(newsWithDates)
       } else {
         throw new Error(data.error || 'Failed to fetch external news')
@@ -179,6 +259,11 @@ export default function NewsPage() {
       fetchExternalNews(true)
     }
   }, [activeTab])
+  
+  // Also fetch LinkedIn posts on mount to have them ready
+  useEffect(() => {
+    fetchExternalNews(true)
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
