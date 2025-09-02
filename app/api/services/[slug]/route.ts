@@ -3,10 +3,10 @@ import { getServiceBySlug } from '@/lib/data/services-data'
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params
+    const { slug } = await params
     
     const service = getServiceBySlug(slug)
     

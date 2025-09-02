@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase/client'
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     if (!isSupabaseConfigured || !supabase) {
       return NextResponse.json({

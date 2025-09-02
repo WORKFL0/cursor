@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ArticleService } from '@/lib/services/article-service'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Test database connection
     const connectionTest = await ArticleService.testConnection()

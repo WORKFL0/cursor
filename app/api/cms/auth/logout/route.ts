@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { CMSAuthService } from '@/lib/auth/cms-auth'
 import { cookies } from 'next/headers'
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const sessionCookie = cookieStore.get('cms-session')
     
     if (!sessionCookie) {
