@@ -4,20 +4,31 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 // Get environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 const jwtSecret = process.env.JWT_SECRET || 'your-jwt-secret-min-32-chars'
 
-// Create Supabase client
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-})
+// Create Supabase client (only if configured)
+const supabase = supabaseUrl && supabaseServiceRoleKey 
+  ? createClient(supabaseUrl, supabaseServiceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
+  : null
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Supabase is configured
+    if (!supabase) {
+      console.warn('Supabase not configured - CMS auth disabled')
+      return NextResponse.json(
+        { success: false, error: 'Database not configured' },
+        { status: 503 }
+      )
+    }
+
     // Parse request body
     let body
     try {
