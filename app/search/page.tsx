@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -38,7 +38,7 @@ const searchableContent: SearchResult[] = [
   { title: 'FAQ', description: 'Veelgestelde vragen', url: '/faq', category: 'Support', icon: FileText },
 ]
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') || ''
   const [query, setQuery] = useState(initialQuery)
@@ -181,4 +181,18 @@ export default function SearchPage() {
       </div>
     </div>
   )
-}export const dynamic = 'force-dynamic'
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">Loading...</div>
+      </div>
+    }>
+      <SearchPageContent />
+    </Suspense>
+  )
+}
+
+export const dynamic = 'force-dynamic'
