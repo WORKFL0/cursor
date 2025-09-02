@@ -181,4 +181,4 @@ export default function SearchPage() {
       </div>
     </div>
   )
-}
+}export const dynamic = 'force-dynamic'
