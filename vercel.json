@@ -4,7 +4,6 @@
   "github": {
     "enabled": true
   },
-  "regions": ["ams1"],
   "headers": [
     {
       "source": "/(.*)",
