@@ -7,12 +7,40 @@ import { createAdminClient } from '@/lib/supabase/client'
 import { 
   Article, 
   ArticleInsert, 
-  ArticleUpdate, 
-  ArticleFilters, 
-  ArticleStats,
-  PaginatedResponse,
-  ApiResponse 
-} from '@/lib/types/database'
+  ArticleUpdate,
+  APIResponse 
+} from '@/lib/types/supabase'
+
+// Define interfaces not in supabase types
+interface ArticleFilters {
+  published?: boolean
+  featured?: boolean
+  category?: string
+  tags?: string[]
+  author?: string
+  search?: string
+  dateFrom?: string
+  dateTo?: string
+  limit?: number
+  offset?: number
+  orderBy?: string
+  orderDirection?: 'asc' | 'desc'
+}
+
+interface PaginatedResponse<T> {
+  data: T[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+}
+
+interface ArticleStats {
+  total: number
+  published: number
+  draft: number
+  featured: number
+}
 
 export class SupabaseArticleService {
   private static supabase = createAdminClient()
@@ -174,7 +202,7 @@ export class SupabaseArticleService {
   /**
    * Create new article
    */
-  static async createArticle(article: ArticleInsert): Promise<ApiResponse<Article>> {
+  static async createArticle(article: ArticleInsert, userId?: string): Promise<APIResponse<Article>> {
     if (!this.supabase) return { success: false, error: "Database not configured" };
     try {
       // Generate slug if not provided
@@ -232,7 +260,7 @@ export class SupabaseArticleService {
   /**
    * Update existing article
    */
-  static async updateArticle(id: string, updates: ArticleUpdate): Promise<ApiResponse<Article>> {
+  static async updateArticle(id: string, updates: ArticleUpdate, userId?: string): Promise<APIResponse<Article>> {
     if (!this.supabase) return { success: false, error: "Database not configured" };
     try {
       // Get current article for comparison

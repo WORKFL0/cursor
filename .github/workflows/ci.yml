@@ -10,6 +10,13 @@ on:
 env:
   NODE_VERSION: '20'
   NEXT_TELEMETRY_DISABLED: 1
+  # Required for build-time environment checks
+  DATABASE_URL: 'postgresql://ci:ci@localhost:5432/ci_test'
+  NEXT_PUBLIC_SUPABASE_URL: 'https://fake.supabase.co'
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'fake_anon_key_for_ci'
+  SUPABASE_SERVICE_ROLE_KEY: 'fake_service_role_key_for_ci'
+  NEXTAUTH_SECRET: 'ci-test-secret-key-change-in-production'
+  NEXTAUTH_URL: 'http://localhost:3000'
 
 jobs:
   # Job 1: Code Quality and Security Checks
@@ -34,8 +41,9 @@ jobs:
         run: npm ci --prefer-offline --no-audit
       
       - name: Run TypeScript check
-        run: echo "TypeScript check temporarily disabled - fixes in progress"
-        # run: npx tsc --noEmit
+        run: npm run type-check
+        env:
+          NODE_ENV: production
       
       - name: Run ESLint
         run: npm run lint

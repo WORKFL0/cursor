@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '@/lib/types/database'
+import { Database } from '@/lib/types/supabase'
 
 // Create a single supabase client for interacting with your database
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
@@ -45,27 +45,23 @@ if (typeof window === 'undefined') {
   })
 }
 
-// Re-export types from database types
+// Re-export types from supabase types
 export type {
+  Database,
+  Tables,
+  TablesInsert,
+  TablesUpdate,
   Article,
   ArticleInsert,
   ArticleUpdate,
-  CMSUser,
-  CMSUserInsert,
-  CMSUserUpdate,
-  ArticleCategory,
-  ArticleTag,
   MediaFile,
-  RSSFeed,
-  RSSItem,
-  LinkedInPost,
-  AuditLog,
-  UserSession,
-  CMSSession,
-  ArticleFilters,
-  ArticleStats,
-  ApiResponse,
+  MediaFileInsert,
+  MediaFileUpdate,
+  Service,
+  ServiceInsert,
+  ServiceUpdate,
+  APIResponse,
   PaginatedResponse,
-  UserRole,
-  ArticleSource
-} from '@/lib/types/database'
+  SupabaseError,
+  SupabaseResponse
+} from '@/lib/types/supabase'

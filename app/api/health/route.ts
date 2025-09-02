@@ -4,13 +4,14 @@ import { uptimeMonitor } from '@/lib/monitoring/uptime-monitor'
 interface MetricsData {
   responseTime: number
   memoryUsage: number
-  uptimeSeconds: number
-  requestCount: number
+  uptime: number
+  throughput: number
+  errorRate: number
 }
 
 interface HealthCheckItem {
   name: string
-  status: 'pass' | 'warn' | 'fail'
+  status: 'healthy' | 'degraded' | 'unhealthy'
   timestamp: string
   details?: string
 }
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
   
   try {
     // Check database connectivity
-    let databaseStatus: 'pass' | 'fail' = 'pass'
+    let databaseStatus: 'pass' | 'warn' | 'fail' = 'pass'
     try {
       // Try to import and test Supabase connection
       const { supabase } = await import('@/src/lib/supabase')

@@ -2,21 +2,35 @@ import type { NextConfig } from "next";
 // import { withSentryConfig } from "@sentry/nextjs"; // Commented out - needs npm install
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: __dirname,
-  },
+  // Removed turbopack config for better Vercel compatibility
+  // turbopack: {
+  //   root: __dirname,
+  // },
   reactStrictMode: true,
   images: {
-    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'localhost',
+      },
+    ],
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // Allow build to succeed with lint warnings for Vercel
+    dirs: ['app', 'components', 'lib', 'src'],
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true, // Allow build to succeed with TypeScript errors for Vercel
   },
-  // Enable standalone output for Docker
-  output: 'standalone',
+  // Removed standalone output for Vercel deployment
+  // output: 'standalone', // Only needed for Docker/self-hosting
+  
+  // Fix workspace root warning
+  outputFileTracingRoot: __dirname,
   // Experimental features
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],

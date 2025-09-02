@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { CMSAuthService } from '@/lib/auth/cms-auth'
 import { createAdminClient } from '@/lib/supabase/client'
+import { MediaFileInsert } from '@/lib/types/supabase'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
@@ -79,22 +80,24 @@ export async function POST(request: NextRequest) {
 
     // Save media info to database
     const supabase = createAdminClient()
+    const mediaFileData: MediaFileInsert = {
+      filename: fileName,
+      original_name: file.name,
+      file_path: filePath,
+      file_url: publicUrl,
+      file_type: 'image',
+      file_size: file.size,
+      mime_type: file.type,
+      alt_text: altText || '',
+      caption: caption || '',
+      width,
+      height,
+      uploaded_by: user.id
+    }
+    
     const { data: mediaFile, error: dbError } = await supabase
       .from('media_files')
-      .insert({
-        filename: fileName,
-        original_name: file.name,
-        file_path: filePath,
-        file_url: publicUrl,
-        file_type: 'image',
-        file_size: file.size,
-        mime_type: file.type,
-        alt_text: altText || null,
-        caption: caption || null,
-        width,
-        height,
-        uploaded_by: user.id
-      })
+      .insert(mediaFileData)
       .select()
       .single()
 
@@ -111,6 +114,13 @@ export async function POST(request: NextRequest) {
           },
           warning: 'File uploaded but database record failed'
         }
+      )
+    }
+
+    if (!mediaFile) {
+      return NextResponse.json(
+        { success: false, error: 'Failed to save media file record' },
+        { status: 500 }
       )
     }
 

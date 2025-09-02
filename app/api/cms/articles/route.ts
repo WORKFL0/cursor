@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
       data: result.data,
       message: 'Article created successfully'
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in POST /api/cms/articles:', error)
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
@@ -172,7 +172,7 @@ export async function PUT(request: NextRequest) {
       data: result.data,
       message: 'Article updated successfully'
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in PUT /api/cms/articles:', error)
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
@@ -212,7 +212,7 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: result.message || 'Article deleted successfully'
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in DELETE /api/cms/articles:', error)
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
