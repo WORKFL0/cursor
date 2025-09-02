@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   //   root: __dirname,
   // },
   reactStrictMode: true,
+  
+  // Power up Vercel deployment
+  poweredByHeader: false,
+  compress: true,
+  
   images: {
     remotePatterns: [
       {
@@ -17,6 +22,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'localhost',
       },
+      {
+        protocol: 'https',
+        hostname: 'workflo.it',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.vercel.app',
+      },
     ],
   },
   eslint: {
@@ -26,8 +39,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true, // Allow build to succeed with TypeScript errors for Vercel
   },
-  // Removed standalone output for Vercel deployment
-  // output: 'standalone', // Only needed for Docker/self-hosting
   
   // Fix workspace root warning
   outputFileTracingRoot: __dirname,

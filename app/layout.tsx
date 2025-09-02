@@ -19,6 +19,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: 'Workflo | Wij regelen je IT - Simpel, betrouwbaar, zonder gedoe',
     template: '%s | Workflo IT Amsterdam',
