@@ -1,6 +1,6 @@
 'use client'
 
-import { getCLS, getFCP, getFID, getLCP, getTTFB, Metric } from 'web-vitals'
+import { onCLS, onFCP, onINP, onLCP, onTTFB, Metric } from 'web-vitals'
 
 // Types
 export interface AnalyticsEvent {
@@ -279,11 +279,11 @@ class Analytics {
       this.sendWebVital(metric)
     }
 
-    getCLS(vitalsHandler)
-    getFCP(vitalsHandler)
-    getFID(vitalsHandler)
-    getLCP(vitalsHandler)
-    getTTFB(vitalsHandler)
+    onCLS(vitalsHandler)
+    onFCP(vitalsHandler)
+    onINP(vitalsHandler)
+    onLCP(vitalsHandler)
+    onTTFB(vitalsHandler)
   }
 
   /**

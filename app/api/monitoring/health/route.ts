@@ -114,7 +114,7 @@ async function testAPI(url: string, options?: { method?: string; expectFailure?:
   try {
     const response = await fetch(url, {
       method: options?.method || 'GET',
-      timeout: 5000, // 5 second timeout
+      signal: AbortSignal.timeout(5000), // 5 second timeout
     })
     
     return options?.expectFailure ? !response.ok : response.ok

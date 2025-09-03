@@ -119,7 +119,7 @@ function calculateWebVitalStats(data: WebVitalData[]) {
     if (!acc[metric.name]) {
       acc[metric.name] = []
     }
-    acc[metric.name].push(metric)
+    acc[metric.name]!.push(metric)
     return acc
   }, {} as Record<string, WebVitalData[]>)
 
@@ -152,11 +152,11 @@ function calculateWebVitalStats(data: WebVitalData[]) {
 function getMedian(values: number[]): number {
   const sorted = [...values].sort((a, b) => a - b)
   const mid = Math.floor(sorted.length / 2)
-  return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+  return sorted.length % 2 !== 0 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2
 }
 
 function getPercentile(values: number[], percentile: number): number {
   const sorted = [...values].sort((a, b) => a - b)
   const index = Math.ceil((percentile / 100) * sorted.length) - 1
-  return sorted[Math.max(0, index)]
+  return sorted[Math.max(0, index)]!
 }

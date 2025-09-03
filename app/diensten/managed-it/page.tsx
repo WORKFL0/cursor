@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Shield, Zap, TrendingUp, Euro, Clock, CheckCircle, ArrowRight, Users, Settings, BarChart3, AlertTriangle, Lock, TrendingDown, Calendar, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -46,18 +45,12 @@ export default function ManagedITPage() {
       }}
     >
       {/* Hero Section */}
-      <motion.section 
+      <section 
         className="relative py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
       >
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary"></div>
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+          <div
             className="text-center max-w-4xl mx-auto"
           >
             <Badge variant="secondary" className="mb-4">
@@ -86,9 +79,9 @@ export default function ManagedITPage() {
                 </Link>
               </Button>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Urgency Alert Section */}
       <section className="py-8 bg-primary/5 dark:bg-primary/10 border-y-4 border-primary/20 dark:border-primary relative overflow-hidden">
@@ -118,11 +111,8 @@ export default function ManagedITPage() {
               { icon: Lock, label: "Ransomware Aanvallen", value: "+87%", subtext: "Toename in Amsterdam 2024" },
               { icon: AlertTriangle, label: "Zonder MSP", value: "6x", subtext: "Meer kans op data verlies" }
             ].map((stat, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.1 }}
                 className="bg-card dark:bg-gray-900 p-4 rounded-lg shadow-md border border-primary/20 dark:border-primary"
               >
                 <div className="flex items-center gap-3">
@@ -135,7 +125,7 @@ export default function ManagedITPage() {
                     <p className="text-xs text-muted-foreground">{stat.subtext}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -144,11 +134,7 @@ export default function ManagedITPage() {
       {/* Benefits Section */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
             className="text-center mb-12"
           >
             <SectionTitle id="managed-it-benefits">
@@ -157,7 +143,7 @@ export default function ManagedITPage() {
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Complete IT-ondersteuning die je bedrijf doet groeien in plaats van vertragen
             </p>
-          </motion.div>
+          </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {[
@@ -186,12 +172,8 @@ export default function ManagedITPage() {
                 stat: "Gemiddelde besparing: €1.850/maand"
               }
             ].map((benefit, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: index * 0.1, duration: 0.8 }}
-                viewport={{ once: true }}
               >
                 <Card className="h-full hover:shadow-lg transition-shadow">
                   <CardHeader>
@@ -209,7 +191,7 @@ export default function ManagedITPage() {
                     </Badge>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -218,11 +200,7 @@ export default function ManagedITPage() {
       {/* Results Section */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
             className="text-center mb-12"
           >
             <SectionTitle id="managed-it-results">
@@ -231,7 +209,7 @@ export default function ManagedITPage() {
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Bewezen resultaten van 100+ Amsterdamse bedrijven
             </p>
-          </motion.div>
+          </div>
           
           <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
@@ -240,17 +218,13 @@ export default function ManagedITPage() {
               { stat: "60%", label: "Verbetering in medewerkersproductiviteit" },
               { stat: "100%", label: "Gemoedsrust wetende dat IT gewoon werkt" }
             ].map((result, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ scale: 0.8, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                viewport={{ once: true }}
                 className="text-center"
               >
                 <div className="text-5xl font-bold text-primary mb-2">{result.stat}</div>
                 <p className="text-muted-foreground">{result.label}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -259,11 +233,7 @@ export default function ManagedITPage() {
       {/* How It Works */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
             className="text-center mb-12"
           >
             <SectionTitle id="managed-it-process">
@@ -272,7 +242,7 @@ export default function ManagedITPage() {
             <p className="text-muted-foreground max-w-2xl mx-auto">
               In 3 simpele stappen naar zorgeloze IT
             </p>
-          </motion.div>
+          </div>
           
           <div className="max-w-3xl mx-auto">
             <div className="space-y-8">
@@ -297,12 +267,8 @@ export default function ManagedITPage() {
                 const IconComponent = iconMap[index] || CheckCircle
                 
                 return (
-                  <motion.div
+                  <div
                     key={index}
-                    initial={{ x: -30, opacity: 0 }}
-                    whileInView={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.2, duration: 0.8 }}
-                    viewport={{ once: true }}
                     className="flex gap-6"
                   >
                     <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/30">
@@ -317,7 +283,7 @@ export default function ManagedITPage() {
                         {step.description}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 )
               })}
             </div>
@@ -330,11 +296,7 @@ export default function ManagedITPage() {
       <section id="security-package" className="py-20 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
         <DangerTape variant="alert" className="absolute top-0 left-0 right-0" />
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
             className="text-center mb-12"
           >
             <Badge variant="destructive" className="mb-4 text-lg px-4 py-2">
@@ -350,15 +312,11 @@ export default function ManagedITPage() {
               Elke dag zonder professionele MSP-bescherming is een gok met je bedrijfscontinuïteit. 
               Kies nu je pakket en krijg <span className="text-primary font-bold">direct 24/7 bescherming</span>.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Remote Support Package */}
-            <motion.div
-              initial={{ x: -30, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+            <div
             >
               <Card className="bg-muted border-2 border-border hover:border-primary transition-all duration-300 h-full">
                 <CardHeader>
@@ -404,14 +362,10 @@ export default function ManagedITPage() {
                   </Button>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
 
             {/* Onsite Support Package */}
-            <motion.div
-              initial={{ x: 30, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+            <div
             >
               <Card className="bg-gradient-to-br from-primary/10 to-muted border-2 border-primary hover:border-primary/80 transition-all duration-300 relative h-full">
                 <div className="absolute -top-1 -right-1">
@@ -463,15 +417,11 @@ export default function ManagedITPage() {
                   </Button>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           </div>
 
           {/* Urgency Stats */}
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            viewport={{ once: true }}
+          <div
             className="mt-12 p-6 bg-destructive/10 border border-destructive rounded-lg"
           >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
@@ -491,32 +441,20 @@ export default function ManagedITPage() {
             <p className="text-center mt-4 text-primary font-semibold">
               ⏰ Elke minuut zonder bescherming verhoogt je risico. Activeer je MSP-schild vandaag nog.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
-        <motion.div
+        <div
           className="absolute inset-0 opacity-10"
-          animate={{ 
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{ 
-            duration: 20,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
           style={{
             backgroundImage: `repeating-linear-gradient(45deg, currentColor, currentColor 10px, transparent 10px, transparent 20px)`
           }}
         />
         <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
           >
             <SectionTitle 
               id="managed-it-cta"
@@ -530,7 +468,7 @@ export default function ManagedITPage() {
                 Plan Je Gratis IT-Assessment <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-          </motion.div>
+          </div>
         </div>
       </section>
     </ServicePage>

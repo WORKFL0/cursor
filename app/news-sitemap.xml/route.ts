@@ -1,11 +1,26 @@
 import { siteConfig } from '@/lib/data/workflo-data'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/src/lib/supabase'
 
 export async function GET() {
   const baseUrl = siteConfig.url
   
   // Fetch recent articles (last 2 days for Google News)
   const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+  
+  if (!supabase) {
+    // Return empty sitemap if database not configured
+    const emptySitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+</urlset>`
+    
+    return new Response(emptySitemap, {
+      headers: {
+        'Content-Type': 'application/xml',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    })
+  }
   
   try {
     const { data: articles } = await supabase

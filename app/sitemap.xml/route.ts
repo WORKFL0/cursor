@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 import { siteConfig } from '@/lib/data/workflo-data'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/src/lib/supabase'
 
 // Types for sitemap entries
 interface SitemapEntry {
@@ -153,6 +153,10 @@ ${sitemapEntries
 
 // Helper function to fetch articles from CMS
 async function fetchArticles() {
+  if (!supabase) {
+    return []
+  }
+  
   try {
     const { data: articles } = await supabase
       .from('articles')
