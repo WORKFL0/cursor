@@ -4,7 +4,7 @@
 
 export default async function globalSetup() {
   // Set test environment variables
-  process.env.NODE_ENV = 'test';
+  // process.env.NODE_ENV = 'test'; // Read-only property
   process.env.NEXT_PUBLIC_APP_ENV = 'test';
   
   // Mock external services

@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       {
         success: false,
         error: 'RSS management operation failed',
-        message: error.message
+        message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )
@@ -93,7 +93,7 @@ export async function DELETE(request: NextRequest) {
       {
         success: false,
         error: 'Failed to clear RSS cache',
-        message: error.message
+        message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )
@@ -141,7 +141,7 @@ export async function PUT(request: NextRequest) {
       {
         success: false,
         error: 'Failed to update feed configuration',
-        message: error.message
+        message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )

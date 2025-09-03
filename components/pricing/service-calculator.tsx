@@ -31,10 +31,10 @@ export function ServiceCalculator({
   const pricing = calculateServicePrice(service, quantity, isYearly)
   const displayPrice = isYearly ? pricing.yearly : pricing.monthly
 
-  const serviceName = getLocalizedValue(service, 'name')
-  const serviceDescription = getLocalizedValue(service, 'description')
-  const serviceUnit = getLocalizedValue(service, 'unit')
-  const serviceFeatures = getLocalizedArray(service, 'features')
+  const serviceName = getLocalizedValue(service as any, 'name')
+  const serviceDescription = getLocalizedValue(service as any, 'description')
+  const serviceUnit = getLocalizedValue(service as any, 'unit')
+  const serviceFeatures = getLocalizedArray(service as any, 'features')
 
   return (
     <Card className="w-full transition-all duration-200 hover:shadow-lg">
@@ -75,7 +75,7 @@ export function ServiceCalculator({
             max={service.maxQuantity}
             step={service.id === 'cloud-storage' || service.id === 'backup-solutions' ? 50 : 1}
             value={[quantity]}
-            onValueChange={(value) => onQuantityChange(value[0])}
+            onValueChange={(value) => onQuantityChange(value[0] ?? service.minQuantity)}
             className="w-full"
           />
           

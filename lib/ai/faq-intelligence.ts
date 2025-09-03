@@ -170,7 +170,7 @@ export class IntelligentFAQSystem {
     
     // 4. Include related questions if requested
     if (options?.includeRelated && matches.length > 0) {
-      const relatedMatches = this.findRelatedQuestions(matches[0].faq, limit);
+      const relatedMatches = matches[0] ? this.findRelatedQuestions(matches[0].faq, limit) : [];
       matches.push(...relatedMatches);
     }
     
@@ -228,8 +228,8 @@ export class IntelligentFAQSystem {
         faq: result.item,
         score: 1 - (result.score || 0),
         matchType: 'fuzzy' as const,
-        highlightedQuestion: this.highlightMatches(result.item.question, result.matches),
-        highlightedAnswer: this.highlightMatches(result.item.answer, result.matches),
+        highlightedQuestion: this.highlightMatches(result.item.question, result.matches as any),
+        highlightedAnswer: this.highlightMatches(result.item.answer, result.matches as any),
         explanation: 'Overeenkomst op basis van gelijkenis',
       }));
   }
@@ -331,9 +331,11 @@ export class IntelligentFAQSystem {
     let normB = 0;
     
     for (let i = 0; i < a.length; i++) {
-      dotProduct += a[i] * b[i];
-      normA += a[i] * a[i];
-      normB += b[i] * b[i];
+      const aVal = a[i] || 0;
+      const bVal = b[i] || 0;
+      dotProduct += aVal * bVal;
+      normA += aVal * aVal;
+      normB += bVal * bVal;
     }
     
     return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));

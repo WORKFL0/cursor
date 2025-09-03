@@ -72,7 +72,7 @@ export class DomErrorBoundary extends Component<DomErrorBoundaryProps, DomErrorB
     }
   }
 
-  private static isDomManipulationError(error: Error): boolean {
+  public static isDomManipulationError(error: Error): boolean {
     const domErrorPatterns = [
       /failed to execute 'removechild'/i,
       /the node to be removed is not a child/i,
@@ -190,14 +190,14 @@ export function useDomErrorRecovery(
 
   React.useEffect(() => {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      if (event.reason instanceof Error && DomErrorBoundary.isDomManipulationError) {
+      if (event.reason instanceof Error && DomErrorBoundary.isDomManipulationError(event.reason)) {
         console.warn('Unhandled DOM error recovered:', event.reason)
         event.preventDefault()
       }
     }
 
     const handleError = (event: ErrorEvent) => {
-      if (DomErrorBoundary.isDomManipulationError && event.error) {
+      if (event.error && DomErrorBoundary.isDomManipulationError(event.error)) {
         console.warn('Global DOM error recovered:', event.error)
         setHasError(true)
         setError(event.error)

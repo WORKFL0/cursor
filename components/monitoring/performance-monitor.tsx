@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+// import { Progress } from '@/components/ui/progress' // Component doesn't exist
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
 import { 
@@ -60,13 +60,13 @@ export function PerformanceMonitorComponent() {
       
       // Get current metrics from the monitor
       const currentMetrics: PerformanceMetrics = {}
-      if (monitor.metrics) {
-        currentMetrics.lcp = monitor.metrics.get('lcp')
-        currentMetrics.fid = monitor.metrics.get('fid') 
-        currentMetrics.cls = monitor.metrics.get('cls')
-        currentMetrics.fcp = monitor.metrics.get('fcp')
-        currentMetrics.ttfb = monitor.metrics.get('ttfb')
-        currentMetrics.inp = monitor.metrics.get('inp')
+      if ((monitor as any).metrics) {
+        currentMetrics.lcp = (monitor as any).metrics.get('lcp')
+        currentMetrics.fid = (monitor as any).metrics.get('fid') 
+        currentMetrics.cls = (monitor as any).metrics.get('cls')
+        currentMetrics.fcp = (monitor as any).metrics.get('fcp')
+        currentMetrics.ttfb = (monitor as any).metrics.get('ttfb')
+        currentMetrics.inp = (monitor as any).metrics.get('inp')
       }
       setMetrics(currentMetrics)
     }, 2000)
@@ -206,7 +206,12 @@ export function PerformanceMonitorComponent() {
                   {score.score}/100
                 </div>
                 <div className="flex-1">
-                  <Progress value={score.score} className="h-2" />
+                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-500 transition-all duration-300" 
+                      style={{ width: `${score.score}%` }}
+                    />
+                  </div>
                 </div>
               </div>
 

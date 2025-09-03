@@ -12,7 +12,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // Test basic connection
-    const { data: healthCheck, error: healthError } = await supabase
+    const { data: _healthCheck, error: healthError } = await supabase
       .from('information_schema.tables')
       .select('table_name')
       .eq('table_schema', 'public')
@@ -27,7 +27,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // Check if articles table exists
-    const { data: articlesTableCheck, error: tableError } = await supabase
+    const { data: articlesTableCheck, error: _tableError } = await supabase
       .from('information_schema.tables')
       .select('table_name')
       .eq('table_schema', 'public')
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
           FOR ALL USING (true) WITH CHECK (true);
       `
 
-      const { error } = await supabase.rpc('sql', { query: createTableSQL })
+      const { error } = await (supabase as any).rpc('sql', { query: createTableSQL })
 
       if (error) {
         console.error('Error creating articles table:', error)
@@ -179,8 +179,8 @@ export async function POST(request: NextRequest) {
         }
       ]
 
-      const { error: insertError } = await supabase
-        .from('articles')
+      const { error: insertError } = await (supabase
+        .from('articles') as any)
         .insert(sampleData)
 
       if (insertError) {

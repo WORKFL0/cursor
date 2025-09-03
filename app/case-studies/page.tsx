@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
+import { useLanguage } from '@/lib/contexts/language-context'
 import { caseStudies, industries, serviceTypes, type CaseStudy } from '@/lib/data/case-studies-data'
 import { 
   Clock, 

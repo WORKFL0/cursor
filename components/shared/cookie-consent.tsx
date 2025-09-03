@@ -27,6 +27,7 @@ export function CookieConsentBanner() {
       const timer = setTimeout(() => setShowBanner(true), 2000)
       return () => clearTimeout(timer)
     }
+    return () => {}
   }, [])
 
   const saveConsent = (consentData: CookieConsent) => {

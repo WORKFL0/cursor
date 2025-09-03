@@ -16,6 +16,10 @@ export const db = supabaseAdmin
  */
 export async function initializeDatabase() {
   try {
+    if (!db) {
+      throw new Error('Supabase admin client not available')
+    }
+    
     // Enable necessary PostgreSQL extensions
     const extensions = [
       'uuid-ossp',
@@ -82,6 +86,10 @@ export async function setupRLSPolicies() {
  */
 export async function testDatabaseConnection() {
   try {
+    if (!db) {
+      throw new Error('Supabase admin client not available')
+    }
+    
     const { data, error } = await db
       .from('information_schema.tables')
       .select('table_name')
@@ -128,6 +136,10 @@ export async function createBackup() {
  */
 export async function getDatabaseStats() {
   try {
+    if (!db) {
+      throw new Error('Supabase admin client not available')
+    }
+    
     // Query database statistics
     const { data: tableStats, error } = await db
       .rpc('get_table_stats')

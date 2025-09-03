@@ -33,10 +33,6 @@ export function ContentRecommendations({
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchRecommendations();
-  }, [fetchRecommendations]);
-
   const fetchRecommendations = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -56,6 +52,10 @@ export function ContentRecommendations({
       setIsLoading(false);
     }
   }, [userId, context]);
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, [fetchRecommendations]);
 
   const trackInteraction = async (contentId: string, type: 'click' | 'view') => {
     try {

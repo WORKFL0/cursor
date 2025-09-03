@@ -1,4 +1,4 @@
-import { workfloData } from '@/lib/data/workflo-data'
+import { companyInfo } from '@/lib/data/workflo-data'
 
 /**
  * Schema.org structured data generator for Workflo
@@ -162,26 +162,25 @@ class SchemaGenerator {
     return {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: workfloData.company.name,
+      name: companyInfo.name,
       url: this.baseUrl,
       logo: `${this.baseUrl}/images/workflo-logo.png`,
-      description: workfloData.company.description,
+      description: companyInfo.description,
       address: {
         '@type': 'PostalAddress',
-        streetAddress: workfloData.company.address.street,
-        addressLocality: workfloData.company.address.city,
-        postalCode: workfloData.company.address.postalCode,
+        streetAddress: companyInfo.location.address,
+        addressLocality: companyInfo.location.city,
+        postalCode: companyInfo.location.postalCode,
         addressCountry: 'NL'
       },
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: workfloData.company.contact.phone,
+        telephone: companyInfo.location.phone,
         contactType: 'customer support',
         availableLanguage: ['Dutch', 'English']
       },
       sameAs: [
-        workfloData.company.social.linkedin,
-        // Add other social media URLs when available
+        // Add social media URLs when available
       ],
       foundingDate: '2018',
       numberOfEmployees: '10-50',
@@ -209,15 +208,15 @@ class SchemaGenerator {
     return {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      name: workfloData.company.name,
-      description: workfloData.company.description,
+      name: companyInfo.name,
+      description: companyInfo.description,
       url: this.baseUrl,
-      telephone: workfloData.company.contact.phone,
+      telephone: companyInfo.location.phone,
       address: {
         '@type': 'PostalAddress',
-        streetAddress: workfloData.company.address.street,
-        addressLocality: workfloData.company.address.city,
-        postalCode: workfloData.company.address.postalCode,
+        streetAddress: companyInfo.location.address,
+        addressLocality: companyInfo.location.city,
+        postalCode: companyInfo.location.postalCode,
         addressCountry: 'NL'
       },
       geo: {
@@ -236,7 +235,7 @@ class SchemaGenerator {
       priceRange: '€€€',
       paymentAccepted: ['Cash', 'Credit Card', 'Invoice'],
       currenciesAccepted: 'EUR',
-      hasMap: `https://maps.google.com/?q=${encodeURIComponent(workfloData.company.address.full)}`
+      hasMap: `https://maps.google.com/?q=${encodeURIComponent(`${companyInfo.location.address}, ${companyInfo.location.city}, ${companyInfo.location.country}`)}`
     }
   }
 
@@ -247,7 +246,7 @@ class SchemaGenerator {
     return {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: workfloData.company.name,
+      name: companyInfo.name,
       url: this.baseUrl,
       potentialAction: {
         '@type': 'SearchAction',
@@ -271,7 +270,7 @@ class SchemaGenerator {
       description: serviceDescription,
       provider: {
         '@type': 'Organization',
-        name: workfloData.company.name
+        name: companyInfo.name
       },
       areaServed: 'Netherlands',
       hasOfferCatalog: {
@@ -282,7 +281,7 @@ class SchemaGenerator {
           itemOffered: {
             '@type': 'Service',
             name: service,
-            description: `Professional ${service} services by ${workfloData.company.name}`
+            description: `Professional ${service} services by ${companyInfo.name}`
           }
         }))
       }
@@ -329,7 +328,7 @@ class SchemaGenerator {
       },
       publisher: {
         '@type': 'Organization',
-        name: workfloData.company.name,
+        name: companyInfo.name,
         logo: {
           '@type': 'ImageObject',
           url: `${this.baseUrl}/images/workflo-logo.png`
@@ -413,7 +412,7 @@ class SchemaGenerator {
     return {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: workfloData.company.name,
+      name: companyInfo.name,
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length,

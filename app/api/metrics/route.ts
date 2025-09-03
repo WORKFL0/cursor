@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { uptimeMonitor } from '@/lib/monitoring/uptime-monitor';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Generate Prometheus-style metrics
     const prometheusMetrics = uptimeMonitor.generatePrometheusMetrics();

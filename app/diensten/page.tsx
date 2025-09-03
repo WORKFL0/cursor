@@ -65,12 +65,12 @@ export default function ServicesPage() {
                         <IconComponent className="w-8 h-8 text-primary" />
                       </div>
                       <CardTitle className="text-xl font-bold text-foreground mb-4">
-                        {getLocalizedValue(category, 'name')}
+                        {getLocalizedValue(category as any, 'name')}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground mb-6">
-                        {getLocalizedValue(category, 'description')}
+                        {getLocalizedValue(category as any, 'description')}
                       </p>
                       <Button asChild variant="outline" className="w-full group-hover:border-primary group-hover:text-primary">
                         <Link href={`/diensten/${category.slug}`}>

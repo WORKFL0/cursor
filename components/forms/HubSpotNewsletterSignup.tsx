@@ -142,7 +142,7 @@ export function HubSpotNewsletterSignup({
         portalContainerRef.current.parentNode.removeChild(portalContainerRef.current)
       } catch (error) {
         // Ignore removeChild errors - this is what we're trying to fix
-        console.warn('Portal cleanup warning (expected):', error.message)
+        console.warn('Portal cleanup warning (expected):', error instanceof Error ? error.message : 'Unknown error')
       } finally {
         portalContainerRef.current = null
       }
@@ -256,11 +256,8 @@ export function HubSpotNewsletterSignup({
             setTimeout(() => setFormSubmitted(false), 5000)
           } catch (error) {
             console.error('Error in onFormSubmit:', error)
+            setHubspotError('Form submission failed')
           }
-        },
-        onFormSubmitError: (error: any) => {
-          console.error('HubSpot form submission error:', error)
-          setHubspotError('Form submission failed')
         }
       })
     } catch (error) {
@@ -280,7 +277,7 @@ export function HubSpotNewsletterSignup({
       
       // Layout styling based on variant
       if (variant === 'compact') {
-        const formFields = form.querySelector('.hs-form-field')
+        const formFields = form.querySelector('.hs-form-field') as HTMLElement
         if (formFields) {
           Object.assign(formFields.style, {
             display: 'flex',
@@ -413,12 +410,12 @@ export function HubSpotNewsletterSignup({
         {/* Animated background elements */}
         <motion.div 
           className="absolute top-0 right-0 w-20 h-20 bg-workflo-yellow/10 rounded-full blur-xl"
-          variants={floatingVariants}
+          variants={floatingVariants as any}
           animate="animate"
         />
         <motion.div 
           className="absolute bottom-0 left-0 w-16 h-16 bg-workflo-yellow/5 rounded-full blur-lg"
-          variants={floatingVariants}
+          variants={floatingVariants as any}
           animate="animate" 
           style={{ animationDelay: '1s' }}
         />
@@ -427,14 +424,14 @@ export function HubSpotNewsletterSignup({
         <motion.div className="flex items-start gap-4 mb-6" variants={itemVariants}>
           <motion.div 
             className="relative w-14 h-14 bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark rounded-xl flex items-center justify-center shadow-lg shadow-workflo-yellow/30"
-            variants={iconVariants}
+            variants={iconVariants as any}
             whileHover={{ rotate: 5, scale: 1.1 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
           >
             <Mail className="w-7 h-7 text-workflo-black" />
             <motion.div 
               className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-workflo-yellow to-workflo-yellow-dark rounded-full flex items-center justify-center"
-              variants={pulseVariants}
+              variants={pulseVariants as any}
               animate="animate"
             >
               <Bell className="w-2 h-2 text-white" />
@@ -637,18 +634,18 @@ export function HubSpotNewsletterSignup({
       {/* Multiple animated glow effects */}
       <motion.div 
         className="absolute top-1/4 left-1/3 w-80 h-80 bg-workflo-yellow/20 blur-3xl rounded-full"
-        variants={floatingVariants}
+        variants={floatingVariants as any}
         animate="animate"
       />
       <motion.div 
         className="absolute bottom-1/4 right-1/3 w-60 h-60 bg-blue-500/10 blur-3xl rounded-full"
-        variants={floatingVariants}
+        variants={floatingVariants as any}
         animate="animate"
         style={{ animationDelay: '2s' }}
       />
       <motion.div 
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-workflo-yellow/10 blur-3xl rounded-full"
-        variants={glowVariants}
+        variants={glowVariants as any}
         animate="animate"
       />
       
@@ -657,7 +654,7 @@ export function HubSpotNewsletterSignup({
         <motion.div className="flex items-center justify-center mb-8">
           <motion.div 
             className="relative w-20 h-20 bg-gradient-to-br from-workflo-yellow via-workflo-yellow-light to-workflo-yellow-dark rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-workflo-yellow/50"
-            variants={iconVariants}
+            variants={iconVariants as any}
             whileHover={{ scale: 1.15, rotate: 10 }}
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
           >
@@ -666,7 +663,7 @@ export function HubSpotNewsletterSignup({
             {/* Floating notification badges */}
             <motion.div 
               className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center text-xs font-bold text-white"
-              variants={pulseVariants}
+              variants={pulseVariants as any}
               animate="animate"
             >
               3
@@ -674,7 +671,7 @@ export function HubSpotNewsletterSignup({
             
             <motion.div 
               className="absolute -bottom-1 -left-2 w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center"
-              variants={floatingVariants}
+              variants={floatingVariants as any}
               animate="animate"
             >
               <TrendingUp className="w-4 h-4 text-white" />

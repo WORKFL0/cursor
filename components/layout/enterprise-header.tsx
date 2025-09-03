@@ -623,14 +623,14 @@ export function EnterpriseHeader() {
                                 <item.icon className="w-4 h-4" />
                                 <div>
                                   <div className="font-medium">{item.title}</div>
-                                  {item.description && (
-                                    <div className="text-xs text-muted-foreground">{item.description}</div>
+                                  {(item as any).description && (
+                                    <div className="text-xs text-muted-foreground">{(item as any).description}</div>
                                   )}
                                 </div>
                               </div>
-                              {item.badge && (
+                              {(item as any).badge && (
                                 <span className="px-2 py-0.5 text-xs font-medium bg-workflo-yellow/20 text-workflo-yellow-dark rounded-full">
-                                  {item.badge}
+                                  {(item as any).badge}
                                 </span>
                               )}
                             </Link>
@@ -840,9 +840,9 @@ export function EnterpriseHeader() {
                           >
                             <item.icon className="w-4 h-4" />
                             {item.title}
-                            {item.badge && (
+                            {(item as any).badge && (
                               <span className="ml-auto px-2 py-0.5 text-xs font-medium bg-workflo-yellow/20 text-workflo-yellow-dark rounded-full">
-                                {item.badge}
+                                {(item as any).badge}
                               </span>
                             )}
                           </Link>

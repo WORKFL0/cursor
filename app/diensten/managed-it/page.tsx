@@ -1,5 +1,3 @@
-'use client'
-
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Shield, Zap, TrendingUp, Euro, Clock, CheckCircle, ArrowRight, Users, Settings, BarChart3, AlertTriangle, Lock, TrendingDown, Calendar, FileText } from 'lucide-react'
@@ -8,10 +6,45 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import DangerTape from '@/components/shared/danger-tape'
+import { ServicePage } from '@/components/seo/seo-page'
+import { PageTitle, SectionTitle, SubSectionTitle } from '@/components/seo/seo-heading'
+import { ServiceImage } from '@/components/seo/seo-image'
+import { generateMetadata } from '@/lib/seo/meta-generator'
+import { seoTemplates } from '@/lib/seo/meta-generator'
+
+// Generate metadata for this page
+export const metadata = generateMetadata(
+  seoTemplates.service(
+    'Managed IT Services Amsterdam',
+    'Managed IT-diensten Amsterdam',
+    'Complete IT management and 24/7 monitoring with unlimited remote support, proactive maintenance, and predictable monthly costs for Dutch businesses.',
+    'Complete IT-beheer en 24/7 monitoring met onbeperkte remote support, proactief onderhoud en voorspelbare maandelijkse kosten voor Nederlandse bedrijven.'
+  )
+)
 
 export default function ManagedITPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <ServicePage
+      serviceName="Managed IT Services"
+      serviceNameNL="Managed IT-diensten"
+      description="Complete IT management and 24/7 monitoring with unlimited remote support and predictable monthly costs"
+      descriptionNL="Complete IT-beheer en 24/7 monitoring met onbeperkte remote support en voorspelbare maandelijkse kosten"
+      features={[
+        '24/7 Proactive Monitoring',
+        'Unlimited Remote Support',
+        '4-Hour Response Time',
+        'Strategic IT Planning',
+        'Fixed Monthly Pricing',
+        'Antivirus & Security',
+        'Backup & Recovery',
+        'Patch Management'
+      ]}
+      pricing={{
+        base: 60,
+        currency: 'EUR',
+        period: 'monthly'
+      }}
+    >
       {/* Hero Section */}
       <motion.section 
         className="relative py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5"
@@ -30,9 +63,12 @@ export default function ManagedITPage() {
             <Badge variant="secondary" className="mb-4">
               Amsterdam's #1 Managed IT Services
             </Badge>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <PageTitle 
+              id="managed-it-hero-title"
+              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+            >
               Managed IT Services Amsterdam: Zet Problemen Om in Winst
-            </h1>
+            </PageTitle>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
               Elk uur dat je team vecht met technologie is een uur niet besteed aan groei van je bedrijf. 
               Amsterdamse bedrijven verspillen gemiddeld 8% van werktijd aan IT-problemen – dat is 
@@ -115,7 +151,9 @@ export default function ManagedITPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Wat Je Krijgt met Workflo Managed IT</h2>
+            <SectionTitle id="managed-it-benefits">
+              Wat Je Krijgt met Workflo Managed IT
+            </SectionTitle>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Complete IT-ondersteuning die je bedrijf doet groeien in plaats van vertragen
             </p>
@@ -187,7 +225,9 @@ export default function ManagedITPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Resultaten Die Je Kunt Verwachten</h2>
+            <SectionTitle id="managed-it-results">
+              Resultaten Die Je Kunt Verwachten
+            </SectionTitle>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Bewezen resultaten van 100+ Amsterdamse bedrijven
             </p>
@@ -226,7 +266,9 @@ export default function ManagedITPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Zo werkt het</h2>
+            <SectionTitle id="managed-it-process">
+              Zo werkt het
+            </SectionTitle>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               In 3 simpele stappen naar zorgeloze IT
             </p>
@@ -298,9 +340,12 @@ export default function ManagedITPage() {
             <Badge variant="destructive" className="mb-4 text-lg px-4 py-2">
               🚨 ACTIE VEREIST: Kies Je Beschermingsniveau Nu 🚨
             </Badge>
-            <h2 className="text-4xl font-bold mb-4">
+            <SectionTitle 
+              id="security-packages" 
+              className="text-4xl font-bold mb-4"
+            >
               Welk Niveau van Bescherming Past Bij Jouw Bedrijf?
-            </h2>
+            </SectionTitle>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Elke dag zonder professionele MSP-bescherming is een gok met je bedrijfscontinuïteit. 
               Kies nu je pakket en krijg <span className="text-primary font-bold">direct 24/7 bescherming</span>.
@@ -473,7 +518,12 @@ export default function ManagedITPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold mb-4">Stop Met Vechten Tegen IT-Problemen. Begin Met Groeien Van Je Bedrijf.</h2>
+            <SectionTitle 
+              id="managed-it-cta"
+              className="text-4xl font-bold mb-4"
+            >
+              Stop Met Vechten Tegen IT-Problemen. Begin Met Groeien Van Je Bedrijf.
+            </SectionTitle>
             <p className="text-xl mb-8 opacity-90">Sluit je aan bij 100+ Amsterdamse bedrijven die Workflo vertrouwen voor hun IT</p>
             <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
               <Link href="/contact">
@@ -483,6 +533,6 @@ export default function ManagedITPage() {
           </motion.div>
         </div>
       </section>
-    </div>
+    </ServicePage>
   )
 }

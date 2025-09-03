@@ -327,6 +327,8 @@ export class ImagePerformanceMonitor {
       const entries = entryList.getEntries()
       const lastEntry = entries[entries.length - 1]
       
+      if (!lastEntry) return
+      
       console.log('LCP:', Math.round(lastEntry.startTime), 'ms')
       
       if ((window as any).gtag) {

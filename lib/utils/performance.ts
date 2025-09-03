@@ -3,6 +3,8 @@
  * Implements Core Web Vitals monitoring and optimization
  */
 
+import React from 'react'
+
 export interface PerformanceMetrics {
   lcp?: number // Largest Contentful Paint
   fid?: number // First Input Delay
@@ -98,6 +100,7 @@ class PerformanceMonitor {
       const navigationEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[]
       if (navigationEntries.length > 0) {
         const nav = navigationEntries[0]
+        if (!nav) return
         this.metrics.ttfb = nav.responseStart - nav.fetchStart
         this.reportMetric('TTFB', this.metrics.ttfb)
       }
@@ -346,8 +349,10 @@ export class ResourceOptimizer {
         return registration
       } catch (error) {
         console.error('Service worker registration failed:', error)
+        return null
       }
     }
+    return null
   }
 }
 
@@ -365,9 +370,9 @@ export const dynamicImports = {
     return React.lazy(() => {
       return new Promise(resolve => {
         const observer = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
+          if (entries[0]?.isIntersecting) {
             observer.disconnect()
-            loader().then(resolve)
+            loader().then(resolve as any)
           }
         })
         
@@ -392,7 +397,7 @@ export const dynamicImports = {
           events.forEach(event => 
             document.removeEventListener(event, loadComponent)
           )
-          loader().then(resolve)
+          loader().then(resolve as any)
         }
         
         events.forEach(event => 

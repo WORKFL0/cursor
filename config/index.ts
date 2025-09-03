@@ -7,7 +7,12 @@ import { developmentConfig } from './environments/development';
 import { stagingConfig } from './environments/staging';
 import { productionConfig } from './environments/production';
 
-export type AppConfig = typeof developmentConfig;
+// Create a flexible type based on development config but with generic environment
+export type AppConfig = Omit<typeof developmentConfig, 'app'> & {
+  app: Omit<typeof developmentConfig.app, 'environment'> & {
+    environment: 'development' | 'staging' | 'production' | 'test';
+  };
+};
 
 /**
  * Get the current environment configuration
@@ -18,9 +23,9 @@ export function getConfig(): AppConfig {
 
   switch (appEnv) {
     case 'production':
-      return productionConfig;
+      return productionConfig as unknown as AppConfig;
     case 'staging':
-      return stagingConfig;
+      return stagingConfig as unknown as AppConfig;
     case 'development':
     case 'test':
     default:

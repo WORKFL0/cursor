@@ -216,7 +216,7 @@ export function ITLoadingMessage() {
     { text: "Workflo magie aan het werk...", icon: "✨" }
   ]
 
-  const randomMessage = messages[Math.floor(Math.random() * messages.length)]
+  const randomMessage = messages[Math.floor(Math.random() * messages.length)] || { text: "Loading...", icon: "⏳" }
 
   return (
     <motion.div

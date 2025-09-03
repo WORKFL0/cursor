@@ -31,7 +31,7 @@ export default function ServicesCalculator({
     }
   }, [initialService])
 
-  const userCount = users[0]
+  const userCount = users[0] ?? 1
   const pricing = selectedService ? calculateServicePrice(selectedService, userCount, supportType) : null
 
   const handleServiceChange = (serviceSlug: string) => {

@@ -18,6 +18,11 @@ async function setupSupabaseCMS() {
   try {
     const supabase = createAdminClient()
     
+    if (!supabase) {
+      console.error('❌ Failed to create Supabase admin client')
+      process.exit(1)
+    }
+    
     // Check if we can connect
     console.log('📡 Testing Supabase connection...')
     const { data: connectionTest, error: connectionError } = await supabase
@@ -46,8 +51,8 @@ async function setupSupabaseCMS() {
       process.exit(1)
     }
 
-    const hasArticles = existingTables?.some(t => t.table_name === 'articles')
-    const hasUsers = existingTables?.some(t => t.table_name === 'cms_users')
+    const hasArticles = existingTables?.some((t: any) => t.table_name === 'articles')
+    const hasUsers = existingTables?.some((t: any) => t.table_name === 'cms_users')
 
     if (hasArticles && hasUsers) {
       console.log('⚠️  CMS tables already exist. Skipping schema creation.')
@@ -63,7 +68,7 @@ async function setupSupabaseCMS() {
       if (adminError) {
         console.error('❌ Error checking admin user:', adminError)
       } else if (adminUsers && adminUsers.length > 0) {
-        console.log(`✅ Admin user found: ${adminUsers[0].username} (${adminUsers[0].email})`)
+        console.log(`✅ Admin user found: ${(adminUsers[0] as any)?.username} (${(adminUsers[0] as any)?.email})`)
         console.log('\n🎉 CMS setup complete! The system is ready to use.')
         return
       }
@@ -84,7 +89,7 @@ async function setupSupabaseCMS() {
         
         for (const statement of statements) {
           if (statement.trim()) {
-            const { error } = await supabase.rpc('exec_sql', { sql: statement + ';' })
+            const { error } = await (supabase as any).rpc('exec_sql', { sql: statement + ';' })
             if (error) {
               // Try alternative method for some statements
               console.warn(`   Warning: ${error.message}`)

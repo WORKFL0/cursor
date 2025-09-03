@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { CMSAuthService } from '@/lib/auth/cms-auth'
 import { createAdminClient } from '@/lib/supabase/client'
-import { MediaFileInsert } from '@/lib/types/supabase'
+import { Database } from '@/lib/types/database'
+
+type MediaFileInsert = Database['public']['Tables']['media_files']['Insert']
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
@@ -80,6 +82,12 @@ export async function POST(request: NextRequest) {
 
     // Save media info to database
     const supabase = createAdminClient()
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, error: 'Database not configured' },
+        { status: 500 }
+      )
+    }
     const mediaFileData: MediaFileInsert = {
       filename: fileName,
       original_name: file.name,
@@ -95,8 +103,8 @@ export async function POST(request: NextRequest) {
       uploaded_by: user.id
     }
     
-    const { data: mediaFile, error: dbError } = await supabase
-      .from('media_files')
+    const { data: mediaFile, error: dbError } = await (supabase
+      .from('media_files') as any)
       .insert(mediaFileData)
       .select()
       .single()
@@ -165,6 +173,13 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') // Filter by file type
 
     const supabase = createAdminClient()
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, error: 'Database not configured' },
+        { status: 500 }
+      )
+    }
+    
     let query = supabase
       .from('media_files')
       .select(`

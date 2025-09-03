@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import SupabaseArticleService from '@/lib/services/supabase-article-service'
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

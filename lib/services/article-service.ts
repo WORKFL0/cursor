@@ -89,8 +89,8 @@ export class ArticleService {
     // Try Supabase first
     if (isSupabaseConfigured && supabase) {
       try {
-        const { data, error } = await supabase
-          .from('articles')
+        const { data, error } = await (supabase
+          .from('articles') as any)
           .insert([{
             ...articleData,
             published_at: articleData.published ? new Date().toISOString() : null,
@@ -146,8 +146,8 @@ export class ArticleService {
           updateData.published_at = updates.published ? new Date().toISOString() : null
         }
 
-        const { data, error } = await supabase
-          .from('articles')
+        const { data, error } = await (supabase
+          .from('articles') as any)
           .update(updateData)
           .eq('id', id)
           .select()
@@ -187,8 +187,8 @@ export class ArticleService {
     // Try Supabase first
     if (isSupabaseConfigured && supabase) {
       try {
-        const { error } = await supabase
-          .from('articles')
+        const { error } = await (supabase
+          .from('articles') as any)
           .delete()
           .eq('id', id)
 
@@ -243,7 +243,7 @@ export class ArticleService {
         tags: articleData.tags || [],
         published: articleData.published || false,
         featured: articleData.featured || false,
-        image: articleData.image
+        image: (articleData as any).image
       })
 
       return {
@@ -339,8 +339,8 @@ export class ArticleService {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('articles')
+      const { data, error } = await (supabase
+        .from('articles') as any)
         .select('count', { count: 'exact', head: true })
         .limit(1)
 

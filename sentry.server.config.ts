@@ -9,8 +9,8 @@ Sentry.init({
   
   // Performance monitoring
   integrations: [
-    new Sentry.Integrations.Prisma(),
-    new Sentry.Integrations.Http({ tracing: true }),
+    // new Sentry.Integrations.Prisma(),
+    // new Sentry.Integrations.Http({ tracing: true }),
   ],
   
   // Error filtering
@@ -25,7 +25,7 @@ Sentry.init({
     
     // Filter out database connection errors in development
     if (process.env.NODE_ENV === 'development' && 
-        error && error.message && error.message.includes('ECONNREFUSED')) {
+        error && (error as any).message && (error as any).message.includes('ECONNREFUSED')) {
       return null;
     }
     

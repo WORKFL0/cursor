@@ -50,7 +50,11 @@ class LinkedInTracker {
     script.src = 'https://snap.licdn.com/li.lms-analytics/insight.min.js'
     
     const firstScript = document.getElementsByTagName('script')[0]
-    firstScript.parentNode?.insertBefore(script, firstScript)
+    if (firstScript && firstScript.parentNode) {
+      firstScript.parentNode.insertBefore(script, firstScript)
+    } else {
+      document.head.appendChild(script)
+    }
 
     // Create img tag for noscript fallback
     const noscript = document.createElement('noscript')

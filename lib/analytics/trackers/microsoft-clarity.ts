@@ -85,7 +85,9 @@ class MicrosoftClarityTracker {
     if (!window.clarity || !consentManager.hasAnalyticsConsent()) return
 
     Object.entries(tags).forEach(([key, value]) => {
-      window.clarity('set', key, value)
+      if (window.clarity) {
+        window.clarity('set', key, value)
+      }
     })
 
     if (analyticsConfig.debug) {
@@ -145,7 +147,9 @@ class MicrosoftClarityTracker {
     if (!window.clarity || !consentManager.hasAnalyticsConsent()) return
 
     Object.entries(traits).forEach(([key, value]) => {
-      window.clarity('identify', key, String(value))
+      if (window.clarity) {
+        window.clarity('identify', key, String(value))
+      }
     })
   }
 

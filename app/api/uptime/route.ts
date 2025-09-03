@@ -48,7 +48,7 @@ async function checkDatabase(): Promise<ServiceStatus> {
     }
     
     // Simple query to test connection - use a more generic approach
-    const { data, error } = await supabase
+    const { data: _data, error } = await supabase
       .from('information_schema.tables')
       .select('count', { count: 'exact', head: true })
       .limit(1)

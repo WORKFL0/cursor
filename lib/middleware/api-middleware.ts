@@ -336,7 +336,8 @@ class ApiMiddleware {
   private cleanupRateLimitStore(): void {
     const now = Date.now()
     Object.keys(this.rateLimitStore).forEach(key => {
-      if (this.rateLimitStore[key].resetTime <= now) {
+      const entry = this.rateLimitStore[key]
+      if (entry && entry.resetTime <= now) {
         delete this.rateLimitStore[key]
       }
     })

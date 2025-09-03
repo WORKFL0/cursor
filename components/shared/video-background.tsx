@@ -26,6 +26,7 @@ export function VideoBackground({
       
       return () => clearInterval(interval)
     }
+    return () => {}
   }, [videos.length])
 
   return (

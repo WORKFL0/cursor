@@ -21,10 +21,10 @@ export function ArticleCard({ article, featured = false, index = 0 }: ArticleCar
   const { getLocalizedValue, getLocalizedArray } = useLocalizedContent()
   
   const category = getCategoryById(article.category)
-  const title = getLocalizedValue(article, 'title')
-  const excerpt = getLocalizedValue(article, 'excerpt')
-  const tags = getLocalizedArray(article, 'tags')
-  const categoryName = category ? getLocalizedValue(category, 'name') : article.category
+  const title = getLocalizedValue(article as any, 'title')
+  const excerpt = getLocalizedValue(article as any, 'excerpt')
+  const tags = getLocalizedArray(article as any, 'tags')
+  const categoryName = category ? getLocalizedValue(category as any, 'name') : article.category
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString(language === 'nl' ? 'nl-NL' : 'en-US', {

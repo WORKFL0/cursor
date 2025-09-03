@@ -13,13 +13,13 @@ Sentry.init({
   
   // Performance monitoring
   integrations: [
-    new Sentry.Replay({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-    new Sentry.BrowserTracing({
-      tracingOrigins: ["localhost", /^https:\/\/.*\.vercel\.app$/],
-    }),
+    // new Sentry.Replay({
+    //   maskAllText: true,
+    //   blockAllMedia: true,
+    // }),
+    // new Sentry.BrowserTracing({
+    //   tracingOrigins: ["localhost", /^https:\/\/.*\.vercel\.app$/],
+    // }),
   ],
   
   // Error filtering
@@ -33,12 +33,12 @@ Sentry.init({
     }
     
     // Filter out network errors
-    if (error && error.message && error.message.includes('NetworkError')) {
+    if (error && (error as any).message && (error as any).message.includes('NetworkError')) {
       return null;
     }
     
     // Filter out script loading errors
-    if (error && error.message && error.message.includes('Loading chunk')) {
+    if (error && (error as any).message && (error as any).message.includes('Loading chunk')) {
       return null;
     }
     

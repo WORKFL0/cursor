@@ -226,7 +226,7 @@ export class SupabaseAuthManager {
    */
   static onAuthStateChange(callback: (event: string, session: AuthSession | null) => void) {
     const client = this.checkConfiguration()
-    return client.auth.onAuthStateChange(callback)
+    return client.auth.onAuthStateChange(callback as any)
   }
 
   /**

@@ -33,7 +33,7 @@ export default defineConfig({
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
     ['list'],
-    ...(process.env.CI ? [['github' as const]] : []),
+    ...(process.env.CI ? ['github' as any] : []),
   ],
   
   // Global test configuration
@@ -131,8 +131,8 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1280, height: 720 },
-        reducedMotion: 'reduce',
-        forcedColors: 'active',
+        // reducedMotion: 'reduce',
+        // forcedColors: 'active',
       },
       testMatch: ['**/e2e/accessibility/**/*.spec.ts'],
     },

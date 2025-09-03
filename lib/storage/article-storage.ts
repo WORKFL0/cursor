@@ -64,16 +64,19 @@ export class ArticleStorage {
     
     if (index === -1) return null
     
+    const existingArticle = articles[index]
+    if (!existingArticle) return null
+    
     const updatedArticle = {
-      ...articles[index],
+      ...existingArticle,
       ...updates,
-      id: articles[index].id, // Prevent ID from being changed
-      created_at: articles[index].created_at, // Preserve original created date
+      id: existingArticle.id, // Prevent ID from being changed
+      created_at: existingArticle.created_at, // Preserve original created date
       updated_at: new Date().toISOString()
     }
     
     // Update published_at if publication status changes
-    if (updates.published && !articles[index].published) {
+    if (updates.published && !existingArticle.published) {
       updatedArticle.published_at = new Date().toISOString()
     } else if (updates.published === false) {
       updatedArticle.published_at = undefined

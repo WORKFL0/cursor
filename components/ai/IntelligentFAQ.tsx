@@ -41,7 +41,8 @@ export function IntelligentFAQ() {
   useEffect(() => {
     fetchCategories();
     fetchTrendingQuestions();
-  }, [fetchCategories, fetchTrendingQuestions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -56,7 +57,8 @@ export function IntelligentFAQ() {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, searchFAQs, fetchSuggestions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   const fetchCategories = useCallback(async () => {
     try {

@@ -54,8 +54,8 @@ export function QuoteSummary({
             const service = serviceCategories.find(s => s.id === quoteService.serviceId)
             if (!service) return null
 
-            const serviceName = getLocalizedValue(service, 'name')
-            const serviceUnit = getLocalizedValue(service, 'unit')
+            const serviceName = getLocalizedValue(service as any, 'name')
+            const serviceUnit = getLocalizedValue(service as any, 'unit')
             const servicePrice = isYearly ? quoteService.yearlyPrice : quoteService.monthlyPrice
 
             return (

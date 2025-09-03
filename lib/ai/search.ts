@@ -23,7 +23,7 @@ export interface SearchableContent {
 }
 
 // Fuzzy search configuration
-const fuseOptions: Fuse.IFuseOptions<SearchableContent> = {
+const fuseOptions: any = {
   keys: [
     { name: 'title', weight: 0.4 },
     { name: 'content', weight: 0.3 },

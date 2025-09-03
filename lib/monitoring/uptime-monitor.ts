@@ -56,7 +56,7 @@ export class UptimeMonitor {
       errorRate,
       throughput,
       memoryUsage: process.memoryUsage(),
-      cpuUsage: process.cpuUsage ? this.getCPUUsage() : undefined,
+      cpuUsage: typeof process.cpuUsage === 'function' ? this.getCPUUsage() : undefined,
     };
   }
 

@@ -43,6 +43,10 @@ export class CMSAuthService {
       const { email, password, remember = false } = credentials
       
       // Find user by email or username
+      if (!this.supabase) {
+        return { success: false, error: 'Database connection not available' }
+      }
+      
       const { data: users, error: userError } = await this.supabase
         .from('cms_users')
         .select('*')
@@ -62,12 +66,15 @@ export class CMSAuthService {
       }
 
       const user = users[0]
+      if (!user) {
+        return { success: false, error: 'Invalid credentials' }
+      }
 
       // Verify password
-      const isPasswordValid = await bcrypt.compare(password, user.password_hash)
+      const isPasswordValid = await bcrypt.compare(password, (user as any).password_hash)
       if (!isPasswordValid) {
         // Log failed attempt
-        await this.logAuditEvent(user.id, 'failed_login', 'authentication', null, {
+        await this.logAuditEvent((user as any).id, 'failed_login', 'authentication', null, {
           email,
           reason: 'invalid_password'
         })
@@ -83,20 +90,20 @@ export class CMSAuthService {
       }
 
       // Update last login
-      await this.supabase
-        .from('cms_users')
+      await (this.supabase
+        .from('cms_users') as any)
         .update({ last_login_at: new Date().toISOString() })
-        .eq('id', user.id)
+        .eq('id', (user as any).id)
 
       // Log successful login
-      await this.logAuditEvent(user.id, 'login', 'authentication', user.id, {
-        username: user.username,
-        email: user.email
+      await this.logAuditEvent((user as any).id, 'login', 'authentication', (user as any).id, {
+        username: (user as any).username,
+        email: (user as any).email
       })
 
       return {
         success: true,
-        user: { ...user, last_login_at: new Date().toISOString() },
+        user: { ...(user as any), last_login_at: new Date().toISOString() },
         session: sessionResult.session
       }
     } catch (error) {
@@ -112,17 +119,21 @@ export class CMSAuthService {
     try {
       const expiresAt = new Date(Date.now() + duration)
       const sessionToken = this.generateSessionToken({
-        userId: user.id,
-        username: user.username,
-        role: user.role,
+        userId: (user as any).id,
+        username: (user as any).username,
+        role: (user as any).role,
         exp: Math.floor(expiresAt.getTime() / 1000)
       })
 
       // Store session in database
-      const { data: session, error } = await this.supabase
-        .from('user_sessions')
+      if (!this.supabase) {
+        return { success: false, error: 'Database connection not available' }
+      }
+      
+      const { data: session, error } = await (this.supabase
+        .from('user_sessions') as any)
         .insert({
-          user_id: user.id,
+          user_id: (user as any).id,
           session_token: sessionToken,
           expires_at: expiresAt.toISOString(),
           is_active: true
@@ -156,6 +167,10 @@ export class CMSAuthService {
       }
 
       // Get session from database
+      if (!this.supabase) {
+        return null
+      }
+      
       const { data: sessions, error: sessionError } = await this.supabase
         .from('user_sessions')
         .select(`
@@ -172,31 +187,35 @@ export class CMSAuthService {
       }
 
       const session = sessions[0]
-      const user = session.cms_users as CMSUser
+      if (!session) {
+        return null
+      }
+      
+      const user = (session as any).cms_users as CMSUser
 
       if (!user || !user.is_active) {
         // Deactivate invalid session
-        await this.supabase
-          .from('user_sessions')
+        await (this.supabase
+          .from('user_sessions') as any)
           .update({ is_active: false })
-          .eq('id', session.id)
+          .eq('id', (session as any).id)
         return null
       }
 
       return {
         user,
         session: {
-          id: session.id,
-          user_id: session.user_id,
-          session_token: session.session_token,
-          expires_at: session.expires_at,
-          ip_address: session.ip_address,
-          user_agent: session.user_agent,
-          is_active: session.is_active,
-          created_at: session.created_at,
-          updated_at: session.updated_at
+          id: (session as any).id,
+          user_id: (session as any).user_id,
+          session_token: (session as any).session_token,
+          expires_at: (session as any).expires_at,
+          ip_address: (session as any).ip_address,
+          user_agent: (session as any).user_agent,
+          is_active: (session as any).is_active,
+          created_at: (session as any).created_at,
+          updated_at: (session as any).updated_at
         },
-        expires: session.expires_at
+        expires: (session as any).expires_at
       }
     } catch (error) {
       console.error('Session validation error:', error)
@@ -213,8 +232,12 @@ export class CMSAuthService {
       const sessionData = await this.validateSession(token)
       
       // Invalidate session in database
-      const { error } = await this.supabase
-        .from('user_sessions')
+      if (!this.supabase) {
+        return { success: false, error: 'Database connection not available' }
+      }
+      
+      const { error } = await (this.supabase
+        .from('user_sessions') as any)
         .update({ is_active: false })
         .eq('session_token', token)
 
@@ -253,6 +276,10 @@ export class CMSAuthService {
       }
 
       // Get user
+      if (!this.supabase) {
+        return { success: false, error: 'Database connection not available' }
+      }
+      
       const { data: user, error: userError } = await this.supabase
         .from('cms_users')
         .select('password_hash')
@@ -264,7 +291,7 @@ export class CMSAuthService {
       }
 
       // Verify current password
-      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password_hash)
+      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, (user as any).password_hash)
       if (!isCurrentPasswordValid) {
         return { success: false, error: 'Current password is incorrect' }
       }
@@ -274,8 +301,8 @@ export class CMSAuthService {
       const newPasswordHash = await bcrypt.hash(newPassword, saltRounds)
 
       // Update password
-      const { error: updateError } = await this.supabase
-        .from('cms_users')
+      const { error: updateError } = await (this.supabase
+        .from('cms_users') as any)
         .update({ 
           password_hash: newPasswordHash,
           password_changed_at: new Date().toISOString()
@@ -288,8 +315,8 @@ export class CMSAuthService {
       }
 
       // Invalidate all other sessions for this user
-      await this.supabase
-        .from('user_sessions')
+      await (this.supabase
+        .from('user_sessions') as any)
         .update({ is_active: false })
         .eq('user_id', userId)
 
@@ -358,7 +385,7 @@ export class CMSAuthService {
     requiredRole?: UserRole | UserRole[]
   ): Promise<{ user: CMSUser; session: UserSession } | NextResponse> {
     try {
-      const cookieStore = cookies()
+      const cookieStore = await cookies()
       const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)
       
       if (!sessionCookie) {
@@ -414,8 +441,10 @@ export class CMSAuthService {
     data?: any
   ): Promise<void> {
     try {
-      await this.supabase
-        .from('audit_logs')
+      if (!this.supabase) return
+      
+      await (this.supabase
+        .from('audit_logs') as any)
         .insert({
           user_id: userId,
           action,
@@ -434,8 +463,10 @@ export class CMSAuthService {
    */
   static async cleanupExpiredSessions(): Promise<void> {
     try {
-      const { error } = await this.supabase
-        .from('user_sessions')
+      if (!this.supabase) return
+      
+      const { error } = await (this.supabase
+        .from('user_sessions') as any)
         .update({ is_active: false })
         .lt('expires_at', new Date().toISOString())
 
@@ -472,7 +503,7 @@ export class CMSAuthService {
    */
   static async getCurrentUser(request: NextRequest): Promise<CMSUser | null> {
     try {
-      const cookieStore = cookies()
+      const cookieStore = await cookies()
       const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)
       
       if (!sessionCookie) {
@@ -496,6 +527,8 @@ export class CMSAuthService {
     }
 
     try {
+      if (!this.supabase) return { success: false, error: 'Database connection not available' }
+      
       // Check if admin already exists
       const { data: existingAdmin } = await this.supabase
         .from('cms_users')
@@ -509,8 +542,8 @@ export class CMSAuthService {
 
       // Create admin user
       const passwordHash = await bcrypt.hash('Admin123!', 12)
-      const { error } = await this.supabase
-        .from('cms_users')
+      const { error } = await (this.supabase
+        .from('cms_users') as any)
         .insert({
           email: 'admin@workflo.it',
           username: 'admin',

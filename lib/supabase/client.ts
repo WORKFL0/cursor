@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '@/lib/types/supabase'
+import { Database } from '@/lib/types/database'
 
 // Create a single supabase client for interacting with your database
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
@@ -45,23 +45,13 @@ if (typeof window === 'undefined') {
   })
 }
 
-// Re-export types from supabase types
+// Re-export types from database types
 export type {
   Database,
-  Tables,
-  TablesInsert,
-  TablesUpdate,
   Article,
   ArticleInsert,
   ArticleUpdate,
   MediaFile,
-  MediaFileInsert,
-  MediaFileUpdate,
-  Service,
-  ServiceInsert,
-  ServiceUpdate,
-  APIResponse,
-  PaginatedResponse,
-  SupabaseError,
-  SupabaseResponse
-} from '@/lib/types/supabase'
+  ApiResponse,
+  PaginatedResponse
+} from '@/lib/types/database'

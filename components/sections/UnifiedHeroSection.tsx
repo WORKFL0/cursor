@@ -162,6 +162,7 @@ export default function UnifiedHeroSection(props: HeroSectionProps) {
       }, 15000)
       return () => clearInterval(interval)
     }
+    return () => {}
   }, [variant, config.videos])
 
   // Background rendering

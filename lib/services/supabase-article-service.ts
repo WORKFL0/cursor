@@ -8,39 +8,11 @@ import {
   Article, 
   ArticleInsert, 
   ArticleUpdate,
-  APIResponse 
-} from '@/lib/types/supabase'
-
-// Define interfaces not in supabase types
-interface ArticleFilters {
-  published?: boolean
-  featured?: boolean
-  category?: string
-  tags?: string[]
-  author?: string
-  search?: string
-  dateFrom?: string
-  dateTo?: string
-  limit?: number
-  offset?: number
-  orderBy?: string
-  orderDirection?: 'asc' | 'desc'
-}
-
-interface PaginatedResponse<T> {
-  data: T[]
-  total: number
-  page: number
-  pageSize: number
-  totalPages: number
-}
-
-interface ArticleStats {
-  total: number
-  published: number
-  draft: number
-  featured: number
-}
+  ApiResponse,
+  PaginatedResponse,
+  ArticleFilters,
+  ArticleStats
+} from '@/lib/types/database'
 
 export class SupabaseArticleService {
   private static supabase = createAdminClient()
@@ -51,7 +23,7 @@ export class SupabaseArticleService {
   static async getArticles(filters: ArticleFilters = {}): Promise<PaginatedResponse<Article>> {
     try {
       if (!this.supabase) {
-        return { data: [], total: 0, page: 1, pageSize: 10, totalPages: 0 }
+        return { success: false, error: "Database not configured", data: [], count: 0, limit: 50, offset: 0 }
       }
       const {
         published,
@@ -152,8 +124,8 @@ export class SupabaseArticleService {
         success: false,
         data: [],
         count: 0,
-        limit,
-        offset,
+        limit: filters.limit ?? 50,
+        offset: filters.offset ?? 0,
         error: 'Article service error'
       }
     }
@@ -164,6 +136,10 @@ export class SupabaseArticleService {
    */
   static async getArticle(identifier: string, bySlug = false): Promise<ApiResponse<Article>> {
     try {
+      if (!this.supabase) {
+        return { success: false, error: "Database not configured" }
+      }
+      
       let query = this.supabase
         .from('articles')
         .select(`
@@ -202,7 +178,7 @@ export class SupabaseArticleService {
   /**
    * Create new article
    */
-  static async createArticle(article: ArticleInsert, userId?: string): Promise<APIResponse<Article>> {
+  static async createArticle(article: ArticleInsert, userId?: string): Promise<ApiResponse<Article>> {
     if (!this.supabase) return { success: false, error: "Database not configured" };
     try {
       // Generate slug if not provided
@@ -224,8 +200,8 @@ export class SupabaseArticleService {
         article.published_at = new Date().toISOString()
       }
 
-      const { data, error } = await this.supabase
-        .from('articles')
+      const { data, error } = await (this.supabase
+        .from('articles') as any)
         .insert(article)
         .select(`
           *,
@@ -260,7 +236,7 @@ export class SupabaseArticleService {
   /**
    * Update existing article
    */
-  static async updateArticle(id: string, updates: ArticleUpdate, userId?: string): Promise<APIResponse<Article>> {
+  static async updateArticle(id: string, updates: ArticleUpdate, userId?: string): Promise<ApiResponse<Article>> {
     if (!this.supabase) return { success: false, error: "Database not configured" };
     try {
       // Get current article for comparison
@@ -291,8 +267,8 @@ export class SupabaseArticleService {
         updates.slug = await this.ensureUniqueSlug(updates.slug, id)
       }
 
-      const { data, error } = await this.supabase
-        .from('articles')
+      const { data, error } = await (this.supabase
+        .from('articles') as any)
         .update(updates)
         .eq('id', id)
         .select(`
@@ -331,6 +307,10 @@ export class SupabaseArticleService {
    */
   static async deleteArticle(articleId: string): Promise<ApiResponse<null>> {
     try {
+      if (!this.supabase) {
+        return { success: false, error: "Database not configured" }
+      }
+      
       // Get article for tag cleanup
       const articleResult = await this.getArticle(articleId)
       const tags = articleResult.data?.tags || []
@@ -362,6 +342,10 @@ export class SupabaseArticleService {
    */
   static async getArticleStats(): Promise<ApiResponse<ArticleStats>> {
     try {
+      if (!this.supabase) {
+        return { success: false, error: "Database not configured" }
+      }
+      
       // Get total counts
       const [totalResult, publishedResult, draftsResult, featuredResult] = await Promise.all([
         this.supabase.from('articles').select('id', { count: 'exact', head: true }),
@@ -376,7 +360,7 @@ export class SupabaseArticleService {
         .select('category')
         
       const byCategory: Record<string, number> = {}
-      categoryData?.forEach(article => {
+      categoryData?.forEach((article: any) => {
         const category = article.category || 'Uncategorized'
         byCategory[category] = (byCategory[category] || 0) + 1
       })
@@ -387,7 +371,7 @@ export class SupabaseArticleService {
         .select('author')
         
       const byAuthor: Record<string, number> = {}
-      authorData?.forEach(article => {
+      authorData?.forEach((article: any) => {
         const author = article.author || 'Unknown'
         byAuthor[author] = (byAuthor[author] || 0) + 1
       })
@@ -404,7 +388,7 @@ export class SupabaseArticleService {
       const recentActivity: { date: string; created: number; published: number }[] = []
       const activityMap: Record<string, { created: number; published: number }> = {}
       
-      recentData?.forEach(article => {
+      recentData?.forEach((article: any) => {
         const createdDate = new Date(article.created_at).toDateString()
         if (!activityMap[createdDate]) {
           activityMap[createdDate] = { created: 0, published: 0 }
@@ -451,7 +435,11 @@ export class SupabaseArticleService {
     publishedOnly = true
   ): Promise<PaginatedResponse<Article>> {
     try {
-      let dbQuery = this.supabase.rpc('search_articles', {
+      if (!this.supabase) {
+        return { success: false, error: "Database not configured", data: [], count: 0, limit, offset }
+      }
+      
+      let dbQuery = (this.supabase as any).rpc('search_articles', {
         search_query: query,
         limit_count: limit,
         offset_count: offset
@@ -496,9 +484,13 @@ export class SupabaseArticleService {
    */
   static async incrementViews(articleId: string): Promise<void> {
     try {
-      await this.supabase
-        .from('articles')
-        .update({ views_count: this.supabase.sql`views_count + 1` })
+      if (!this.supabase) {
+        return
+      }
+      
+      await (this.supabase
+        .from('articles') as any)
+        .update({ views_count: (this.supabase as any).sql`views_count + 1` })
         .eq('id', articleId)
     } catch (error) {
       console.error('Increment views error:', error)
@@ -511,6 +503,10 @@ export class SupabaseArticleService {
    */
   static async getCategories(): Promise<ApiResponse<Array<{ name: string; count: number }>>> {
     try {
+      if (!this.supabase) {
+        return { success: false, error: "Database not configured" }
+      }
+      
       const { data, error } = await this.supabase
         .from('article_categories')
         .select(`
@@ -529,9 +525,10 @@ export class SupabaseArticleService {
       }
 
       // Get article counts for each category
+      const supabaseClient = this.supabase
       const categoriesWithCounts = await Promise.all(
-        (data || []).map(async (category) => {
-          const { count } = await this.supabase
+        (data || []).map(async (category: any) => {
+          const { count } = await supabaseClient!
             .from('articles')
             .select('id', { count: 'exact', head: true })
             .eq('category', category.name)
@@ -569,6 +566,10 @@ export class SupabaseArticleService {
    */
   private static async ensureUniqueSlug(slug: string, excludeId?: string): Promise<string> {
     try {
+      if (!this.supabase) {
+        return slug
+      }
+      
       let uniqueSlug = slug
       let counter = 1
 
@@ -616,6 +617,10 @@ export class SupabaseArticleService {
    */
   private static async updateTagUsageCounts(oldTags: string[], newTags: string[]): Promise<void> {
     try {
+      if (!this.supabase) {
+        return
+      }
+      
       // Tags to decrement
       const tagsToDecrement = oldTags.filter(tag => !newTags.includes(tag))
       
@@ -624,20 +629,20 @@ export class SupabaseArticleService {
 
       // Process decrements
       for (const tag of tagsToDecrement) {
-        await this.supabase.rpc('decrement_tag_usage', { tag_name: tag })
+        await (this.supabase as any).rpc('decrement_tag_usage', { tag_name: tag })
       }
 
       // Process increments
       for (const tag of tagsToIncrement) {
         // Create tag if it doesn't exist
-        await this.supabase
-          .from('article_tags')
+        await (this.supabase
+          .from('article_tags') as any)
           .upsert(
             { name: tag, usage_count: 0 },
             { onConflict: 'name', ignoreDuplicates: true }
           )
 
-        await this.supabase.rpc('increment_tag_usage', { tag_name: tag })
+        await (this.supabase as any).rpc('increment_tag_usage', { tag_name: tag })
       }
     } catch (error) {
       console.error('Update tag usage counts error:', error)

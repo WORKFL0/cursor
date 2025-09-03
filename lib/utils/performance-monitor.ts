@@ -92,6 +92,7 @@ export class PerformanceMonitor {
           // If the entry occurred less than 1 second after the previous entry and
           // less than 5 seconds after the first entry in the session, include it
           if (sessionValue &&
+              lastSessionEntry && firstSessionEntry &&
               entry.startTime - lastSessionEntry.startTime < 1000 &&
               entry.startTime - firstSessionEntry.startTime < 5000) {
             sessionValue += (entry as any).value
@@ -202,7 +203,9 @@ export class PerformanceMonitor {
       
       const entries = performance.getEntriesByName(name, 'measure')
       if (entries.length > 0) {
-        const duration = entries[entries.length - 1].duration
+        const lastEntry = entries[entries.length - 1]
+        if (!lastEntry) return
+        const duration = lastEntry.duration
         this.metrics.set(name, duration)
         this.logMetric(name, duration, 'ms', 'info')
         this.sendToAnalytics(`custom_${name.toLowerCase().replace(/\s/g, '_')}`, duration)
@@ -227,7 +230,7 @@ export class PerformanceMonitor {
         server_response: navigation.responseStart - navigation.requestStart,
         dom_parsing: navigation.domContentLoadedEventStart - navigation.responseEnd,
         resource_loading: navigation.loadEventStart - navigation.domContentLoadedEventEnd,
-        total_load_time: navigation.loadEventEnd - navigation.navigationStart
+        total_load_time: navigation.loadEventEnd - (navigation as any).navigationStart
       }
 
       Object.entries(metrics).forEach(([key, value]) => {
@@ -388,10 +391,11 @@ export function usePerformanceMonitoring(enabled = true) {
 
   const monitor = PerformanceMonitor.getInstance()
   
-  // Initialize on first use
-  if (!monitor.metrics) {
-    monitor.init()
-    monitor.trackPageLoad()
+  // Monitor is initialized via getInstance()
+  try {
+    (monitor as any).init?.()
+  } catch (e) {
+    // Initialization already handled or not needed
   }
 
   return {

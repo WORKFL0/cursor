@@ -272,7 +272,7 @@ Klaar voor de cloud? Plan een gratis cloud readiness assessment in.`,
       {
         success: false,
         error: 'CMS management operation failed',
-        message: error.message
+        message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )

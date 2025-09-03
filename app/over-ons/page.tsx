@@ -31,7 +31,7 @@ export default function AboutPage() {
       y: 0,
       transition: { 
         duration: 0.6,
-        ease: [0.6, -0.05, 0.01, 0.99]
+        ease: "easeOut"
       }
     }
   }
@@ -140,23 +140,23 @@ export default function AboutPage() {
             <motion.div
               initial="hidden"
               animate="visible"
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="text-center"
             >
               <motion.h1 
-                variants={fadeInUp}
+                variants={fadeInUp as any}
                 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-8 leading-tight"
               >
-                {getLocalizedValue(aboutPageData.hero, 'title')}
+                {getLocalizedValue(aboutPageData.hero as any, 'title')}
               </motion.h1>
               <motion.p 
-                variants={fadeInUp}
+                variants={fadeInUp as any}
                 className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed"
               >
-                {getLocalizedValue(aboutPageData.hero, 'subtitle')}
+                {getLocalizedValue(aboutPageData.hero as any, 'subtitle')}
               </motion.p>
               <motion.div
-                variants={fadeInUp}
+                variants={fadeInUp as any}
                 className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               >
                 <Button size="lg" asChild className="bg-workflo-yellow hover:bg-workflo-yellow/90 text-black">
@@ -184,15 +184,15 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="grid lg:grid-cols-2 gap-16 items-center"
             >
-              <motion.div variants={fadeInUp}>
+              <motion.div variants={fadeInUp as any}>
                 <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-8">
-                  {getLocalizedValue(aboutPageData.story, 'title')}
+                  {getLocalizedValue(aboutPageData.story as any, 'title')}
                 </h2>
                 <div className="text-lg text-muted-foreground leading-relaxed space-y-6">
-                  <p>{getLocalizedValue(aboutPageData.story, 'content')}</p>
+                  <p>{getLocalizedValue(aboutPageData.story as any, 'content')}</p>
                 </div>
                 <div className="mt-8 p-6 bg-workflo-yellow/10 rounded-2xl border border-workflo-yellow/20">
                   <p className="text-xl font-semibold text-center text-foreground">
@@ -204,7 +204,7 @@ export default function AboutPage() {
                 </div>
               </motion.div>
               
-              <motion.div variants={fadeInUp} className="relative">
+              <motion.div variants={fadeInUp as any} className="relative">
                 <div className="relative z-10">
                   <Image
                     src="/images/workflo-building.jpg"
@@ -237,11 +237,11 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
             >
               {aboutPageData.stats.map((stat, index) => (
-                <motion.div key={index} variants={scaleIn} className="group">
+                <motion.div key={index} variants={scaleIn as any} className="group">
                   <div className="text-4xl lg:text-5xl font-bold text-workflo-yellow mb-2 group-hover:scale-110 transition-transform duration-300">
                     {stat.value}
                   </div>
@@ -263,13 +263,13 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="text-center mb-16"
             >
-              <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              <motion.h2 variants={fadeInUp as any} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 {language === 'nl' ? 'Onze Waarden' : 'Our Values'}
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <motion.p variants={fadeInUp as any} className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 {language === 'nl' 
                   ? 'De principes die ons dagelijks werk leiden en onze relatie met klanten bepalen'
                   : 'The principles that guide our daily work and shape our client relationships'
@@ -281,26 +281,26 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
             >
               {companyInfo.values.map((value, index) => {
-                const IconComponent = valueIcons[getLocalizedValue(value, 'title') as keyof typeof valueIcons] || Users
+                const IconComponent = valueIcons[getLocalizedValue(value as any, 'title') as keyof typeof valueIcons] || Users
                 
                 return (
-                  <motion.div key={index} variants={fadeInUp}>
+                  <motion.div key={index} variants={fadeInUp as any}>
                     <Card className="bg-card shadow-lg border-2 border-border hover:border-workflo-yellow/50 hover:shadow-xl transition-all duration-300 text-center group h-full">
                       <CardHeader>
                         <div className="w-16 h-16 bg-workflo-yellow/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-workflo-yellow/20 transition-colors duration-300">
                           <IconComponent className="w-8 h-8 text-workflo-yellow-dark group-hover:scale-110 transition-transform duration-300" />
                         </div>
                         <CardTitle className="text-xl font-bold text-foreground">
-                          {getLocalizedValue(value, 'title')}
+                          {getLocalizedValue(value as any, 'title')}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <p className="text-muted-foreground leading-relaxed">
-                          {getLocalizedValue(value, 'description')}
+                          {getLocalizedValue(value as any, 'description')}
                         </p>
                       </CardContent>
                     </Card>
@@ -319,13 +319,13 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="text-center mb-16"
             >
-              <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              <motion.h2 variants={fadeInUp as any} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 {language === 'nl' ? 'Waarom kiezen voor Workflo?' : 'Why choose Workflo?'}
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              <motion.p variants={fadeInUp as any} className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 {language === 'nl' 
                   ? 'Ontdek waarom 50+ bedrijven in Amsterdam en omgeving hun IT aan ons toevertrouwen'
                   : 'Discover why 50+ businesses in Amsterdam and surroundings trust us with their IT'
@@ -337,14 +337,14 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="grid md:grid-cols-2 gap-8"
             >
               {whyChooseData.map((item, index) => {
                 const IconComponent = item.icon
                 
                 return (
-                  <motion.div key={index} variants={fadeInUp}>
+                  <motion.div key={index} variants={fadeInUp as any}>
                     <Card className="bg-card shadow-lg border border-border hover:border-workflo-yellow/50 hover:shadow-xl transition-all duration-300 p-6 h-full group">
                       <div className="flex items-start gap-4">
                         <div className="w-12 h-12 bg-workflo-yellow/10 rounded-lg flex items-center justify-center group-hover:bg-workflo-yellow/20 transition-colors duration-300 flex-shrink-0">
@@ -376,13 +376,13 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="text-center mb-16"
             >
-              <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              <motion.h2 variants={fadeInUp as any} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 {language === 'nl' ? 'Onze Reis' : 'Our Journey'}
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <motion.p variants={fadeInUp as any} className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 {language === 'nl' 
                   ? 'Van startup tot vertrouwde IT-partner: onze groei in cijfers'
                   : 'From startup to trusted IT partner: our growth in numbers'
@@ -394,7 +394,7 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="relative"
             >
               {/* Timeline line */}
@@ -404,7 +404,7 @@ export default function AboutPage() {
                 {aboutPageData.timeline.map((item, index) => (
                   <motion.div 
                     key={item.year}
-                    variants={fadeInUp}
+                    variants={fadeInUp as any}
                     className={`relative flex items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                   >
                     {/* Timeline dot */}
@@ -437,13 +437,13 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="text-center mb-16"
             >
-              <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              <motion.h2 variants={fadeInUp as any} className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 {language === 'nl' ? 'Ons Team' : 'Our Team'}
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <motion.p variants={fadeInUp as any} className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 {language === 'nl' 
                   ? 'Ontmoet de experts die jouw IT-uitdagingen oplossen met persoonlijke aandacht en jarenlange ervaring'
                   : 'Meet the experts who solve your IT challenges with personal attention and years of experience'
@@ -455,11 +455,11 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="grid md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12"
             >
               {aboutPageData.team.map((member, index) => (
-                <motion.div key={member.id} variants={fadeInUp}>
+                <motion.div key={member.id} variants={fadeInUp as any}>
                   <Card className="bg-card shadow-lg border border-border hover:border-workflo-yellow/50 hover:shadow-xl transition-all duration-300 group h-full">
                     <CardHeader className="pb-8 px-8 pt-8">
                       <div className="relative w-40 h-40 mx-auto mb-8 group-hover:scale-105 transition-transform duration-300">
@@ -522,15 +522,15 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
             >
-              <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-bold mb-8">
+              <motion.h2 variants={fadeInUp as any} className="text-3xl lg:text-4xl font-bold mb-8">
                 {language === 'nl' ? 'Onze Missie' : 'Our Mission'}
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-xl lg:text-2xl leading-relaxed mb-12 font-medium">
+              <motion.p variants={fadeInUp as any} className="text-xl lg:text-2xl leading-relaxed mb-12 font-medium">
                 {language === 'nl' ? companyInfo.missionNL : companyInfo.mission}
               </motion.p>
-              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.div variants={fadeInUp as any} className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" variant="secondary" asChild className="bg-black hover:bg-black/90 text-white">
                   <Link href="/contact">
                     {language === 'nl' ? 'Neem contact op' : 'Get in touch'}
@@ -557,10 +557,10 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+              variants={staggerContainer as any}
               className="grid lg:grid-cols-2 gap-16 items-center"
             >
-              <motion.div variants={fadeInUp}>
+              <motion.div variants={fadeInUp as any}>
                 <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
                   {language === 'nl' ? 'Amsterdam is onze thuis' : 'Amsterdam is our home'}
                 </h2>
@@ -595,7 +595,7 @@ export default function AboutPage() {
                 </div>
               </motion.div>
               
-              <motion.div variants={fadeInUp}>
+              <motion.div variants={fadeInUp as any}>
                 <Card className="bg-card shadow-2xl border border-workflo-yellow/20 p-8 hover:shadow-3xl transition-shadow duration-300">
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">

@@ -74,7 +74,7 @@ export async function getEmbedding(text: string): Promise<number[]> {
       model: AI_CONFIG.openai.embeddingModel,
       input: text,
     });
-    return response.data[0].embedding;
+    return response.data[0]?.embedding || [];
   } catch (error) {
     console.error('Error generating embedding:', error);
     throw error;
@@ -93,7 +93,7 @@ export async function getChatCompletion(
       temperature: options?.temperature || AI_CONFIG.openai.temperature,
       max_tokens: options?.maxTokens || AI_CONFIG.openai.maxTokens,
     });
-    return response.choices[0].message.content || '';
+    return response.choices[0]?.message?.content || '';
   } catch (error) {
     console.error('Error getting chat completion:', error);
     throw error;

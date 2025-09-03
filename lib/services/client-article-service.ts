@@ -37,7 +37,7 @@ export class ClientArticleService {
       id: 'local_' + Math.random().toString(36).substr(2, 9),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      published_at: article.published ? new Date().toISOString() : undefined
+      published_at: article.published ? new Date().toISOString() : null
     }
     
     articles.unshift(newArticle)
@@ -55,18 +55,21 @@ export class ClientArticleService {
     
     if (index === -1) return null
     
+    const existingArticle = articles[index]
+    if (!existingArticle) return null
+    
     const updatedArticle = {
-      ...articles[index],
+      ...existingArticle,
       ...updates,
-      id: articles[index].id,
-      created_at: articles[index].created_at,
+      id: existingArticle.id,
+      created_at: existingArticle.created_at,
       updated_at: new Date().toISOString()
     }
     
-    if (updates.published && !articles[index].published) {
+    if (updates.published && !existingArticle.published) {
       updatedArticle.published_at = new Date().toISOString()
     } else if (updates.published === false) {
-      updatedArticle.published_at = undefined
+      updatedArticle.published_at = null
     }
     
     articles[index] = updatedArticle

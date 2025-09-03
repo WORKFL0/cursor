@@ -330,7 +330,7 @@ export function generatePageMetadata(
       creator: '@workflo_it',
       site: '@workflo_it'
     },
-    robots: siteMetadata.robots,
+    robots: siteMetadata.robots as any,
     authors: siteMetadata.authors,
     category: 'Technology'
   }

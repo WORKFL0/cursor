@@ -153,7 +153,7 @@ COMMENT ON FUNCTION update_updated_at_column() IS 'Function to automatically upd
     const content = fs.readFileSync(filePath, 'utf-8')
     
     // Extract version from filename (e.g., "001_initial_setup.sql" -> "001")
-    const version = file.split('_')[0]
+    const version = file.split('_')[0] || '000'
     const name = file.replace('.sql', '').replace(/^\d+_/, '')
 
     migrations.push({
@@ -242,7 +242,7 @@ async function createNewMigration(name: string) {
     .sort()
 
   const lastVersion = files.length > 0 
-    ? parseInt(files[files.length - 1].split('_')[0])
+    ? parseInt(files[files.length - 1]?.split('_')[0] || '0')
     : 0
 
   const newVersion = (lastVersion + 1).toString().padStart(3, '0')

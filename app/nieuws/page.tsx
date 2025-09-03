@@ -182,7 +182,7 @@ export default function NewsPage() {
             }))
             
             const allArticles = [...convertedArticles, ...staticNewsArticles]
-            setNewsArticles(allArticles)
+            setNewsArticles(allArticles as any)
             setCmsArticles(storedArticles.articles as any)
           }
         } catch (storageError) {

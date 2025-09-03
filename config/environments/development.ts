@@ -5,8 +5,8 @@ export const developmentConfig = {
   // Application
   app: {
     name: 'Workflo New Project',
-    version: '1.0.0',
-    environment: 'development',
+    version: process.env.npm_package_version || '1.0.0',
+    environment: 'development' as const,
     url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
     port: 3000,
   },
@@ -59,6 +59,13 @@ export const developmentConfig = {
     encryption: {
       algorithm: 'aes-256-gcm',
       keyLength: 32,
+    },
+    headers: {
+      hsts: false,
+      csp: false,
+      xssProtection: false,
+      noSniff: false,
+      referrerPolicy: 'origin-when-cross-origin',
     },
   },
 

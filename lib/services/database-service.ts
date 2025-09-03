@@ -245,7 +245,7 @@ class DatabaseService {
       return { data: [], error: errorMessage }
       }
 
-      return { data: data || [], count }
+      return { data: data || [], count: count ?? undefined }
     } catch (error: unknown) {
       console.error('Database error in getArticles:', error)
       const errorMessage = error instanceof Error ? error.message : 'Database not configured'
@@ -357,7 +357,7 @@ class DatabaseService {
       // Update published_date if publishing for the first time
       const currentArticle = await this.getArticleById(id)
       if (currentArticle.data && updates.published && !currentArticle.data.published) {
-        updates.published_date = new Date().toISOString()
+        (updates as any).published_date = new Date().toISOString()
       }
 
       // Recalculate reading time if content changed

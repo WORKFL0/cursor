@@ -369,7 +369,16 @@ export const calculateResultFromAnswers = (answers: number[]): QuestionnaireResu
   const detailedAnswers: DetailedAnswer[] = answers.map((answerValue, index) => ({
     questionId: index + 1, // Simple mapping
     answerValue,
-    question: questions[index] || questions[0] // Fallback
+    question: questions[index] || questions[0] || { // Fallback
+      id: 0,
+      question: "Unknown question",
+      questionEN: "Unknown question",
+      options: ["1", "2", "3", "4", "5"],
+      optionsEN: ["1", "2", "3", "4", "5"],
+      next: [],
+      type: ["neutral"],
+      category: "quality"
+    }
   }))
   return calculateResult(detailedAnswers)
 }

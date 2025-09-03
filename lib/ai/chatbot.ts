@@ -167,7 +167,7 @@ export class WorkBot {
     ];
     
     return {
-      message: greetings[Math.floor(Math.random() * greetings.length)],
+      message: greetings[Math.floor(Math.random() * greetings.length)] || greetings[0] || "Hallo! Hoe kan ik je helpen?",
       suggestedActions: [
         "Vertel over jullie diensten",
         "Ik heb IT ondersteuning nodig",

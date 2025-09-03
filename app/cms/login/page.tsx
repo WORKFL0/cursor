@@ -10,7 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Lock, User, AlertCircle } from 'lucide-react'
 
 export default function CMSLoginPage() {
-  const router = useRouter()
+  const _router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')

@@ -261,9 +261,9 @@ export class RecommendationEngine {
         
         if (validEmbeddings.length > 0) {
           // Calculate average embedding
-          const avgEmbedding = validEmbeddings[0].map((_, i) =>
-            validEmbeddings.reduce((sum, emb) => sum + emb[i], 0) / validEmbeddings.length
-          );
+          const avgEmbedding = validEmbeddings[0]?.map((_, i) =>
+            validEmbeddings.reduce((sum, emb) => sum + (emb[i] || 0), 0) / validEmbeddings.length
+          ) || [];
           
           // Query similar content
           const index = pinecone.index(AI_CONFIG.vectorDB.indexName);
@@ -277,7 +277,7 @@ export class RecommendationEngine {
           const viewedIds = new Set(profile.viewedContent.map(v => v.contentId));
           
           results.matches
-            .filter(match => !viewedIds.has(match.id) && match.score >= AI_CONFIG.recommendations.similarityThreshold)
+            .filter(match => !viewedIds.has(match.id) && (match.score || 0) >= AI_CONFIG.recommendations.similarityThreshold)
             .forEach(match => {
               recommendations.push({
                 id: match.id,

@@ -84,9 +84,9 @@ export function useLocalizedContent() {
     key: string
   ): string => {
     if (language === 'nl') {
-      return obj[`${key}NL`] || obj[key] || ''
+      return String(obj[`${key}NL`] || obj[key] || '')
     }
-    return obj[key] || obj[`${key}NL`] || ''
+    return String(obj[key] || obj[`${key}NL`] || '')
   }
 
   const getLocalizedArray = <T extends Record<string, unknown>>(
@@ -94,9 +94,9 @@ export function useLocalizedContent() {
     key: string
   ): string[] => {
     if (language === 'nl') {
-      return obj[`${key}NL`] || obj[key] || []
+      return (obj[`${key}NL`] as string[]) || (obj[key] as string[]) || []
     }
-    return obj[key] || obj[`${key}NL`] || []
+    return (obj[key] as string[]) || (obj[`${key}NL`] as string[]) || []
   }
 
   return {

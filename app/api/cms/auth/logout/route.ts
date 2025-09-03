@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { CMSAuthService } from '@/lib/auth/cms-auth'
 import { cookies } from 'next/headers'
 

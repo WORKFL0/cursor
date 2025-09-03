@@ -638,8 +638,20 @@ export const contactPageData: ContactPageData = {
     supportNL: '24/7 Support voor contractklanten'
   },
   forms: {
-    contact: hubspotForms.contact,
-    newsletter: hubspotForms.newsletter
+    contact: hubspotForms.contact || {
+      region: 'eu1',
+      portalId: '139506119',
+      formId: 'contact-form',
+      name: 'Contact Form',
+      purpose: 'Contact form for inquiries'
+    },
+    newsletter: hubspotForms.newsletter || {
+      region: 'eu1', 
+      portalId: '139506119',
+      formId: 'newsletter-form',
+      name: 'Newsletter Form',
+      purpose: 'Newsletter signup form'
+    }
   }
 }
 

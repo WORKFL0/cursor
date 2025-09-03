@@ -35,7 +35,7 @@ interface HealthCheckResult {
 }
 
 // Simple health check for load balancers and monitoring systems
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   const startTime = Date.now()
   
   try {
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
     else if (memoryUsedMB > 256) memoryStatus = 'warn'
     
     // Check disk space (simplified - in production use proper disk check)
-    const diskStatus: 'pass' | 'warn' | 'fail' = 'pass' // Placeholder
+    let diskStatus: 'pass' | 'warn' | 'fail' = 'pass' // Placeholder
     
     const responseTime = Date.now() - startTime
     
@@ -86,9 +86,9 @@ export async function GET(request: NextRequest) {
     // Determine overall status
     let overallStatus: 'healthy' | 'degraded' | 'unhealthy'
     
-    if (databaseStatus === 'fail' || memoryStatus === 'fail' || diskStatus === 'fail') {
+    if (databaseStatus === 'fail' || memoryStatus === 'fail' || (diskStatus as any) === 'fail') {
       overallStatus = 'unhealthy'
-    } else if (memoryStatus === 'warn' || diskStatus === 'warn' || responseTime > 1000) {
+    } else if (memoryStatus === 'warn' || (diskStatus as any) === 'warn' || responseTime > 1000) {
       overallStatus = 'degraded'
     } else {
       overallStatus = 'healthy'
@@ -96,7 +96,6 @@ export async function GET(request: NextRequest) {
     
     // Consider monitoring health checks in overall status
     const unhealthyChecks = healthChecks.filter(check => check.status === 'unhealthy')
-    const degradedChecks = healthChecks.filter(check => check.status === 'degraded')
     
     if (unhealthyChecks.length > 0 && overallStatus === 'healthy') {
       overallStatus = 'degraded'
@@ -108,15 +107,15 @@ export async function GET(request: NextRequest) {
       version: process.env.npm_package_version || '1.0.0',
       uptime: process.uptime(),
       checks: {
-        database: databaseStatus,
-        memory: memoryStatus,
-        disk: diskStatus,
+        database: databaseStatus as any,
+        memory: memoryStatus as any,
+        disk: diskStatus as any,
         responseTime
       },
       environment: process.env.NODE_ENV || 'development',
       monitoring: {
-        metrics: monitoringMetrics,
-        healthChecks: healthChecks
+        metrics: monitoringMetrics as any,
+        healthChecks: healthChecks as any
       }
     }
     

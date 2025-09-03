@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-// import { withSentryConfig } from "@sentry/nextjs"; // Commented out - needs npm install
+import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   // Removed turbopack config for better Vercel compatibility
@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
     dirs: ['app', 'components', 'lib', 'src'],
   },
   typescript: {
-    ignoreBuildErrors: true, // Allow build to succeed with TypeScript errors for Vercel
+    ignoreBuildErrors: false, // Enable TypeScript checking during build
   },
   
   // Fix workspace root warning
@@ -103,9 +103,7 @@ const sentryWebpackPluginOptions = {
   automaticVercelMonitors: true,
 };
 
-// Temporarily disabled Sentry until dependency is installed
-// export default process.env.NODE_ENV === 'production' 
-//   ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
-//   : nextConfig;
-
-export default nextConfig;
+// Enable Sentry in production
+export default process.env.SENTRY_DSN && process.env.NODE_ENV === 'production'
+  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  : nextConfig;

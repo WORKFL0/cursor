@@ -20,7 +20,7 @@ export async function GET() {
 
   try {
     // Test the connection with a simple query
-    const { data, error } = await supabase
+    const { data: _data, error } = await supabase
       .from('articles')
       .select('count')
       .limit(1)

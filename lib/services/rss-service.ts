@@ -223,7 +223,7 @@ class RSSService {
           'Phishing campagne richt zich op MKB bedrijven',
           'Zero-day exploit gepatch door Microsoft'
         ]
-        title = securityTopics[Math.floor(Math.random() * securityTopics.length)]
+        title = securityTopics[Math.floor(Math.random() * securityTopics.length)] || securityTopics[0] || 'Beveiligingsupdate'
         description = `Beveiligingsupdate van ${feed.name}: ${title.toLowerCase()}. Lees meer over de details en beschermingsmaatregelen.`
       } else {
         const techTopics = [
@@ -233,7 +233,7 @@ class RSSService {
           'Beste practices voor remote work IT',
           'Duurzame IT oplossingen winnen aan populariteit'
         ]
-        title = techTopics[Math.floor(Math.random() * techTopics.length)]
+        title = techTopics[Math.floor(Math.random() * techTopics.length)] || techTopics[0] || 'Technologie update'
         description = `Technologie update van ${feed.name}: ${title.toLowerCase()}. Ontdek de laatste ontwikkelingen.`
       }
 
@@ -367,7 +367,7 @@ class RSSService {
       return false
     }
 
-    this.config.feeds[feedIndex] = { ...this.config.feeds[feedIndex], ...updates }
+    this.config.feeds[feedIndex] = { ...this.config.feeds[feedIndex], ...updates } as any
     
     // Clear cache for this feed to force refresh
     this.cache.delete(feedUrl)

@@ -32,7 +32,7 @@ export function Header() {
   const pathname = usePathname()
 
   const getNavTitle = (item: typeof navigation[0]) => {
-    return getLocalizedValue(item, 'title')
+    return getLocalizedValue(item as any, 'title')
   }
 
   const isActivePage = (href: string) => {
@@ -181,11 +181,11 @@ export function Header() {
                                       className="block select-none space-y-1 rounded-lg p-3 leading-none no-underline outline-none transition-colors hover:bg-muted/50 hover:text-primary focus:bg-muted/50 focus:text-primary"
                                     >
                                       <div className="text-sm font-medium leading-none">
-                                        {getLocalizedValue(child, 'title')}
+                                        {getLocalizedValue(child as any, 'title')}
                                       </div>
                                       {child.description && (
                                         <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
-                                          {getLocalizedValue(child, 'description')}
+                                          {getLocalizedValue(child as any, 'description')}
                                         </p>
                                       )}
                                     </Link>
@@ -395,7 +395,7 @@ export function Header() {
                                   }`}
                                   onClick={() => setMobileMenuOpen(false)}
                                 >
-                                  {getLocalizedValue(child, 'title')}
+                                  {getLocalizedValue(child as any, 'title')}
                                 </Link>
                               ))}
                             </div>

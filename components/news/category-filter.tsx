@@ -44,7 +44,7 @@ export function CategoryFilter({ selectedCategory, onCategoryChange }: CategoryF
 
       {/* Category Filters */}
       {newsCategories.map((category, index) => {
-        const categoryName = getLocalizedValue(category, 'name')
+        const categoryName = getLocalizedValue(category as any, 'name')
         const articleCount = getArticlesByCategory(category.id).length
         const isSelected = selectedCategory === category.id
 

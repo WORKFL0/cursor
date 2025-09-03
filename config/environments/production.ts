@@ -6,7 +6,7 @@ export const productionConfig = {
   app: {
     name: 'Workflo New Project',
     version: process.env.npm_package_version || '1.0.0',
-    environment: 'production',
+    environment: 'production' as const,
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://workflo-new-project.vercel.app',
     port: 3000,
   },

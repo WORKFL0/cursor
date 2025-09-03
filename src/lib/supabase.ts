@@ -48,7 +48,13 @@ export const getSupabaseConnectionString = (): string | null => {
   
   try {
     // Extract the project reference from the Supabase URL
-    const projectRef = url.split('//')[1].split('.')[0]
+    const urlParts = url.split('//')
+    if (!urlParts[1]) throw new Error('Invalid Supabase URL format')
+    
+    const hostParts = urlParts[1].split('.')
+    if (!hostParts[0]) throw new Error('Invalid Supabase URL format')
+    
+    const projectRef = hostParts[0]
     
     // Return the PostgreSQL connection string for Payload CMS
     return `postgresql://postgres:${password}@db.${projectRef}.supabase.co:5432/postgres?sslmode=require`

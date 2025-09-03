@@ -57,7 +57,15 @@ class Analytics {
    * Track form submission
    */
   trackFormSubmit(formName: string, formType: 'contact' | 'newsletter' | 'quote' | 'demo' | 'appointment'): void {
-    const value = conversionValues[`${formType}FormSubmit`] || conversionValues.contactFormSubmit
+    const typeMap: Record<string, keyof typeof conversionValues> = {
+      'contact': 'contactFormSubmit',
+      'newsletter': 'newsletterSignup', 
+      'quote': 'quoteRequested',
+      'demo': 'demoScheduled',
+      'appointment': 'appointmentBooked'
+    }
+    const mappedType = typeMap[formType] || 'contactFormSubmit'
+    const value = conversionValues[mappedType] || conversionValues.contactFormSubmit
 
     // GA4
     ga4Tracker.trackFormSubmit(formName, { form_type: formType, value })
@@ -113,7 +121,7 @@ class Analytics {
    * Track service page view
    */
   trackServicePageView(serviceName: string): void {
-    const serviceLabel = servicePages[serviceName] || serviceName
+    const serviceLabel = servicePages[serviceName as keyof typeof servicePages] || serviceName
 
     this.event(analyticsEvents.servicePageView, {
       service_name: serviceLabel,
