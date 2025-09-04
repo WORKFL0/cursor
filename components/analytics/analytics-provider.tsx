@@ -53,18 +53,14 @@ function AnalyticsTracker() {
 
     // Set up error tracking
     const handleError = (event: ErrorEvent) => {
-      analytics.trackError(new Error(event.message), {
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno,
-        url: window.location.href,
-      })
+      const errorContext = `${event.filename}:${event.lineno}:${event.colno}`
+      analytics.trackError(new Error(event.message), errorContext)
     }
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       analytics.trackError(
         event.reason instanceof Error ? event.reason : new Error(String(event.reason)),
-        { type: 'unhandled_promise_rejection' }
+        'unhandled_promise_rejection'
       )
     }
 

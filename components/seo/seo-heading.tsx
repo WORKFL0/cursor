@@ -242,7 +242,7 @@ export function useHeadingHierarchy() {
         const current = hierarchy[i]
         const previous = hierarchy[i - 1]
         
-        if (current - previous > 1) {
+        if (current && current - previous > 1) {
           console.warn(`SEO Warning: Heading hierarchy violation detected. H${previous} followed by H${current}. Consider using H${previous + 1} instead.`)
         }
       }

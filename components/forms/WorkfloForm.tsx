@@ -193,8 +193,8 @@ export function WorkfloForm({
 
       // Sanitize text inputs
       Object.keys(submissionData).forEach(key => {
-        if (typeof submissionData[key] === 'string') {
-          submissionData[key] = FormUtils.sanitizeInput(submissionData[key])
+        if (typeof (submissionData as any)[key] === 'string') {
+          (submissionData as any)[key] = FormUtils.sanitizeInput((submissionData as any)[key])
         }
       })
 
@@ -235,7 +235,7 @@ export function WorkfloForm({
         success: true,
         hubspotIntegrated: result.details?.hubspotSubmitted || result.details?.hubspotIntegrated,
         fallbackUsed: result.details?.fallbackUsed,
-        services: submissionData.services,
+        services: (submissionData as any).services,
         timestamp: submissionData.timestamp
       })
 
@@ -293,7 +293,7 @@ export function WorkfloForm({
               placeholder={field.placeholder}
               className={`${hasError ? 'border-red-500 focus:border-red-500' : ''} ${hasWarning ? 'border-yellow-500' : ''}`}
               maxLength={field.maxLength}
-              aria-invalid={hasError}
+              aria-invalid={hasError ? 'true' : undefined}
               aria-describedby={hasError ? `${fieldId}-error` : hasWarning ? `${fieldId}-warning` : undefined}
             />
             {field.description && (
@@ -347,7 +347,7 @@ export function WorkfloForm({
               placeholder={field.placeholder}
               className={`min-h-[120px] ${hasError ? 'border-red-500 focus:border-red-500' : ''} ${hasWarning ? 'border-yellow-500' : ''}`}
               maxLength={field.maxLength}
-              aria-invalid={hasError}
+              aria-invalid={hasError ? 'true' : undefined}
             />
             <div className="flex justify-between items-center">
               <div>
@@ -487,6 +487,7 @@ export function WorkfloForm({
 
       return () => clearTimeout(timer)
     }
+    return undefined
   }, [submission.isSuccess])
 
   return (
