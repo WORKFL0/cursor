@@ -39,8 +39,8 @@ export function SEOPage({
     '@type': schema.pageType || 'WebPage',
     '@id': `${siteConfig.url}${pathname}#webpage`,
     url: `${siteConfig.url}${pathname}`,
-    name: document.title,
-    description: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
+    name: 'Workflo IT Services',
+    description: siteConfig.description,
     isPartOf: {
       '@id': `${siteConfig.url}/#website`
     },

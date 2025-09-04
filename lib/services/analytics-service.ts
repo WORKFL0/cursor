@@ -287,7 +287,7 @@ class AnalyticsService {
       })
 
       input.addEventListener('blur', () => {
-        if (input.value) {
+        if ((input as HTMLInputElement).value) {
           this.trackFormEngagement(formType, 'field_completed', fieldName)
         }
       })
@@ -297,7 +297,7 @@ class AnalyticsService {
     const handleUnload = () => {
       const timeSpent = Date.now() - startTime
       const totalFields = inputs.length
-      const completedFields = Array.from(inputs).filter(input => input.value).length
+      const completedFields = Array.from(inputs).filter(input => (input as HTMLInputElement).value).length
       const completionPercentage = totalFields > 0 ? (completedFields / totalFields) * 100 : 0
 
       if (completionPercentage > 0 && completionPercentage < 100) {

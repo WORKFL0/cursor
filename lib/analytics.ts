@@ -26,12 +26,12 @@ export interface ConversionEvent {
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void
-    clarity: (...args: any[]) => void
-    hj: (...args: any[]) => void
-    fbq: (...args: any[]) => void
-    lintrk: (...args: any[]) => void
-    dataLayer: any[]
+    gtag?: (...args: any[]) => void
+    clarity?: (...args: any[]) => void
+    hj?: (...args: any[]) => void
+    fbq?: (...args: any[]) => void
+    lintrk?: (...args: any[]) => void
+    dataLayer?: any[]
   }
 }
 
@@ -120,7 +120,7 @@ class Analytics {
     // Initialize gtag
     window.dataLayer = window.dataLayer || []
     window.gtag = function() {
-      window.dataLayer.push(arguments)
+      window.dataLayer!.push(arguments)
     }
 
     window.gtag('js', new Date())

@@ -1,7 +1,7 @@
 import { siteConfig, companyInfo, serviceCategories } from '@/lib/data/workflo-data'
 
 export interface StructuredDataConfig {
-  type: 'organization' | 'website' | 'article' | 'service' | 'faq' | 'breadcrumb' | 'local-business'
+  type: 'organization' | 'website' | 'webpage' | 'article' | 'service' | 'faq' | 'breadcrumb' | 'local-business'
   data: any
 }
 

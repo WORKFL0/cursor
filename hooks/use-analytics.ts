@@ -4,7 +4,7 @@
  */
 
 import { useCallback } from 'react'
-import { analytics, analyticsEvents } from '@/lib/analytics'
+import { analytics } from '@/lib/analytics'
 
 interface AnalyticsEventParameters {
   [key: string]: string | number | boolean | null | undefined
@@ -34,56 +34,83 @@ export function useAnalytics() {
    * Track newsletter signup
    */
   const trackNewsletterSignup = useCallback((email: string) => {
-    analytics.trackNewsletterSignup(email)
+    analytics.trackConversion({
+      event_name: 'newsletter_signup',
+      value: 0
+    })
   }, [])
 
   /**
    * Track appointment booking
    */
   const trackAppointmentBooked = useCallback((serviceName: string, date: string) => {
-    analytics.trackAppointmentBooked(serviceName, date)
+    analytics.trackConversion({
+      event_name: 'appointment_booked',
+      value: 0
+    })
   }, [])
 
   /**
    * Track service page view
    */
   const trackServicePageView = useCallback((serviceName: string) => {
-    analytics.trackServicePageView(serviceName)
+    analytics.trackEvent({
+      category: 'Service',
+      action: 'view',
+      label: serviceName,
+      value: 0
+    })
   }, [])
 
   /**
    * Track download
    */
   const trackDownload = useCallback((fileName: string, fileType: string) => {
-    analytics.trackDownload(fileName, fileType)
+    analytics.trackEvent({
+      category: 'Download',
+      action: 'file_download',
+      label: fileName,
+      value: 0
+    })
   }, [])
 
   /**
    * Track pricing calculator usage
    */
   const trackPricingCalculator = useCallback((services: string[], totalPrice: number) => {
-    analytics.trackPricingCalculator(services, totalPrice)
+    analytics.trackEvent({
+      category: 'Calculator',
+      action: 'pricing_calculated',
+      label: services.join(', '),
+      value: totalPrice
+    })
   }, [])
 
   /**
    * Track custom event
    */
   const trackEvent = useCallback((eventName: string, parameters?: AnalyticsEventParameters) => {
-    analytics.event(eventName, parameters)
+    analytics.trackEvent({
+      category: 'Custom',
+      action: eventName,
+      label: parameters ? JSON.stringify(parameters) : '',
+      value: 0
+    })
   }, [])
 
   /**
    * Track error
    */
   const trackError = useCallback((errorType: string, errorMessage: string, fatal = false) => {
-    analytics.trackError(errorType, errorMessage, fatal)
+    analytics.trackError(new Error(errorMessage), errorType)
   }, [])
 
   /**
-   * Identify user
+   * Identify user (placeholder - not implemented in analytics)
    */
   const identify = useCallback((userId: string, traits?: UserTraits) => {
-    analytics.identify(userId, traits)
+    // User identification not yet implemented in analytics
+    console.log('User identification:', userId, traits)
   }, [])
 
   return {
@@ -96,6 +123,5 @@ export function useAnalytics() {
     trackEvent,
     trackError,
     identify,
-    events: analyticsEvents,
   }
 }

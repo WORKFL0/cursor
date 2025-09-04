@@ -56,30 +56,8 @@ export const initSentry = () => {
     // Additional configuration
     debug: process.env.NODE_ENV === 'development',
     integrations: [
-      new Sentry.BrowserTracing({
-        // Set up automatic route change tracking for Next.js
-        routingInstrumentation: Sentry.nextRouterInstrumentation,
-        
-        // Capture interactions like clicks, form submissions
-        idleTimeout: 5000,
-        
-        // Trace specific operations
-        tracePropagationTargets: [
-          'localhost',
-          /^\//,
-          /^https:\/\/workflo\.nl/,
-          /^https:\/\/.*\.vercel\.app/,
-        ],
-      }),
-      new Sentry.Replay({
-        // Mask all text content and inputs
-        maskAllText: true,
-        maskAllInputs: true,
-        
-        // Block specific elements
-        blockAllMedia: true,
-        blockSelector: '.sensitive-data, .privacy-sensitive',
-      }),
+      // TODO: Update Sentry integrations for newer SDK version
+      // BrowserTracing and Replay are not available in the current version
     ],
     
     // Set user context
