@@ -290,7 +290,7 @@ export const PUT = async (req: NextRequest, { params }: RouteParams) => {
         article: updatedArticle, 
         changes: updateData,
         updated_by: user?.username 
-      }
+      })
     } catch (webhookError) {
       console.error('Webhook trigger failed:', webhookError)
     }
@@ -390,7 +390,7 @@ export const DELETE = async (req: NextRequest, { params }: RouteParams) => {
       await triggerWebhook('article.deleted', { 
         article: existingArticle, 
         deleted_by: user?.username 
-      }
+      })
     } catch (webhookError) {
       console.error('Webhook trigger failed:', webhookError)
     }
@@ -446,7 +446,7 @@ async function triggerWebhook(event: string, data: any) {
             data
           },
           status: 'pending'
-        }
+        })
     } catch (error) {
       console.error(`Failed to queue webhook for ${webhook.name}:`, error)
     }
