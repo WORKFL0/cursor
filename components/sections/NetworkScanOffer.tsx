@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
@@ -16,6 +16,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '@/lib/contexts/language-context'
 
 export default function NetworkScanOffer() {
@@ -75,10 +76,14 @@ export default function NetworkScanOffer() {
     <section className="relative py-20 bg-gradient-to-br from-primary/5 via-background to-primary/5">
       {/* LinkedIn Header Banner Background */}
       <div className="absolute top-0 left-0 right-0 h-40 overflow-hidden opacity-10">
-        <img 
+        <Image 
           src="/images/workflo-linkedin-header.jpg"
-          alt=""
-          className="w-full h-full object-cover object-center"
+          alt="Workflo LinkedIn header background"
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+          priority={false}
+          quality={75}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" />
       </div>

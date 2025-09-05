@@ -14,7 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from '@/lib/framer-motion'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { faqData } from '@/lib/data/workflo-data'
 

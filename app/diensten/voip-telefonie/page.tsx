@@ -1,7 +1,7 @@
 'use client'
 
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import Link from 'next/link'
 import { Phone, Smartphone, Headphones, MessageSquare, BarChart3, Globe, ArrowRight, CheckCircle, Users, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'

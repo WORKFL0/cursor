@@ -1,136 +1,153 @@
-# Workflo Website Deployment Guide
+# Deployment Guide for Workflo IT Services Platform
 
-## 🚀 Deployment Overview
+## Deployment Options
 
-This guide covers the complete deployment process for the Workflo IT Services website, focusing on Vercel and Supabase configurations.
+### 1. Vercel Deployment (Recommended)
 
-## 📋 Prerequisites
-
-- GitHub repository with the latest code
+#### Prerequisites
+- GitHub account
 - Vercel account
-- Supabase account
-- Payload CMS account
-- Domain registered and configured
+- Project repository on GitHub
 
-## 🔧 Environment Setup
+#### Steps
+1. **Connect Repository**
+   - Log in to Vercel
+   - Click "New Project"
+   - Import your GitHub repository
 
-### 1. Supabase Database Configuration
-
-1. Create a new Supabase project
-2. Copy the database connection string
-3. Set the following environment variables:
-   ```
-   DATABASE_URL="postgresql://username:password@supabase-project.supabase.co:5432/postgres"
-   ```
-
-### 2. Payload CMS Setup
-
-1. Configure Payload CMS settings
-2. Generate a secure secret for authentication
-3. Set environment variables:
-   ```
-   PAYLOAD_SECRET="your-secure-payload-secret"
-   ```
-
-### 3. Authentication Configuration
-
-1. Generate a secure NextAuth secret
-2. Add to environment variables:
-   ```
-   NEXTAUTH_SECRET="your-nextauth-secret"
-   ```
-
-### 4. Analytics and Tracking
-
-Configure tracking IDs:
-```
-NEXT_PUBLIC_GOOGLE_ANALYTICS_ID="G-XXXXXXXXXX"
-NEXT_PUBLIC_MICROSOFT_CLARITY_ID="xxxxxxxxx"
-NEXT_PUBLIC_HOTJAR_ID="xxxxxxxxx"
-```
-
-## 🌐 Vercel Deployment
-
-### Manual Deployment Steps
-
-1. Push latest code to GitHub
-2. Connect Vercel to your GitHub repository
-3. Configure project settings:
+2. **Configure Project**
+   - Select `new-project` as the root directory
    - Framework Preset: Next.js
-   - Build Command: `npm run build`
-   - Output Directory: `.next`
-   - Install Command: `npm install`
+   - Node.js version: 20.x
 
-### Environment Variable Configuration
-
-In Vercel Dashboard:
-1. Go to Project Settings
-2. Navigate to "Environment Variables"
-3. Add all variables from `.env.example`
-   - Mark sensitive variables as "Encrypted"
-   - Add both Production and Preview environments
-
-### Domain Configuration
-
-1. Purchase or configure domain (workflo.it)
-2. In Vercel, go to Project Settings > Domains
-3. Add primary and www subdomain
-4. Configure DNS settings with your domain registrar:
-   - CNAME: www → cname.vercel-dns.com
-   - ALIAS/ANAME: @ → alias.zeit.world
-
-## 🔒 SSL/TLS Configuration
-
-Vercel automatically provisions SSL certificates via Let's Encrypt.
-
-## 🚦 Deployment Workflow
-
-### Continuous Deployment
-
-- Main branch auto-deploys to production
-- Feature branches create preview deployments
-
-### Deployment Checks
-
-1. Run pre-deployment checks:
-   ```bash
-   npm run typecheck
-   npm run lint
-   npm run build
+3. **Environment Variables**
+   Configure the following environment variables in Vercel:
+   ```
+   DATABASE_URL=your_postgres_connection_string
+   NEXTAUTH_SECRET=generate_a_secure_random_secret
+   NEXTAUTH_URL=https://your-production-domain.com
+   ANTHROPIC_API_KEY=your_anthropic_key
+   OPENAI_API_KEY=your_openai_key
+   ANALYTICS_ID=your_google_analytics_id
    ```
 
-2. Verify Vercel deployment:
-   - Check build logs
-   - Test all pages
-   - Validate environment variables
+4. **Deploy**
+   - Vercel will automatically deploy on push to main branch
+   - Each PR gets a preview deployment
 
-## 🛠️ Troubleshooting
+### 2. Docker Deployment
 
-### Common Issues
+#### Requirements
+- Docker installed
+- Docker Compose (optional but recommended)
 
-- **Database Connection**: Verify Supabase connection string
-- **Authentication Failures**: Check NextAuth and Payload secrets
-- **Missing Environment Variables**: Ensure all variables are set
-- **Build Errors**: Review build logs, check dependencies
+#### Deployment Steps
+1. **Environment Configuration**
+   ```bash
+   # Copy environment template
+   cp .env.example .env
+   
+   # Edit .env with production values
+   vim .env
+   ```
 
-### Rollback Procedure
+2. **Docker Image**
+   ```bash
+   # Building the image
+   docker build -t workflo-nextjs .
 
-1. In Vercel Dashboard, select previous deployment
-2. Click "Promote to Current Deployment"
+   # Running the container
+   docker run -p 3000:3000 \
+     -e DATABASE_URL=postgres://... \
+     -e NEXTAUTH_SECRET=... \
+     workflo-nextjs
+   ```
 
-## 📊 Monitoring
+3. **Docker Compose**
+   Use `docker-compose.yml` for multi-container setup:
+   ```bash
+   docker-compose up -d
+   ```
 
-- Use Vercel Analytics
-- Set up Microsoft Clarity
-- Configure Google Analytics
-- Monitor Supabase database performance
+### 3. Supabase Database Deployment
 
-## 🆘 Support
+1. **Create Supabase Project**
+   - Go to Supabase Dashboard
+   - Create a new project
+   - Copy connection string
 
-- **Support Email**: tech@workflo.it
-- **Staging Environment**: localhost:3000
-- **Production URL**: https://workflo.it
+2. **Database Migration**
+   ```bash
+   npx prisma db push
+   npx prisma migrate deploy
+   ```
+
+### Continuous Integration
+
+#### GitHub Actions Workflow
+Sample workflow for CI/CD:
+
+```yaml
+name: CI/Deploy
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:unit
+      - run: npm run build
+```
+
+### Performance Optimization
+
+1. **Static Optimization**
+   - Use `getStaticProps` for static generation
+   - Implement Incremental Static Regeneration (ISR)
+
+2. **Image Optimization**
+   - Use Next.js Image component
+   - Implement lazy loading
+   - Use WebP and AVIF formats
+
+3. **Caching Strategies**
+   - Implement Redis or Vercel Edge Caching
+   - Use `Cache-Control` headers
+   - Optimize database queries
+
+### Monitoring & Logging
+
+1. **Sentry Configuration**
+   - Add Sentry DSN to environment variables
+   - Configure error tracking in `sentry.client.config.ts` and `sentry.server.config.ts`
+
+2. **Performance Monitoring**
+   - Google Analytics
+   - Microsoft Clarity
+   - Uptime Robot for availability checks
+
+### Security Considerations
+
+- Always use HTTPS
+- Implement rate limiting
+- Keep all dependencies updated
+- Regularly audit environment variables
+- Use strong, unique secrets
+
+## Troubleshooting
+
+- Check Vercel/Docker logs for deployment issues
+- Verify environment variable configuration
+- Ensure database migrations are successful
+- Test preview deployments thoroughly
 
 ---
 
-🚨 **Important**: Always test thoroughly in staging before production deployment!
+Happy Deploying! 🚀

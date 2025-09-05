@@ -1,0 +1,13 @@
+<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="80" rx="12" fill="#E8F5E8"/>
+  <g transform="translate(40, 20)">
+    <!-- Cross symbol -->
+    <rect x="18" y="8" width="4" height="24" rx="2" fill="#22C55E"/>
+    <rect x="10" y="16" width="20" height="4" rx="2" fill="#22C55E"/>
+    <!-- Circle background -->
+    <circle cx="20" cy="20" r="18" stroke="#22C55E" stroke-width="2" fill="none"/>
+  </g>
+  <text x="60" y="52" font-family="Arial, sans-serif" font-size="10" fill="#166534" text-anchor="middle" font-weight="600">
+    HEALTHCARE
+  </text>
+</svg>

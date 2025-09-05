@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { TrendingUp, BookOpen, Briefcase, FileText, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { motion } from 'framer-motion';
+import { motion } from '@/lib/framer-motion';
 
 interface Recommendation {
   id: string;

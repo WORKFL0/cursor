@@ -25,6 +25,9 @@
     "restore": "bash ./restore.sh",
     "setup:supabase": "tsx scripts/setup-supabase-cms.ts",
     "cms:setup": "tsx scripts/setup-supabase-cms.ts",
+    "seed:database": "tsx scripts/seed-database.ts",
+    "verify:monitoring": "tsx scripts/verify-monitoring.ts",
+    "deploy:check": "npm run verify:monitoring && npm run type-check && npm run lint && npm run build",
     "postinstall": "husky"
   },
   "dependencies": {
@@ -51,9 +54,11 @@
     "@sentry/nextjs": "^8.46.0",
     "@supabase/supabase-js": "^2.56.0",
     "@types/js-cookie": "^3.0.6",
+    "ai": "^5.0.30",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "framer-motion": "^12.23.12",
     "fuse.js": "^7.1.0",
     "html2canvas": "^1.4.1",
@@ -66,6 +71,8 @@
     "openai": "^5.16.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "resend": "^6.0.1",
     "tailwind-merge": "^3.3.1",
     "web-vitals": "^5.1.0"

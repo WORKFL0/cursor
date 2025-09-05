@@ -42,14 +42,7 @@ export class SupabaseArticleService {
 
       let query = this.supabase
         .from('articles')
-        .select(`
-          *,
-          cms_users!articles_created_by_fkey (
-            username,
-            first_name,
-            last_name
-          )
-        `, { count: 'exact' })
+        .select('*', { count: 'exact' })
 
       // Apply filters
       if (published !== undefined) {

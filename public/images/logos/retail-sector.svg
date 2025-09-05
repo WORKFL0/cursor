@@ -1,0 +1,21 @@
+<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="80" rx="12" fill="#FEF3E2"/>
+  <g transform="translate(35, 15)">
+    <!-- Shopping cart -->
+    <rect x="8" y="12" width="30" height="20" rx="3" fill="#F59E0B" stroke="#D97706" stroke-width="1"/>
+    <!-- Cart handle -->
+    <rect x="2" y="12" width="8" height="3" rx="1.5" fill="#D97706"/>
+    <!-- Cart items -->
+    <circle cx="15" cy="20" r="2" fill="#FED7AA"/>
+    <circle cx="25" cy="20" r="2" fill="#FED7AA"/>
+    <circle cx="30" cy="18" r="1.5" fill="#FED7AA"/>
+    <!-- Wheels -->
+    <circle cx="15" cy="36" r="3" fill="#D97706" stroke="#B45309" stroke-width="1"/>
+    <circle cx="30" cy="36" r="3" fill="#D97706" stroke="#B45309" stroke-width="1"/>
+    <!-- Store front -->
+    <rect x="0" y="10" width="50" height="2" fill="#D97706"/>
+  </g>
+  <text x="60" y="62" font-family="Arial, sans-serif" font-size="10" fill="#D97706" text-anchor="middle" font-weight="600">
+    RETAIL
+  </text>
+</svg>

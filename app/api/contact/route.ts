@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { emailService, ContactFormData } from '@/lib/services/email-service'
 import { hubspotService } from '@/lib/services/hubspot-service'
-
-// Rate limiting store (in production, use Redis)
-const rateLimitStore = new Map<string, { count: number; timestamp: number }>()
-const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
-const RATE_LIMIT_MAX = 5 // 5 requests per minute per IP
+import { checkRateLimit, defaultRateLimits, addRateLimitHeaders } from '@/lib/middleware/rate-limiter'
+import { checkCSRF } from '@/lib/middleware/csrf-protection'
 
 interface ServiceResult {
   success: boolean;
@@ -13,42 +10,52 @@ interface ServiceResult {
   type?: string;
 }
 
-function getRateLimitKey(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded ? forwarded.split(',')[0] : 'unknown'
-  return `contact:${ip}`
-}
-
-function isRateLimited(key: string): boolean {
-  const now = Date.now()
-  const entry = rateLimitStore.get(key)
-  
-  if (!entry || now - entry.timestamp > RATE_LIMIT_WINDOW) {
-    rateLimitStore.set(key, { count: 1, timestamp: now })
-    return false
-  }
-  
-  if (entry.count >= RATE_LIMIT_MAX) {
-    return true
-  }
-  
-  entry.count++
-  return false
-}
-
+/**
+ * Handles contact form submissions with multi-service processing.
+ * 
+ * @param {NextRequest} request - The incoming contact form submission request
+ * @returns {NextResponse} JSON response with submission status
+ * @description Validates contact form, sends email notifications, updates HubSpot, and handles rate limiting
+ * 
+ * @throws {Error} For invalid input or service integration failures
+ * @see emailService
+ * @see hubspotService
+ */
 export async function POST(request: NextRequest) {
   try {
+    // CSRF Protection
+    const csrfResult = checkCSRF(request, {
+      allowedOrigins: ['http://localhost:3000', 'https://workflo.nl', 'https://www.workflo.nl']
+    })
+    
+    if (!csrfResult.valid) {
+      console.warn('CSRF validation failed:', csrfResult.error)
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Beveiligingsvalidatie mislukt. Vernieuw de pagina en probeer opnieuw.',
+          code: csrfResult.code || 'CSRF_ERROR'
+        },
+        { status: 403 }
+      )
+    }
+    
     // Rate limiting check
-    const rateLimitKey = getRateLimitKey(request)
-    if (isRateLimited(rateLimitKey)) {
-      console.warn('Rate limit exceeded for:', rateLimitKey)
+    const rateLimitResult = checkRateLimit(request, defaultRateLimits.contact, 'contact')
+    
+    if (!rateLimitResult.allowed) {
+      console.warn('Rate limit exceeded for contact form')
       return NextResponse.json(
         { 
           success: false, 
           error: 'Te veel verzoeken. Probeer het over een minuut opnieuw.',
-          code: 'RATE_LIMIT_EXCEEDED'
+          code: 'RATE_LIMIT_EXCEEDED',
+          retryAfter: rateLimitResult.retryAfter
         },
-        { status: 429 }
+        { 
+          status: 429,
+          headers: addRateLimitHeaders(rateLimitResult)
+        }
       )
     }
 
@@ -222,6 +229,8 @@ export async function POST(request: NextRequest) {
           hubspotUpdated: hubspotService.isAvailable() && results.find(r => r.type === 'hubspot')?.success,
           tracked: hubspotService.isAvailable() && results.find(r => r.type === 'tracking')?.success
         }
+      }, {
+        headers: addRateLimitHeaders(rateLimitResult)
       })
     } else {
       // Log the error but don't expose internal details to user
@@ -251,6 +260,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * Provides health check information for the Contact API.
+ * 
+ * @returns {NextResponse} JSON with API status and service availability
+ * @description Returns current timestamp and status of integrated services
+ */
 export async function GET() {
   return NextResponse.json(
     { 

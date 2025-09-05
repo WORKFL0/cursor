@@ -1,47 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { hubspotService, NewsletterSubscriber } from '@/lib/services/hubspot-service'
-
-// Rate limiting store (in production, use Redis)
-const rateLimitStore = new Map<string, { count: number; timestamp: number }>()
-const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
-const RATE_LIMIT_MAX = 3 // 3 newsletter signups per minute per IP
-
-function getRateLimitKey(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded ? forwarded.split(',')[0] : 'unknown'
-  return `newsletter:${ip}`
-}
-
-function isRateLimited(key: string): boolean {
-  const now = Date.now()
-  const entry = rateLimitStore.get(key)
-  
-  if (!entry || now - entry.timestamp > RATE_LIMIT_WINDOW) {
-    rateLimitStore.set(key, { count: 1, timestamp: now })
-    return false
-  }
-  
-  if (entry.count >= RATE_LIMIT_MAX) {
-    return true
-  }
-  
-  entry.count++
-  return false
-}
+import { checkRateLimit, defaultRateLimits, addRateLimitHeaders } from '@/lib/middleware/rate-limiter'
+import { checkCSRF } from '@/lib/middleware/csrf-protection'
 
 export async function POST(request: NextRequest) {
   try {
+    // CSRF Protection (less strict for newsletter signup)
+    const csrfResult = checkCSRF(request, {
+      allowedOrigins: ['http://localhost:3000', 'https://workflo.nl', 'https://www.workflo.nl'],
+      requireSameOrigin: false // Allow cross-origin newsletter signups
+    })
+    
+    if (!csrfResult.valid && csrfResult.code === 'FORBIDDEN_ORIGIN') {
+      console.warn('Newsletter CSRF validation failed:', csrfResult.error)
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Aanmelding niet toegestaan vanaf deze bron.',
+          code: csrfResult.code
+        },
+        { status: 403 }
+      )
+    }
+
     // Rate limiting check
-    const rateLimitKey = getRateLimitKey(request)
-    if (isRateLimited(rateLimitKey)) {
-      console.warn('Newsletter rate limit exceeded for:', rateLimitKey)
+    const rateLimitResult = checkRateLimit(request, defaultRateLimits.newsletter, 'newsletter')
+    
+    if (!rateLimitResult.allowed) {
+      console.warn('Newsletter rate limit exceeded')
       return NextResponse.json(
         { 
           success: false, 
           error: 'Te veel aanmeldingen. Probeer het over een minuut opnieuw.',
-          code: 'RATE_LIMIT_EXCEEDED'
+          code: 'RATE_LIMIT_EXCEEDED',
+          retryAfter: rateLimitResult.retryAfter
         },
-        { status: 429 }
+        { 
+          status: 429,
+          headers: addRateLimitHeaders(rateLimitResult)
+        }
       )
     }
 
@@ -142,17 +139,22 @@ export async function POST(request: NextRequest) {
 
     // Log successful signup for manual processing if needed
     if (fallbackMode) {
+      const forwardedFor = request.headers.get('x-forwarded-for')
+      const ip = forwardedFor ? forwardedFor.split(',')[0] : 'unknown'
+      
       console.log('FALLBACK NEWSLETTER SIGNUP:', {
         email: subscriberData.email,
         language: subscriberData.language,
         source: subscriberData.source,
         timestamp: subscriberData.subscribedAt,
-        ip: getRateLimitKey({ headers: { get: () => null } } as any).split(':')[1],
-        userAgent: 'Not captured in fallback mode'
+        ip: ip,
+        userAgent: request.headers.get('user-agent') || 'unknown'
       })
     }
 
-    return NextResponse.json(responseData)
+    return NextResponse.json(responseData, {
+      headers: addRateLimitHeaders(rateLimitResult)
+    })
 
   } catch (error: unknown) {
     console.error('Newsletter subscription error:', error)

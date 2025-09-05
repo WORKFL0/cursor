@@ -20,10 +20,10 @@ export const analyticsConfig = {
   
   // Hotjar
   hotjar: {
-    siteId: process.env.NEXT_PUBLIC_HOTJAR_SITE_ID ? 
-            parseInt(process.env.NEXT_PUBLIC_HOTJAR_SITE_ID, 10) : 0,
+    siteId: process.env.NEXT_PUBLIC_HOTJAR_ID ? 
+            parseInt(process.env.NEXT_PUBLIC_HOTJAR_ID, 10) : 0,
     version: 6,
-    enabled: Boolean(process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) && 
+    enabled: Boolean(process.env.NEXT_PUBLIC_HOTJAR_ID) && 
              process.env.NEXT_PUBLIC_ENABLE_HOTJAR !== 'false',
   },
   

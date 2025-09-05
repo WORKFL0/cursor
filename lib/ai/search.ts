@@ -240,12 +240,24 @@ export class SmartSearchEngine {
     }
     
     for (const correction of corrections) {
-      const results = await this.search(correction, { limit, useSemanticSearch: false });
-      if (results.length > 0) {
-        return results.map(r => ({
-          ...r,
-          highlight: `Bedoelde je "${correction}"? ${r.highlight}`,
-        }));
+      // Perform direct fuzzy search to avoid recursion
+      if (this.fuseIndex) {
+        const fuseResults = this.fuseIndex.search(correction);
+        const results = fuseResults
+          .slice(0, limit)
+          .map(result => ({
+            id: result.item.id,
+            title: result.item.title,
+            content: result.item.content,
+            type: result.item.type,
+            url: result.item.url,
+            score: 1 - (result.score || 0),
+            highlight: `Bedoelde je "${correction}"? ${this.generateHighlight(result.item.content, correction)}`,
+          }));
+        
+        if (results.length > 0) {
+          return results;
+        }
       }
     }
     

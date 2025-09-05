@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from '@/lib/framer-motion'
 import { useLanguage } from '@/lib/contexts/language-context'
 import { questions, calculateResult, calculateResultFromAnswers, type Question, type DetailedAnswer } from '@/lib/data/questionnaire-data'
 import QuestionnaireCard from './QuestionnaireCard'

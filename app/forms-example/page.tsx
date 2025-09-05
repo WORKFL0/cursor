@@ -6,7 +6,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { ContactForm } from '@/components/forms/ContactForm'
 import { QuoteForm } from '@/components/forms/QuoteForm'
 import { NewsletterForm, InlineNewsletterSignup } from '@/components/forms/NewsletterForm'

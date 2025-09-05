@@ -19,7 +19,7 @@ describe('Configuration System', () => {
 
   describe('getConfig', () => {
     it('should return development config by default', () => {
-      process.env.NODE_ENV = 'development';
+      (process.env as any).NODE_ENV = 'development';
       const config = getConfig();
       
       expect(config.app.environment).toBe('development');
@@ -28,7 +28,7 @@ describe('Configuration System', () => {
     });
 
     it('should return production config when NODE_ENV is production', () => {
-      process.env.NODE_ENV = 'production';
+      (process.env as any).NODE_ENV = 'production';
       const config = getConfig();
       
       expect(config.app.environment).toBe('production');
@@ -48,7 +48,7 @@ describe('Configuration System', () => {
 
   describe('configUtils', () => {
     beforeEach(() => {
-      process.env.NODE_ENV = 'test';
+      (process.env as any).NODE_ENV = 'test';
     });
 
     describe('isFeatureEnabled', () => {
@@ -100,7 +100,7 @@ describe('Configuration System', () => {
 
     describe('getSecurityHeaders', () => {
       it('should return security headers for production', () => {
-        process.env.NODE_ENV = 'production';
+        (process.env as any).NODE_ENV = 'production';
         
         const headers = configUtils.getSecurityHeaders();
         
@@ -113,7 +113,7 @@ describe('Configuration System', () => {
 
     describe('validateRequiredEnvVars', () => {
       it('should not throw in development with minimal env vars', () => {
-        process.env.NODE_ENV = 'development';
+        (process.env as any).NODE_ENV = 'development';
         process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
         
         expect(() => {
@@ -122,7 +122,7 @@ describe('Configuration System', () => {
       });
 
       it('should throw in production without required env vars', () => {
-        process.env.NODE_ENV = 'production';
+        (process.env as any).NODE_ENV = 'production';
         delete process.env.SENTRY_DSN;
         delete process.env.NEXTAUTH_SECRET;
         
@@ -135,7 +135,7 @@ describe('Configuration System', () => {
 
   describe('Environment Detection', () => {
     it('should correctly detect development environment', () => {
-      process.env.NODE_ENV = 'development';
+      (process.env as any).NODE_ENV = 'development';
       // Re-import to get updated values
       jest.resetModules();
       const { isDevelopment, isProduction } = require('@/config');
@@ -145,7 +145,7 @@ describe('Configuration System', () => {
     });
 
     it('should correctly detect production environment', () => {
-      process.env.NODE_ENV = 'production';
+      (process.env as any).NODE_ENV = 'production';
       // Re-import to get updated values
       jest.resetModules();
       const { isDevelopment, isProduction } = require('@/config');

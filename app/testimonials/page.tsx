@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useLanguage } from '@/lib/contexts/language-context'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Search, Star, Filter, Users, Building2, Quote, Award } from 'lucide-react'
 
 const companyLogos = [

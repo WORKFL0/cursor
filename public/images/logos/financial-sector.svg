@@ -1,0 +1,20 @@
+<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="80" rx="12" fill="#EFF6FF"/>
+  <g transform="translate(35, 15)">
+    <!-- Bank building icon -->
+    <rect x="15" y="10" width="20" height="30" fill="#3B82F6" rx="2"/>
+    <rect x="5" y="20" width="40" height="4" fill="#1E40AF"/>
+    <rect x="0" y="38" width="50" height="6" fill="#1E40AF" rx="2"/>
+    <!-- Columns -->
+    <rect x="10" y="24" width="3" height="14" fill="#DBEAFE"/>
+    <rect x="16" y="24" width="3" height="14" fill="#DBEAFE"/>
+    <rect x="22" y="24" width="3" height="14" fill="#DBEAFE"/>
+    <rect x="28" y="24" width="3" height="14" fill="#DBEAFE"/>
+    <rect x="34" y="24" width="3" height="14" fill="#DBEAFE"/>
+    <!-- Triangle roof -->
+    <polygon points="25,5 5,15 45,15" fill="#1E40AF"/>
+  </g>
+  <text x="60" y="62" font-family="Arial, sans-serif" font-size="10" fill="#1E40AF" text-anchor="middle" font-weight="600">
+    FINANCIAL
+  </text>
+</svg>

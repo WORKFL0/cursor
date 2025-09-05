@@ -1,0 +1,61 @@
+name: "CodeQL Security Analysis"
+
+# Disable default queries to use only security-focused ones
+disable-default-queries: false
+
+# Include additional security query packs
+packs:
+  - codeql/javascript-queries:AlertSuppression.ql
+  - codeql/javascript-queries:Security/CWE-079
+  - codeql/javascript-queries:Security/CWE-089
+  - codeql/javascript-queries:Security/CWE-094
+  - codeql/javascript-queries:Security/CWE-116
+  - codeql/javascript-queries:Security/CWE-200
+  - codeql/javascript-queries:Security/CWE-311
+  - codeql/javascript-queries:Security/CWE-327
+  - codeql/javascript-queries:Security/CWE-352
+  - codeql/javascript-queries:Security/CWE-377
+  - codeql/javascript-queries:Security/CWE-601
+  - codeql/javascript-queries:Security/CWE-643
+  - codeql/javascript-queries:Security/CWE-776
+  - codeql/javascript-queries:Security/CWE-798
+
+# Additional queries for Next.js specific security checks
+queries:
+  - name: Next.js Security
+    uses: security-and-quality
+  - name: React Security
+    uses: security-and-quality
+
+# Paths to include in analysis
+paths:
+  - "app/"
+  - "components/"
+  - "lib/"
+  - "src/"
+  - "pages/"
+  - "api/"
+  - "utils/"
+  - "hooks/"
+  - "middleware.ts"
+  - "next.config.ts"
+
+# Paths to exclude from analysis  
+paths-ignore:
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "**/*.spec.tsx"
+  - "**/node_modules/**"
+  - "**/.next/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/.git/**"
+  - "**/coverage/**"
+  - "**/test-results/**"
+  - "**/playwright-report/**"
+  - "**/__mocks__/**"
+  - "**/public/**"
+  - "**/docs/**"
+  - "**/*.md"
+  - "**/*.json"

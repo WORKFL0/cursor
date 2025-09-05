@@ -47,8 +47,14 @@ const config: Config = {
   			ring: 'hsl(var(--ring))',
   			// Workflo brand colors - for backgrounds, borders, and accents only
   			workflo: {
+  				primary: 'hsl(var(--workflo-primary))',
+  				'primary-light': 'hsl(var(--workflo-primary-light))', 
+  				'primary-dark': 'hsl(var(--workflo-primary-dark))',
+  				secondary: 'hsl(var(--workflo-secondary))',
+  				'secondary-light': 'hsl(var(--workflo-secondary-light))', 
+  				'secondary-dark': 'hsl(var(--workflo-secondary-dark))',
   				yellow: 'hsl(var(--workflo-yellow))',
-  				'yellow-light': 'hsl(var(--workflo-yellow-light))', 
+  				'yellow-light': 'hsl(var(--workflo-yellow-light))',
   				'yellow-dark': 'hsl(var(--workflo-yellow-dark))',
   				black: '#000000',
   			},
@@ -65,14 +71,14 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--info))',
   				foreground: 'hsl(var(--info-foreground))'
   			},
-  			// Legacy yellow scale - should be migrated to workflo.yellow
+  			// Legacy yellow scale - deprecated, use workflo.primary instead
   			yellow: {
   				'50': '#fffef0',
   				'100': '#fffdd1',
   				'200': '#fff9a3',
   				'300': '#ffd500', // Pure yellow instead of orangish
-  				'400': 'hsl(var(--workflo-yellow))',
-  				'500': 'hsl(var(--workflo-yellow-dark))',
+  				'400': 'hsl(var(--workflo-primary))', // Migrate to primary
+  				'500': 'hsl(var(--workflo-primary-dark))', // Migrate to primary-dark
   			},
   			chart: {
   				'1': 'hsl(var(--chart-1))',
@@ -150,6 +156,14 @@ const config: Config = {
   					transform: 'translateX(-50%)',
   				},
   			},
+  			'shimmer': {
+  				'0%': {
+  					backgroundPosition: '-200% 0',
+  				},
+  				'100%': {
+  					backgroundPosition: '200% 0',
+  				},
+  			},
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
@@ -160,6 +174,21 @@ const config: Config = {
   			'blob': 'blob 7s infinite',
   			'float': 'float 6s ease-in-out infinite',
   			'scroll': 'scroll 20s linear infinite',
+  			'shimmer': 'shimmer 2s linear infinite',
+  		},
+  		// Mobile optimizations
+  		spacing: {
+  			'safe-top': 'env(safe-area-inset-top)',
+  			'safe-bottom': 'env(safe-area-inset-bottom)',
+  			'safe-left': 'env(safe-area-inset-left)',
+  			'safe-right': 'env(safe-area-inset-right)',
+  		},
+  		// Touch-friendly minimum sizes
+  		minWidth: {
+  			'touch': '44px',
+  		},
+  		minHeight: {
+  			'touch': '44px',
   		}
   	}
   },

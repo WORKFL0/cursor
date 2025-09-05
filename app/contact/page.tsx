@@ -4,12 +4,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Phone, Mail, Clock, Users, Building2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { contactPageData } from '@/lib/data/workflo-data'
 import { HubSpotContactForm } from '@/components/forms/HubSpotContactForm'
 import DangerTape from '@/components/shared/danger-tape'
+import { PhoneLink } from '@/components/ui/phone-link'
 
 export default function ContactPage() {
   const { language } = useLanguage()
@@ -92,20 +93,11 @@ export default function ContactPage() {
                 </CardHeader>
                 
                 <CardContent className="space-y-4">
-                  <a 
-                    href={`tel:${contactPageData.location.phone.replace(/\s/g, '')}`}
-                    className="flex items-center gap-3 hover:underline group"
-                  >
-                    <div className="p-3 bg-workflo-yellow/20 rounded-lg group-hover:bg-workflo-yellow/30 transition-colors">
-                      <Phone className="w-6 h-6 text-foreground" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">
-                        {language === 'nl' ? 'Bel ons direct' : 'Call us directly'}
-                      </div>
-                      <div className="text-xl font-semibold text-foreground">{contactPageData.location.phone}</div>
-                    </div>
-                  </a>
+                  <PhoneLink 
+                    phoneNumber={contactPageData.location.phone}
+                    sublabel={language === 'nl' ? 'Bel ons direct' : 'Call us directly'}
+                    label={contactPageData.location.phone}
+                  />
                   
                   <a 
                     href={`mailto:${contactPageData.location.email}`}

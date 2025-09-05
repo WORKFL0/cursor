@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from '@/lib/framer-motion'
 import { useLanguage } from '@/lib/contexts/language-context'
 import { Mail, Send, Loader2, CheckCircle, Sparkles, Shield, Gift, Zap, TrendingUp, Bell, Star, ArrowRight, Users, Globe, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -119,7 +119,6 @@ export function HubSpotNewsletterSignup({
   const [formLoading, setFormLoading] = useState(true)
   const [useCustomForm, setUseCustomForm] = useState(false)
   const [hubspotError, setHubspotError] = useState<string | null>(null)
-  const subscriberCount = 1427 // Fixed count to avoid hydration issues
 
   // Cleanup function to safely remove HubSpot form
   const cleanupHubSpotForm = useCallback(() => {
@@ -452,19 +451,6 @@ export function HubSpotNewsletterSignup({
               {language === 'nl' ? 'Blijf voorop met de nieuwste IT-trends en cybersecurity tips' : 'Stay ahead with the latest IT trends and cybersecurity tips'}
             </motion.p>
             
-            {/* Social proof */}
-            <motion.div className="flex items-center gap-2 mt-2" variants={itemVariants}>
-              <div className="flex -space-x-2">
-                {[1,2,3].map((i) => (
-                  <div key={i} className="w-6 h-6 rounded-full bg-gradient-to-r from-workflo-yellow to-workflo-yellow-dark border-2 border-white flex items-center justify-center">
-                    <Users className="w-3 h-3 text-workflo-black" />
-                  </div>
-                ))}
-              </div>
-              <span className="text-xs text-muted-foreground font-medium">
-                {subscriberCount}+ {language === 'nl' ? 'IT-professionals' : 'IT professionals'}
-              </span>
-            </motion.div>
           </div>
         </motion.div>
         
@@ -768,7 +754,7 @@ export function HubSpotNewsletterSignup({
                 >
                   <Users className="w-4 h-4 text-green-400" />
                   <span className="text-sm text-green-300">
-                    {language === 'nl' ? `Welkom bij ${subscriberCount}+ IT-professionals!` : `Welcome to ${subscriberCount}+ IT professionals!`}
+                    {language === 'nl' ? 'Welkom bij de Workflo IT-community!' : 'Welcome to the Workflo IT community!'}
                   </span>
                 </motion.div>
               </div>
@@ -887,7 +873,7 @@ export function HubSpotNewsletterSignup({
               { 
                 icon: Star, 
                 text: '4.9/5 Rating', 
-                detail: `${subscriberCount}+ ${language === 'nl' ? 'leden' : 'members'}`,
+                detail: language === 'nl' ? 'Hoge waardering' : 'Highly rated',
                 color: 'text-yellow-400' 
               }
             ].map((benefit, index) => (

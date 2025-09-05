@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/lib/contexts/language-context'
 import { type Question } from '@/lib/data/questionnaire-data'

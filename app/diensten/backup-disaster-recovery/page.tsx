@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import Link from 'next/link'
 import { Shield, Clock, RotateCcw, HardDrive, CloudSnow, AlertTriangle, ArrowRight, CheckCircle, Timer, Database } from 'lucide-react'
 import { Button } from '@/components/ui/button'

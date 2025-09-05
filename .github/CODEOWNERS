@@ -1,0 +1,109 @@
+# Code Owners for Workflo New Project
+# 
+# This file defines individuals or teams that are responsible for code in this repository.
+# Code owners are automatically requested for review when someone opens a pull request
+# that modifies code that they own.
+#
+# More info: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners - These users/teams will be requested to review all PRs
+* @workflo-dev-team
+
+# Root configuration files
+package.json @workflo-devops-team @workflo-leads
+package-lock.json @workflo-devops-team
+tsconfig.json @workflo-frontend-team @workflo-backend-team
+tailwind.config.* @workflo-frontend-team @workflo-design-team
+next.config.* @workflo-frontend-team @workflo-devops-team
+
+# Environment and secrets
+.env* @workflo-devops-team @workflo-security-team
+.env.example @workflo-devops-team
+.env.staging @workflo-devops-team
+.env.monitoring.* @workflo-devops-team
+
+# CI/CD and DevOps
+.github/ @workflo-devops-team
+.github/workflows/ @workflo-devops-team
+.github/dependabot.yml @workflo-devops-team
+.github/codeql/ @workflo-security-team @workflo-devops-team
+docker-compose*.yml @workflo-devops-team
+Dockerfile* @workflo-devops-team
+.dockerignore @workflo-devops-team
+
+# Git hooks and tooling
+.husky/ @workflo-devops-team
+.prettierrc* @workflo-frontend-team @workflo-devops-team
+.eslintrc* @workflo-frontend-team @workflo-devops-team
+jest.config.* @workflo-devops-team
+playwright.config.* @workflo-devops-team
+lighthouserc.* @workflo-frontend-team @workflo-devops-team
+
+# Infrastructure and monitoring
+monitoring/ @workflo-devops-team @workflo-sre-team
+config/ @workflo-devops-team
+scripts/ @workflo-devops-team @workflo-security-team
+
+# Frontend application structure
+app/ @workflo-frontend-team
+components/ @workflo-frontend-team
+public/ @workflo-frontend-team @workflo-design-team
+styles/ @workflo-frontend-team @workflo-design-team
+
+# Backend and API
+lib/ @workflo-backend-team
+src/ @workflo-backend-team
+middleware.ts @workflo-backend-team @workflo-security-team
+
+# Database and data
+migrations/ @workflo-backend-team @workflo-devops-team
+scripts/init-db.sql @workflo-backend-team @workflo-devops-team
+supabase/ @workflo-backend-team @workflo-devops-team
+
+# Testing
+tests/ @workflo-dev-team
+__tests__/ @workflo-dev-team
+__mocks__/ @workflo-dev-team
+*.test.* @workflo-dev-team
+*.spec.* @workflo-dev-team
+
+# Documentation
+*.md @workflo-dev-team @workflo-docs-team
+docs/ @workflo-docs-team
+README.* @workflo-dev-team @workflo-docs-team
+
+# Security-sensitive files
+SECURITY.md @workflo-security-team
+.github/SECURITY.md @workflo-security-team
+sentry*.config.* @workflo-security-team @workflo-devops-team
+
+# Analytics and tracking
+*analytics* @workflo-backend-team @workflo-marketing-team
+*tracking* @workflo-backend-team @workflo-marketing-team
+
+# Specific high-impact files that require extra scrutiny
+/app/layout.tsx @workflo-frontend-team @workflo-leads
+/app/globals.css @workflo-frontend-team @workflo-design-team
+/lib/auth.ts @workflo-backend-team @workflo-security-team
+/middleware.ts @workflo-backend-team @workflo-security-team
+
+# Performance-critical files
+/next.config.ts @workflo-frontend-team @workflo-devops-team @workflo-leads
+/lib/db.ts @workflo-backend-team @workflo-devops-team
+/lib/cache.ts @workflo-backend-team @workflo-devops-team
+
+# Deployment and production files
+vercel.json @workflo-devops-team @workflo-leads
+DEPLOYMENT.md @workflo-devops-team
+CHANGELOG.md @workflo-dev-team @workflo-leads
+
+# Legal and compliance
+LICENSE* @workflo-legal-team @workflo-leads
+PRIVACY.md @workflo-legal-team @workflo-backend-team
+TERMS.md @workflo-legal-team
+
+# Team-specific patterns
+# If using feature-based folder structure
+# /features/auth/ @workflo-backend-team @workflo-security-team  
+# /features/payments/ @workflo-backend-team @workflo-finance-team
+# /features/analytics/ @workflo-backend-team @workflo-marketing-team

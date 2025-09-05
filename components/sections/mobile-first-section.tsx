@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Smartphone, Tablet, Monitor, Wifi } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { VideoBackground, VideoSets } from '@/components/shared/video-background'

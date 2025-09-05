@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { newsCategories, getArticlesByCategory } from '@/lib/data/news-data'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 

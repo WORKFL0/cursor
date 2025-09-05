@@ -81,11 +81,17 @@ export async function getEmbedding(text: string): Promise<number[]> {
   }
 }
 
-// Helper function for chat completion
+// Helper function for chat completion with fallback
 export async function getChatCompletion(
   messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>,
   options?: { temperature?: number; maxTokens?: number }
 ): Promise<string> {
+  // Check if OpenAI is configured
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn('OpenAI API key not configured, using mock response');
+    return getMockChatResponse(messages[messages.length - 1]?.content || '');
+  }
+  
   try {
     const response = await openai.chat.completions.create({
       model: AI_CONFIG.openai.chatModel,
@@ -96,7 +102,8 @@ export async function getChatCompletion(
     return response.choices[0]?.message?.content || '';
   } catch (error) {
     console.error('Error getting chat completion:', error);
-    throw error;
+    // Fallback to mock response
+    return getMockChatResponse(messages[messages.length - 1]?.content || '');
   }
 }
 
@@ -105,6 +112,12 @@ export async function getAnthropicCompletion(
   messages: Array<{ role: 'user' | 'assistant'; content: string }>,
   systemPrompt?: string
 ): Promise<string> {
+  // Check if Anthropic is configured
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.warn('Anthropic API key not configured, using mock response');
+    return getMockChatResponse(messages[messages.length - 1]?.content || '');
+  }
+  
   try {
     const response = await anthropic.messages.create({
       model: AI_CONFIG.anthropic.model,
@@ -118,6 +131,61 @@ export async function getAnthropicCompletion(
     return textContent?.text || '';
   } catch (error) {
     console.error('Error getting Anthropic completion:', error);
-    throw error;
+    // Fallback to mock response
+    return getMockChatResponse(messages[messages.length - 1]?.content || '');
   }
+}
+
+// Mock response generator for when AI services are not configured
+export function getMockChatResponse(userMessage: string): string {
+  const lowerMessage = userMessage.toLowerCase();
+  
+  // Service-related responses
+  if (lowerMessage.includes('dienst') || lowerMessage.includes('service')) {
+    return "Workflo biedt verschillende IT-diensten:\n\n" +
+      "• **Managed IT Services** - Complete IT-beheer en ondersteuning\n" +
+      "• **Cloud Oplossingen** - Schaalbare cloud infrastructuur\n" +
+      "• **Cybersecurity** - Bescherming tegen digitale dreigingen\n" +
+      "• **Microsoft 365** - Complete Microsoft implementatie\n" +
+      "• **VoIP Telefonie** - Moderne zakelijke telefonie\n" +
+      "• **Hardware as a Service** - Flexibele hardware lease\n\n" +
+      "Wil je meer informatie over een specifieke dienst?";
+  }
+  
+  // Support-related responses
+  if (lowerMessage.includes('help') || lowerMessage.includes('support') || 
+      lowerMessage.includes('probleem') || lowerMessage.includes('storing')) {
+    return "Ik zie dat je ondersteuning nodig hebt. Momenteel kan ik geen directe tickets aanmaken, maar je kunt:\n\n" +
+      "• **Bellen**: 020-30 80 465 (24/7 beschikbaar)\n" +
+      "• **E-mail**: support@workflo.it\n" +
+      "• **Portal**: https://servicedesk.workflo.it\n\n" +
+      "Voor urgente storingen adviseer ik je om direct te bellen.";
+  }
+  
+  // Pricing responses
+  if (lowerMessage.includes('prijs') || lowerMessage.includes('kost') || 
+      lowerMessage.includes('price') || lowerMessage.includes('offerte')) {
+    return "Voor prijsinformatie maken we graag een persoonlijke offerte op maat van jouw bedrijf.\n\n" +
+      "• Kleine bedrijven: vanaf €99/maand\n" +
+      "• Middelgrote bedrijven: op aanvraag\n" +
+      "• Enterprise oplossingen: maatwerk\n\n" +
+      "Neem contact op voor een vrijblijvend adviesgesprek: 020-30 80 465 of info@workflo.nl";
+  }
+  
+  // Contact responses
+  if (lowerMessage.includes('contact') || lowerMessage.includes('bereik') || 
+      lowerMessage.includes('bel') || lowerMessage.includes('mail')) {
+    return "Je kunt Workflo bereiken via:\n\n" +
+      "📞 **Telefoon**: 020-30 80 465\n" +
+      "📧 **E-mail**: info@workflo.nl\n" +
+      "🏢 **Kantoor**: Amsterdam\n" +
+      "🌐 **Website**: https://workflo.it\n\n" +
+      "We zijn bereikbaar op werkdagen van 8:00 tot 18:00 uur. Voor urgente storingen zijn we 24/7 beschikbaar.";
+  }
+  
+  // Default response
+  return "Bedankt voor je bericht! Ik ben WorkBot, de digitale assistent van Workflo.\n\n" +
+    "Ik kan je helpen met informatie over onze IT-diensten, prijzen, en ondersteuning. " +
+    "Voor directe hulp kun je ook bellen naar 020-30 80 465 of mailen naar info@workflo.nl.\n\n" +
+    "Waar kan ik je mee helpen?";
 }

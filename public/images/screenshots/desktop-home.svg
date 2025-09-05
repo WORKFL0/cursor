@@ -1,0 +1,26 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1920" height="1080" fill="#F9FAFB"/>
+  
+  <!-- Header -->
+  <rect width="1920" height="80" fill="#1F2937"/>
+  <rect x="60" y="25" width="120" height="30" rx="4" fill="#60A5FA"/>
+  <text x="120" y="45" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Workflo</text>
+  
+  <!-- Hero Section -->
+  <rect x="60" y="120" width="800" height="400" rx="8" fill="#FFFFFF" stroke="#E5E7EB"/>
+  <text x="460" y="200" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="32" font-weight="bold">Professional IT Services</text>
+  <text x="460" y="250" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="18">Managed Services • Cloud Solutions • Cybersecurity</text>
+  <rect x="380" y="300" width="160" height="40" rx="8" fill="#60A5FA"/>
+  <text x="460" y="325" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16">Get Started</text>
+  
+  <!-- Services Grid -->
+  <rect x="920" y="120" width="380" height="180" rx="8" fill="#FFFFFF" stroke="#E5E7EB"/>
+  <text x="1110" y="160" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Our Services</text>
+  
+  <rect x="920" y="340" width="380" height="180" rx="8" fill="#FFFFFF" stroke="#E5E7EB"/>
+  <text x="1110" y="380" text-anchor="middle" fill="#1F2937" font-family="Arial, sans-serif" font-size="20" font-weight="bold">24/7 Support</text>
+  
+  <!-- Footer indication -->
+  <rect y="1000" width="1920" height="80" fill="#1F2937"/>
+  <text x="960" y="1045" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="14">Workflo IT Services - Amsterdam</text>
+</svg>

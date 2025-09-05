@@ -264,34 +264,41 @@ export const serviceCategories: ServiceCategory[] = [
   }
 ]
 
-// Navigation Structure
-export const navigation: NavigationItem[] = [
-  {
-    title: 'Services',
-    titleNL: 'Diensten',
-    href: '/diensten',
-    children: [
-      {
-        title: 'All Services',
-        titleNL: 'Alle Diensten',
-        href: '/diensten',
-        description: 'Complete overview of our IT services',
-        descriptionNL: 'Compleet overzicht van onze IT-diensten'
-      },
+// Service Categories for Navigation (organized by main categories)
+export const serviceNavigationCategories = {
+  coreIT: {
+    title: 'Core IT Services',
+    titleNL: 'Kern IT-diensten',
+    icon: 'Monitor',
+    services: [
       {
         title: 'Managed IT',
         titleNL: 'Managed IT',
-        href: '/diensten/managed-it',
+        href: '/diensten/managed-it-services',
         description: '24/7 monitoring and complete IT management',
         descriptionNL: '24/7 monitoring en volledig IT-beheer'
       },
       {
-        title: 'Cloud Solutions',
-        titleNL: 'Cloud-oplossingen',
-        href: '/diensten/cloud',
-        description: 'Microsoft 365, Azure and hybrid cloud',
-        descriptionNL: 'Microsoft 365, Azure en hybride cloud'
+        title: 'Cloud Services',
+        titleNL: 'Cloud-diensten',
+        href: '/diensten/cloud-diensten',
+        description: 'Microsoft 365, Azure and hybrid cloud solutions',
+        descriptionNL: 'Microsoft 365, Azure en hybride cloud-oplossingen'
       },
+      {
+        title: 'Microsoft 365',
+        titleNL: 'Microsoft 365',
+        href: '/diensten/microsoft-365',
+        description: 'Complete Microsoft 365 setup and migration',
+        descriptionNL: 'Complete Microsoft 365 inrichting en migratie'
+      }
+    ]
+  },
+  security: {
+    title: 'Security & Backup',
+    titleNL: 'Beveiliging & Backup',
+    icon: 'Shield',
+    services: [
       {
         title: 'Cybersecurity',
         titleNL: 'Cybersecurity',
@@ -300,6 +307,27 @@ export const navigation: NavigationItem[] = [
         descriptionNL: 'Geavanceerde beveiliging en GDPR-compliance'
       },
       {
+        title: 'Backup & Disaster Recovery',
+        titleNL: 'Backup & Disaster Recovery',
+        href: '/diensten/backup-disaster-recovery',
+        description: 'Secure data backup and recovery solutions',
+        descriptionNL: 'Veilige data backup en herstel oplossingen'
+      },
+      {
+        title: 'Zero Trust Security',
+        titleNL: 'Zero Trust Beveiliging',
+        href: '/diensten/zero-trust',
+        description: 'Proactive security strategy with user verification',
+        descriptionNL: 'Proactieve beveiligingsstrategie met gebruikersverificatie'
+      }
+    ]
+  },
+  communication: {
+    title: 'Communication',
+    titleNL: 'Communicatie',
+    icon: 'Phone',
+    services: [
+      {
         title: 'VoIP Telefonie',
         titleNL: 'VoIP Telefonie',
         href: '/diensten/voip-telefonie',
@@ -307,86 +335,141 @@ export const navigation: NavigationItem[] = [
         descriptionNL: 'Moderne cloud-telefonie oplossingen'
       },
       {
+        title: 'Connectivity',
+        titleNL: 'Connectiviteit',
+        href: '/diensten/connectivity',
+        description: 'Internet connectivity and network optimization',
+        descriptionNL: 'Internetconnectiviteit en netwerkoptimalisatie'
+      },
+      {
+        title: 'Microsoft Teams',
+        titleNL: 'Microsoft Teams',
+        href: '/diensten/microsoft-teams',
+        description: 'Unified communication platform setup',
+        descriptionNL: 'Geïntegreerd communicatieplatform inrichting'
+      }
+    ]
+  },
+  hardware: {
+    title: 'Hardware & Support',
+    titleNL: 'Hardware & Ondersteuning',
+    icon: 'HardDriveIcon',
+    services: [
+      {
         title: 'Hardware as a Service',
         titleNL: 'Hardware as a Service',
         href: '/diensten/hardware-as-a-service',
         description: 'Flexible hardware rental and management',
         descriptionNL: 'Flexibele hardware verhuur en beheer'
+      },
+      {
+        title: 'Mobile Device Management',
+        titleNL: 'Mobile Device Management',
+        href: '/diensten/mobile-device-management',
+        description: 'Central security management for mobile devices',
+        descriptionNL: 'Centraal beveiligingsbeheer voor mobiele apparaten'
+      },
+      {
+        title: 'Audio Visual',
+        titleNL: 'Audio Visueel',
+        href: '/diensten/audio-visueel',
+        description: 'Professional AV solutions and support',
+        descriptionNL: 'Professionele AV-oplossingen en ondersteuning'
       }
     ]
+  }
+}
+
+// Sectors for dropdown
+export const sectors = [
+  {
+    title: 'Financial Services',
+    titleNL: 'Financiële Dienstverlening',
+    href: '/sectoren/financiele-dienstverlening',
+    icon: 'Building2'
   },
   {
-    title: 'Solutions',
-    titleNL: 'Oplossingen',
-    href: '/portfolio',
-    children: [
-      {
-        title: 'Case Studies',
-        titleNL: 'Casestudies',
-        href: '/case-studies',
-        description: 'Real client success stories',
-        descriptionNL: 'Echte klantsuccessen'
-      },
-      {
-        title: 'Portfolio',
-        titleNL: 'Portfolio',
-        href: '/portfolio',
-        description: 'Overview of our implemented solutions',
-        descriptionNL: 'Overzicht van onze geïmplementeerde oplossingen'
-      },
-      {
-        title: 'Testimonials',
-        titleNL: 'Testimonials',
-        href: '/testimonials',
-        description: 'What our clients say about us',
-        descriptionNL: 'Wat onze klanten over ons zeggen'
-      }
-    ]
+    title: 'Healthcare',
+    titleNL: 'Gezondheidszorg',
+    href: '/sectoren/gezondheidszorg',
+    icon: 'Heart'
   },
   {
-    title: 'Pricing',
-    titleNL: 'Prijzen',
-    href: '/prijzen'
+    title: 'Marketing & Advertising',
+    titleNL: 'Marketing & Reclame',
+    href: '/sectoren/marketing-reclame',
+    icon: 'Megaphone'
   },
   {
-    title: 'Resources',
-    titleNL: 'Bronnen',
-    href: '/nieuws',
-    children: [
-      {
-        title: 'News & Updates',
-        titleNL: 'Nieuws & Updates',
-        href: '/nieuws',
-        description: 'Latest IT news and company updates',
-        descriptionNL: 'Laatste IT-nieuws en bedrijfsupdates'
-      },
-      {
-        title: 'FAQ',
-        titleNL: 'Veelgestelde Vragen',
-        href: '/faq',
-        description: 'Frequently asked questions',
-        descriptionNL: 'Veelgestelde vragen'
-      },
-      {
-        title: 'Satisfaction Check',
-        titleNL: 'Tevredenheidscheck',
-        href: '/tevredenheidscheck',
-        description: 'Rate your current IT satisfaction',
-        descriptionNL: 'Beoordeel je huidige IT-tevredenheid'
-      }
-    ]
+    title: 'Freelancers',
+    titleNL: 'ZZP',
+    href: '/sectoren/zzp',
+    icon: 'User'
   },
   {
-    title: 'Company',
-    titleNL: 'Bedrijf',
+    title: 'Media',
+    titleNL: 'Media',
+    href: '/sectoren/media',
+    icon: 'Camera'
+  },
+  {
+    title: 'Retail',
+    titleNL: 'Retail',
+    href: '/sectoren/retail',
+    icon: 'ShoppingCart'
+  },
+  {
+    title: 'Non-Profit',
+    titleNL: 'Non-Profit',
+    href: '/sectoren/non-profit',
+    icon: 'Heart'
+  },
+  {
+    title: 'Other',
+    titleNL: 'Overige',
+    href: '/sectoren/overige',
+    icon: 'Building'
+  }
+]
+
+// Consolidated Navigation Structure
+export const navigation: NavigationItem[] = [
+  {
+    title: 'Services',
+    titleNL: 'Diensten',
+    href: '/diensten',
+    children: Object.values(serviceNavigationCategories).flatMap(category => category.services)
+  },
+  {
+    title: 'Sectors',
+    titleNL: 'Sectoren',
+    href: '/sectoren',
+    children: sectors.map(sector => ({
+      title: sector.title,
+      titleNL: sector.titleNL,
+      href: sector.href,
+      description: `IT solutions for ${sector.title.toLowerCase()}`,
+      descriptionNL: `IT-oplossingen voor ${sector.titleNL.toLowerCase()}`
+    }))
+  },
+  {
+    title: 'About Us',
+    titleNL: 'Over Ons',
     href: '/over-ons',
     children: [
       {
-        title: 'About Us',
-        titleNL: 'Over Ons',
+        title: 'Our Story',
+        titleNL: 'Ons Verhaal',
         href: '/over-ons',
         description: 'Our story, team and values',
         descriptionNL: 'Ons verhaal, team en waarden'
+      },
+      {
+        title: 'Team',
+        titleNL: 'Team',
+        href: '/over-ons#team',
+        description: 'Meet our experienced IT professionals',
+        descriptionNL: 'Ontmoet onze ervaren IT-professionals'
       },
       {
         title: 'Careers',
@@ -396,11 +479,11 @@ export const navigation: NavigationItem[] = [
         descriptionNL: 'Word onderdeel van ons groeiende team'
       },
       {
-        title: 'Referral Program',
-        titleNL: 'Referral Programma',
-        href: '/referral',
-        description: 'Earn rewards for referrals',
-        descriptionNL: 'Verdien beloningen voor doorverwijzingen'
+        title: 'Certifications',
+        titleNL: 'Certificeringen',
+        href: '/over-ons#certifications',
+        description: 'Our industry certifications and partnerships',
+        descriptionNL: 'Onze branche certificeringen en partnerships'
       }
     ]
   },
@@ -793,6 +876,181 @@ export const faqData: FAQ[] = [
     answerNL: 'Je kunt contact opnemen met ons support-team via telefoon, e-mail of ons klantportaal. We bieden ook een speciale support-app voor snelle probleemmelding. Alle contactmethoden zijn 24/7 beschikbaar voor managed service klanten.',
     category: 'Support',
     categoryNL: 'Ondersteuning',
+    order: 3,
+    featured: false
+  },
+
+  // Security & Backup Questions
+  {
+    id: 'security-1',
+    question: 'How do you protect our data from cyber threats?',
+    questionNL: 'Hoe beschermen jullie onze data tegen cyberdreigingen?',
+    answer: 'We implement multi-layered security including advanced firewalls, endpoint protection, email security, regular security patches, employee training, and 24/7 security monitoring. We also conduct regular security assessments and provide incident response planning.',
+    answerNL: 'We implementeren meerlagige beveiliging waaronder geavanceerde firewalls, endpoint-bescherming, e-mailbeveiliging, regelmatige security patches, medewerkerstraining en 24/7 beveiligingsmonitoring. We voeren ook regelmatige security assessments uit en bieden incident response planning.',
+    category: 'Security',
+    categoryNL: 'Beveiliging',
+    order: 1,
+    featured: true
+  },
+  {
+    id: 'security-2',
+    question: 'What backup solutions do you offer?',
+    questionNL: 'Welke backup-oplossingen bieden jullie?',
+    answer: 'We provide automated daily backups to secure cloud locations with multiple restore points. Our backup solutions include local and cloud redundancy, automated testing, and disaster recovery planning. We guarantee data recovery within agreed RTOs.',
+    answerNL: 'We bieden geautomatiseerde dagelijkse backups naar beveiligde cloud-locaties met meerdere herstelpunten. Onze backup-oplossingen omvatten lokale en cloud-redundantie, geautomatiseerde tests en disaster recovery planning. We garanderen dataherstel binnen afgesproken RTOs.',
+    category: 'Security',
+    categoryNL: 'Beveiliging',
+    order: 2,
+    featured: false
+  },
+  {
+    id: 'security-3',
+    question: 'Are you GDPR compliant?',
+    questionNL: 'Zijn jullie GDPR-compliant?',
+    answer: 'Yes, we are fully GDPR compliant and help our clients maintain compliance. We provide data processing agreements, regular compliance audits, privacy impact assessments, and guidance on data handling best practices.',
+    answerNL: 'Ja, we zijn volledig GDPR-compliant en helpen onze klanten compliance te behouden. We bieden verwerkersovereenkomsten, regelmatige compliance audits, privacy impact assessments en begeleiding bij best practices voor dataverwerking.',
+    category: 'Security',
+    categoryNL: 'Beveiliging',
+    order: 3,
+    featured: false
+  },
+
+  // Migration & Setup Questions
+  {
+    id: 'migration-1',
+    question: 'How long does a typical IT migration take?',
+    questionNL: 'Hoe lang duurt een typische IT-migratie?',
+    answer: 'Migration timelines depend on complexity but typically range from 1-4 weeks for most small businesses. We create detailed migration plans with minimal downtime, usually completed during evenings or weekends to avoid business disruption.',
+    answerNL: 'Migratietijdlijnen hangen af van complexiteit maar variëren meestal van 1-4 weken voor de meeste kleine bedrijven. We maken gedetailleerde migratieplannen met minimale downtime, meestal voltooid tijdens avonden of weekends om bedrijfsverstoringen te voorkomen.',
+    category: 'Migration',
+    categoryNL: 'Migratie',
+    order: 1,
+    featured: false
+  },
+  {
+    id: 'migration-2',
+    question: 'Do you provide training after implementation?',
+    questionNL: 'Bieden jullie training na implementatie?',
+    answer: 'Absolutely! We provide comprehensive user training sessions, documentation, video tutorials, and ongoing support to ensure your team can effectively use new systems. Training is tailored to your specific setup and user needs.',
+    answerNL: 'Absoluut! We bieden uitgebreide gebruikerstrainingen, documentatie, video-tutorials en doorlopende ondersteuning om ervoor te zorgen dat je team nieuwe systemen effectief kan gebruiken. Training wordt afgestemd op jouw specifieke setup en gebruikersbehoeften.',
+    category: 'Migration',
+    categoryNL: 'Migratie',
+    order: 2,
+    featured: false
+  },
+  {
+    id: 'migration-3',
+    question: 'What if we have custom software or legacy systems?',
+    questionNL: 'Wat als we custom software of verouderde systemen hebben?',
+    answer: 'We specialize in working with custom and legacy systems. Our team assesses compatibility, creates integration solutions, and provides modernization strategies while maintaining business continuity throughout the process.',
+    answerNL: 'We zijn gespecialiseerd in het werken met custom en verouderde systemen. Ons team beoordeelt compatibiliteit, creëert integratieoplossingen en biedt moderniseringsstrategieën terwijl de bedrijfscontinuïteit tijdens het proces behouden blijft.',
+    category: 'Migration',
+    categoryNL: 'Migratie',
+    order: 3,
+    featured: false
+  },
+
+  // Hardware & Infrastructure
+  {
+    id: 'hardware-1',
+    question: 'Do you provide computer hardware?',
+    questionNL: 'Leveren jullie computerhardware?',
+    answer: 'Yes, we offer Hardware-as-a-Service with latest business computers, servers, and networking equipment. This includes procurement, setup, maintenance, and replacement under flexible leasing arrangements.',
+    answerNL: 'Ja, we bieden Hardware-as-a-Service met de nieuwste business computers, servers en netwerkapparatuur. Dit omvat inkoop, setup, onderhoud en vervanging onder flexibele leasingovereenkomsten.',
+    category: 'Hardware',
+    categoryNL: 'Hardware',
+    order: 1,
+    featured: false
+  },
+  {
+    id: 'hardware-2',
+    question: 'What happens when hardware fails?',
+    questionNL: 'Wat gebeurt er als hardware kapot gaat?',
+    answer: 'We provide rapid hardware replacement with next-business-day delivery for critical components. Our monitoring systems alert us to potential failures before they occur, and we maintain spare equipment for immediate replacement.',
+    answerNL: 'We bieden snelle hardwarevervanging met levering op de volgende werkdag voor kritieke componenten. Onze monitoringsystemen waarschuwen ons voor potentiële storingen voordat ze optreden, en we houden reserveapparatuur aan voor directe vervanging.',
+    category: 'Hardware',
+    categoryNL: 'Hardware',
+    order: 2,
+    featured: false
+  },
+  {
+    id: 'hardware-3',
+    question: 'Can you help with network infrastructure?',
+    questionNL: 'Kunnen jullie helpen met netwerkinfrastructuur?',
+    answer: 'Yes, we design, implement, and manage complete network infrastructures including WiFi, switches, routers, and security appliances. We ensure optimal performance, security, and scalability for your business needs.',
+    answerNL: 'Ja, we ontwerpen, implementeren en beheren complete netwerkinfrastructuren inclusief WiFi, switches, routers en beveiligingsapparatuur. We zorgen voor optimale prestaties, beveiliging en schaalbaarheid voor jouw bedrijfsbehoeften.',
+    category: 'Hardware',
+    categoryNL: 'Hardware',
+    order: 3,
+    featured: false
+  },
+
+  // Cloud & Microsoft 365
+  {
+    id: 'cloud-1',
+    question: 'What are the benefits of moving to the cloud?',
+    questionNL: 'Wat zijn de voordelen van overstappen naar de cloud?',
+    answer: 'Cloud solutions offer improved accessibility, automatic backups, enhanced security, lower maintenance costs, better collaboration tools, and easier scaling. You can work from anywhere while we handle the technical infrastructure.',
+    answerNL: 'Cloud-oplossingen bieden verbeterde toegankelijkheid, automatische backups, verbeterde beveiliging, lagere onderhoudskosten, betere samenwerkingstools en eenvoudiger opschaling. Je kunt overal werken terwijl wij de technische infrastructuur afhandelen.',
+    category: 'Cloud',
+    categoryNL: 'Cloud',
+    order: 1,
+    featured: true
+  },
+  {
+    id: 'cloud-2',
+    question: 'Is Microsoft 365 suitable for small businesses?',
+    questionNL: 'Is Microsoft 365 geschikt voor kleine bedrijven?',
+    answer: 'Absolutely! Microsoft 365 is perfect for small businesses, offering professional email, document collaboration, video conferencing, and cloud storage at an affordable price. We help you choose the right plan and set it up correctly.',
+    answerNL: 'Absoluut! Microsoft 365 is perfect voor kleine bedrijven en biedt professionele e-mail, documentsamenwerking, videoconferenties en cloud-opslag tegen een betaalbare prijs. We helpen je het juiste plan te kiezen en correct in te stellen.',
+    category: 'Cloud',
+    categoryNL: 'Cloud',
+    order: 2,
+    featured: false
+  },
+  {
+    id: 'cloud-3',
+    question: 'What about internet connectivity for cloud services?',
+    questionNL: 'Hoe zit het met internetconnectiviteit voor cloud-diensten?',
+    answer: 'Reliable internet is crucial for cloud services. We assess your connectivity needs, recommend appropriate bandwidth, and can arrange redundant internet connections to ensure uninterrupted access to your cloud services.',
+    answerNL: 'Betrouwbaar internet is cruciaal voor cloud-diensten. We beoordelen je connectiviteitsbehoeften, adviseren geschikte bandbreedte en kunnen redundante internetverbindingen regelen om ononderbroken toegang tot jouw cloud-diensten te garanderen.',
+    category: 'Cloud',
+    categoryNL: 'Cloud',
+    order: 3,
+    featured: false
+  },
+
+  // Service Contracts & Agreements
+  {
+    id: 'contracts-1',
+    question: 'What is included in your managed IT contracts?',
+    questionNL: 'Wat is inbegrepen in jullie managed IT-contracten?',
+    answer: 'Our contracts include 24/7 monitoring, unlimited remote support, regular maintenance, security updates, backup services, priority response times, and monthly reporting. Everything is covered under one predictable monthly fee.',
+    answerNL: 'Onze contracten omvatten 24/7 monitoring, onbeperkte remote support, regulier onderhoud, beveiligingsupdates, backup-diensten, prioritaire responstijden en maandelijkse rapportage. Alles wordt gedekt onder één voorspelbare maandelijkse vergoeding.',
+    category: 'Contracts',
+    categoryNL: 'Contracten',
+    order: 1,
+    featured: false
+  },
+  {
+    id: 'contracts-2',
+    question: 'Can we cancel our contract anytime?',
+    questionNL: 'Kunnen we ons contract altijd opzeggen?',
+    answer: 'We offer flexible contract terms with standard 30-60 day notice periods. While we prefer long-term partnerships, we understand business needs change. We focus on providing such good service that you\'ll want to stay with us.',
+    answerNL: 'We bieden flexibele contractvoorwaarden met standaard opzegtermijnen van 30-60 dagen. Hoewel we voorkeur geven aan langetermijnpartnerschappen, begrijpen we dat bedrijfsbehoeften veranderen. We richten ons op het leveren van zo\'n goede service dat je bij ons wilt blijven.',
+    category: 'Contracts',
+    categoryNL: 'Contracten',
+    order: 2,
+    featured: false
+  },
+  {
+    id: 'contracts-3',
+    question: 'Do you offer Service Level Agreements (SLAs)?',
+    questionNL: 'Bieden jullie Service Level Agreements (SLAs)?',
+    answer: 'Yes, all our managed service contracts include clear SLAs with guaranteed response times, uptime targets, and resolution timeframes. We provide monthly reports showing our performance against these commitments.',
+    answerNL: 'Ja, al onze managed service contracten bevatten duidelijke SLAs met gegarandeerde responstijden, uptime-doelen en oplossingstermijnen. We bieden maandelijkse rapportages die onze prestaties tegen deze commitments tonen.',
+    category: 'Contracts',
+    categoryNL: 'Contracten',
     order: 3,
     featured: false
   }

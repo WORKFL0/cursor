@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { analytics } from '@/lib/analytics'
 import { GoogleAnalytics } from './google-analytics'
 import { MicrosoftClarity } from './microsoft-clarity'
+import Hotjar from './hotjar'
 import { ErrorBoundary } from '@/components/error/error-boundary'
 
 /**
@@ -97,6 +98,7 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
       {/* Third-party analytics scripts */}
       <GoogleAnalytics />
       <MicrosoftClarity />
+      <Hotjar />
       
       {/* Custom analytics tracker */}
       <Suspense fallback={null}>

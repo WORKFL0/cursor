@@ -1,0 +1,822 @@
+{
+  "info": {
+    "name": "Workflo CMS API v1",
+    "description": "Comprehensive API collection for Workflo Content Management System",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "article_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "webhook_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Articles",
+      "item": [
+        {
+          "name": "List Articles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/articles?page=1&limit=10&published=true&sortBy=published_at&sortOrder=desc",
+              "host": ["{{base_url}}"],
+              "path": ["articles"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page (max 100)"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search term",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "description": "Filter by category",
+                  "disabled": true
+                },
+                {
+                  "key": "published",
+                  "value": "true",
+                  "description": "Filter by published status"
+                },
+                {
+                  "key": "featured",
+                  "value": "",
+                  "description": "Filter by featured status",
+                  "disabled": true
+                },
+                {
+                  "key": "tags",
+                  "value": "",
+                  "description": "Filter by tags (comma-separated)",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "published_at",
+                  "description": "Sort field"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort order (asc/desc)"
+                }
+              ]
+            },
+            "description": "Get a paginated list of articles with filtering and sorting options"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Article by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/articles/{{article_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["articles", "{{article_id}}"]
+            },
+            "description": "Get a single article by ID or slug"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Article",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sample Article Title\",\n  \"excerpt\": \"A brief excerpt of the article content\",\n  \"content\": \"# Sample Article\\n\\nThis is the full content of the article with **markdown** support.\\n\\n## Key Points\\n\\n- Point 1\\n- Point 2\\n- Point 3\\n\\nConclusion and call to action.\",\n  \"author\": \"John Doe\",\n  \"category\": \"Blog\",\n  \"tags\": [\"technology\", \"tutorial\", \"guide\"],\n  \"published\": true,\n  \"featured\": false,\n  \"image_url\": \"https://example.com/image.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/articles",
+              "host": ["{{base_url}}"],
+              "path": ["articles"]
+            },
+            "description": "Create a new article (requires editor role)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Article",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Article Title\",\n  \"published\": true,\n  \"featured\": true,\n  \"tags\": [\"updated\", \"featured\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/articles/{{article_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["articles", "{{article_id}}"]
+            },
+            "description": "Update an existing article (requires editor role)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Article",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/articles/{{article_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["articles", "{{article_id}}"]
+            },
+            "description": "Delete an article (requires editor role)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Overview Analytics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics?type=overview&dateFrom=2025-08-01&dateTo=2025-09-04",
+              "host": ["{{base_url}}"],
+              "path": ["analytics"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "overview",
+                  "description": "Analytics type"
+                },
+                {
+                  "key": "dateFrom",
+                  "value": "2025-08-01",
+                  "description": "Start date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "dateTo",
+                  "value": "2025-09-04",
+                  "description": "End date (YYYY-MM-DD)"
+                }
+              ]
+            },
+            "description": "Get overview analytics with totals and summaries"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Visitor Statistics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics?type=visitors&dateFrom=2025-08-01&dateTo=2025-09-04",
+              "host": ["{{base_url}}"],
+              "path": ["analytics"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "visitors"
+                },
+                {
+                  "key": "dateFrom",
+                  "value": "2025-08-01"
+                },
+                {
+                  "key": "dateTo",
+                  "value": "2025-09-04"
+                }
+              ]
+            },
+            "description": "Get detailed visitor statistics by date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Article Analytics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics?type=articles&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["analytics"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "articles"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get analytics for individual articles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Realtime Analytics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analytics?type=realtime",
+              "host": ["{{base_url}}"],
+              "path": ["analytics"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "realtime"
+                }
+              ]
+            },
+            "description": "Get realtime analytics (last 15 minutes)"
+          },
+          "response": []
+        },
+        {
+          "name": "Track Analytics Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_name\": \"page_viewed\",\n  \"event_type\": \"page_view\",\n  \"page_url\": \"https://workflo.it/blog/sample-article\",\n  \"referrer\": \"https://google.com\",\n  \"properties\": {\n    \"article_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"category\": \"blog\",\n    \"device\": \"desktop\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/analytics",
+              "host": ["{{base_url}}"],
+              "path": ["analytics"]
+            },
+            "description": "Track a new analytics event (rate limited)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Email",
+      "item": [
+        {
+          "name": "Get Email Queue",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/emails?type=queue&status=queued&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["emails"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "queue"
+                },
+                {
+                  "key": "status",
+                  "value": "queued",
+                  "description": "Filter by status: queued, sending, sent, failed, bounced"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get email queue with optional status filtering"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Email Templates",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/emails?type=templates",
+              "host": ["{{base_url}}"],
+              "path": ["emails"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "templates"
+                }
+              ]
+            },
+            "description": "Get all available email templates"
+          },
+          "response": []
+        },
+        {
+          "name": "Queue Template-based Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"template_name\": \"welcome_new_user\",\n  \"to_email\": \"user@example.com\",\n  \"to_name\": \"John Doe\",\n  \"variables\": {\n    \"name\": \"John Doe\",\n    \"email\": \"user@example.com\",\n    \"username\": \"johndoe\"\n  },\n  \"priority\": 3,\n  \"send_immediately\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/emails",
+              "host": ["{{base_url}}"],
+              "path": ["emails"]
+            },
+            "description": "Queue an email using a predefined template"
+          },
+          "response": []
+        },
+        {
+          "name": "Queue Direct Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to_email\": \"client@example.com\",\n  \"to_name\": \"Jane Smith\",\n  \"subject\": \"Thank you for contacting Workflo\",\n  \"body_html\": \"<h1>Thank you!</h1><p>We received your message and will respond within 24 hours.</p>\",\n  \"body_text\": \"Thank you! We received your message and will respond within 24 hours.\",\n  \"from_email\": \"info@workflo.it\",\n  \"from_name\": \"Workflo Support Team\",\n  \"priority\": 2,\n  \"send_immediately\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/emails",
+              "host": ["{{base_url}}"],
+              "path": ["emails"]
+            },
+            "description": "Queue a direct email without using a template"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Email Logs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/emails?type=logs&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["emails"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "logs"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get email delivery logs"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "Get Webhook Endpoints",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/webhooks?type=endpoints",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "endpoints"
+                }
+              ]
+            },
+            "description": "Get all configured webhook endpoints"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Webhook Deliveries",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/webhooks?type=deliveries&limit=50&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "deliveries"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get webhook delivery history"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Webhook Statistics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/webhooks?type=stats",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "stats"
+                }
+              ]
+            },
+            "description": "Get webhook delivery statistics"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Webhook Endpoint",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"n8n Article Sync\",\n  \"url\": \"https://your-n8n-instance.com/webhook/article-sync\",\n  \"events\": [\"article.created\", \"article.updated\", \"article.deleted\"],\n  \"is_active\": true,\n  \"timeout_seconds\": 30,\n  \"headers\": {\n    \"X-API-Key\": \"your-api-key\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/webhooks",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks"]
+            },
+            "description": "Create a new webhook endpoint (requires admin role)"
+          },
+          "response": []
+        },
+        {
+          "name": "Trigger Webhook Delivery",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"trigger\",\n  \"delivery_id\": \"{{webhook_delivery_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/webhooks",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks"]
+            },
+            "description": "Manually trigger a webhook delivery (requires admin role)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documentation",
+      "item": [
+        {
+          "name": "Get API Documentation (JSON)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/docs?format=json",
+              "host": ["{{base_url}}"],
+              "path": ["docs"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "json"
+                }
+              ]
+            },
+            "description": "Get OpenAPI specification in JSON format"
+          },
+          "response": []
+        },
+        {
+          "name": "Get API Documentation (YAML)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/docs?format=yaml",
+              "host": ["{{base_url}}"],
+              "path": ["docs"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "yaml"
+                }
+              ]
+            },
+            "description": "Get OpenAPI specification in YAML format"
+          },
+          "response": []
+        },
+        {
+          "name": "View Swagger UI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/docs?format=html",
+              "host": ["{{base_url}}"],
+              "path": ["docs"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "html"
+                }
+              ]
+            },
+            "description": "View interactive Swagger UI documentation"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-set environment based on URL",
+          "if (pm.request.url.toString().includes('localhost')) {",
+          "    pm.collectionVariables.set('base_url', 'http://localhost:3000/api/v1');",
+          "} else {",
+          "    pm.collectionVariables.set('base_url', 'https://your-domain.com/api/v1');",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test to check response format",
+          "pm.test('Response has success field', function () {",
+          "    pm.expect(pm.response.json()).to.have.property('success');",
+          "});",
+          "",
+          "pm.test('Response has timestamp', function () {",
+          "    pm.expect(pm.response.json()).to.have.property('timestamp');",
+          "});",
+          "",
+          "// Extract IDs from responses for use in subsequent requests",
+          "if (pm.response.json().data && pm.response.json().data.id) {",
+          "    const responseData = pm.response.json().data;",
+          "    ",
+          "    // Set article ID if this is an article response",
+          "    if (pm.request.url.toString().includes('/articles')) {",
+          "        pm.collectionVariables.set('article_id', responseData.id);",
+          "    }",
+          "    ",
+          "    // Set webhook ID if this is a webhook response",
+          "    if (pm.request.url.toString().includes('/webhooks')) {",
+          "        pm.collectionVariables.set('webhook_id', responseData.id);",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+}

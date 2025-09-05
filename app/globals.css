@@ -25,21 +25,28 @@
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
-    /* Workflo brand colors optimized for accessibility */
-    --workflo-yellow: 45 93% 47%; /* Darkened for better contrast */
-    --workflo-yellow-light: 48 100% 94%; /* Lighter background version */
-    --workflo-yellow-dark: 42 100% 35%; /* Darker version for text */
+    /* Workflo brand colors - Modern professional palette */
+    --workflo-primary: 220 100% 50%; /* Deep blue #0055FF */
+    --workflo-primary-light: 220 100% 97%; /* Light blue background */
+    --workflo-primary-dark: 220 100% 35%; /* Darker blue for text */
+    --workflo-secondary: 258 60% 50%; /* Purple accent #6B46C1 */
+    --workflo-secondary-light: 258 100% 95%; /* Light purple background */
+    --workflo-secondary-dark: 258 60% 35%; /* Darker purple for text */
+    /* Workflo yellow brand colors */
+    --workflo-yellow: 60 100% 48%; /* Main brand yellow #f2f400 */
+    --workflo-yellow-light: 60 100% 95%; /* Light yellow background */
+    --workflo-yellow-dark: 45 100% 45%; /* Darker yellow for hover states */
     /* Additional semantic colors for better UX */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
-    --warning: 45 93% 47%; /* Changed to Workflo yellow */
+    --warning: 38 92% 50%; /* Professional amber warning */
     --warning-foreground: 0 0% 9%;
     --info: 221 83% 53%;
     --info-foreground: 0 0% 98%;
-    --chart-1: 45 93% 47%; /* Workflo yellow */
+    --chart-1: 220 100% 50%; /* Workflo primary blue */
     --chart-2: 173 58% 39%; /* Teal */
     --chart-3: 197 37% 24%; /* Blue-grey */
-    --chart-4: 45 70% 55%; /* Lighter Workflo yellow variant */
+    --chart-4: 258 60% 50%; /* Workflo secondary purple */
     --chart-5: 0 0% 45%; /* Neutral grey */
   }
 
@@ -65,20 +72,27 @@
     --input: 0 0% 18%;
     --ring: 0 0% 83.1%;
     /* Workflo colors optimized for dark mode accessibility */
-    --workflo-yellow: 45 85% 58%; /* Optimized for dark background readability */
-    --workflo-yellow-light: 48 100% 94%; /* Consistent with light mode */
-    --workflo-yellow-dark: 42 100% 35%; /* Dark enough for text use */
+    --workflo-primary: 220 100% 65%; /* Lighter blue for dark mode readability */
+    --workflo-primary-light: 220 100% 97%; /* Consistent with light mode */
+    --workflo-primary-dark: 220 100% 35%; /* Dark enough for text use */
+    --workflo-secondary: 258 60% 65%; /* Lighter purple for dark mode */
+    --workflo-secondary-light: 258 100% 95%; /* Consistent with light mode */
+    --workflo-secondary-dark: 258 60% 35%; /* Dark enough for text use */
+    /* Workflo yellow colors for dark mode */
+    --workflo-yellow: 60 100% 48%; /* Same yellow works well on dark */
+    --workflo-yellow-light: 60 100% 95%; /* Light yellow background */
+    --workflo-yellow-dark: 45 100% 40%; /* Slightly darker for better contrast */
     /* Dark mode semantic colors */
     --success: 142 71% 45%;
     --success-foreground: 0 0% 98%;
-    --warning: 45 85% 58%; /* Changed to Workflo yellow for dark mode */
+    --warning: 38 92% 65%; /* Professional amber warning for dark mode */
     --warning-foreground: 0 0% 9%;
     --info: 221 83% 53%;
     --info-foreground: 0 0% 98%;
-    --chart-1: 45 85% 58%; /* Workflo yellow for dark mode */
+    --chart-1: 220 100% 65%; /* Workflo primary blue for dark mode */
     --chart-2: 160 60% 45%; /* Teal-green */
     --chart-3: 220 70% 50%; /* Blue instead of orange */
-    --chart-4: 45 60% 65%; /* Lighter Workflo yellow variant */
+    --chart-4: 258 60% 65%; /* Workflo secondary purple */
     --chart-5: 0 0% 60%; /* Neutral grey */
   }
 }
@@ -129,21 +143,21 @@
     @apply py-16 sm:py-20 lg:py-24;
   }
 
-  /* Safe background gradients using Workflo yellow */
+  /* Safe background gradients using Workflo modern colors */
   .gradient-workflo {
-    background: linear-gradient(135deg, hsl(var(--workflo-yellow)) 0%, hsl(var(--workflo-yellow-dark)) 100%);
+    background: linear-gradient(135deg, hsl(var(--workflo-primary)) 0%, hsl(var(--workflo-secondary)) 100%);
   }
 
   .gradient-workflo-soft {
-    background: linear-gradient(135deg, hsl(var(--workflo-yellow-light)) 0%, hsl(var(--workflo-yellow)) 20%, transparent 100%);
+    background: linear-gradient(135deg, hsl(var(--workflo-primary-light)) 0%, hsl(var(--workflo-primary)) 20%, transparent 100%);
   }
 
   .gradient-workflo-radial {
-    background: radial-gradient(circle at center, hsl(var(--workflo-yellow-light)) 0%, transparent 70%);
+    background: radial-gradient(circle at center, hsl(var(--workflo-primary-light)) 0%, transparent 70%);
   }
 
   .gradient-section-warm {
-    background: linear-gradient(135deg, hsl(var(--workflo-yellow-light)) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    background: linear-gradient(135deg, hsl(var(--workflo-primary-light)) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   }
 
   /* Safe text gradient for dark text on light backgrounds */
@@ -152,27 +166,39 @@
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--muted-foreground)) 100%);
   }
 
-  /* Workflo yellow with proper contrast text */
-  .bg-workflo-yellow-contrast {
-    background-color: hsl(var(--workflo-yellow));
-    color: hsl(var(--background));
+  /* Workflo modern colors with proper contrast text */
+  .bg-workflo-primary-contrast {
+    background-color: hsl(var(--workflo-primary));
+    color: white;
   }
 
-  .dark .bg-workflo-yellow-contrast {
-    color: hsl(var(--foreground));
+  .dark .bg-workflo-primary-contrast {
+    color: white;
   }
 
   /* Workflo brand utilities for backgrounds/accents only */
-  .bg-workflo-yellow {
-    background-color: hsl(var(--workflo-yellow));
+  .bg-workflo-primary {
+    background-color: hsl(var(--workflo-primary));
   }
   
-  .bg-workflo-yellow-light {
-    background-color: hsl(var(--workflo-yellow-light));
+  .bg-workflo-primary-light {
+    background-color: hsl(var(--workflo-primary-light));
   }
   
-  .border-workflo-yellow {
-    border-color: hsl(var(--workflo-yellow));
+  .bg-workflo-secondary {
+    background-color: hsl(var(--workflo-secondary));
+  }
+  
+  .bg-workflo-secondary-light {
+    background-color: hsl(var(--workflo-secondary-light));
+  }
+  
+  .border-workflo-primary {
+    border-color: hsl(var(--workflo-primary));
+  }
+  
+  .border-workflo-secondary {
+    border-color: hsl(var(--workflo-secondary));
   }
 
   .animation-delay-1000 {
@@ -190,8 +216,8 @@
   .warning-tape {
     background: repeating-linear-gradient(
       -45deg,
-      hsl(var(--workflo-yellow)) 0px,
-      hsl(var(--workflo-yellow)) 10px,
+      hsl(var(--workflo-primary)) 0px,
+      hsl(var(--workflo-primary)) 10px,
       hsl(var(--background)) 10px,
       hsl(var(--background)) 20px
     );
@@ -201,8 +227,8 @@
   .warning-tape-thin {
     background: repeating-linear-gradient(
       -45deg,
-      hsl(var(--workflo-yellow)) 0px,
-      hsl(var(--workflo-yellow)) 6px,
+      hsl(var(--workflo-primary)) 0px,
+      hsl(var(--workflo-primary)) 6px,
       hsl(var(--muted)) 6px,
       hsl(var(--muted)) 12px
     );
@@ -212,8 +238,8 @@
   .warning-tape-vertical {
     background: repeating-linear-gradient(
       90deg,
-      hsl(var(--workflo-yellow)),
-      hsl(var(--workflo-yellow)) 10px,
+      hsl(var(--workflo-primary)),
+      hsl(var(--workflo-primary)) 10px,
       hsl(var(--foreground)) 10px,
       hsl(var(--foreground)) 20px
     );
@@ -223,7 +249,7 @@
     background: linear-gradient(
       to right,
       transparent,
-      hsl(var(--workflo-yellow)),
+      hsl(var(--workflo-primary)),
       transparent
     );
     height: 1px;
@@ -319,16 +345,16 @@
   }
 
   .workflo-focus-ring {
-    @apply focus-visible:ring-2 focus-visible:ring-workflo-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    @apply focus-visible:ring-2 focus-visible:ring-workflo-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 
   /* Workflo gradient animations */
   @keyframes workflo-pulse {
     0%, 100% {
-      background-color: hsl(var(--workflo-yellow));
+      background-color: hsl(var(--workflo-primary));
     }
     50% {
-      background-color: hsl(var(--workflo-yellow-dark));
+      background-color: hsl(var(--workflo-secondary));
     }
   }
 
@@ -349,15 +375,15 @@
   /* Improved card shadows with Workflo branding */
   .workflo-card-shadow {
     box-shadow: 
-      0 4px 6px -1px hsl(var(--workflo-yellow) / 0.1),
-      0 2px 4px -1px hsl(var(--workflo-yellow) / 0.06),
-      0 0 0 1px hsl(var(--workflo-yellow) / 0.05);
+      0 4px 6px -1px hsl(var(--workflo-primary) / 0.1),
+      0 2px 4px -1px hsl(var(--workflo-primary) / 0.06),
+      0 0 0 1px hsl(var(--workflo-primary) / 0.05);
   }
 
   .workflo-card-shadow:hover {
     box-shadow: 
-      0 20px 25px -5px hsl(var(--workflo-yellow) / 0.15),
-      0 10px 10px -5px hsl(var(--workflo-yellow) / 0.1),
-      0 0 0 1px hsl(var(--workflo-yellow) / 0.1);
+      0 20px 25px -5px hsl(var(--workflo-primary) / 0.15),
+      0 10px 10px -5px hsl(var(--workflo-primary) / 0.1),
+      0 0 0 1px hsl(var(--workflo-primary) / 0.1);
   }
 }

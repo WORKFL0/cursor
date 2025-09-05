@@ -10,9 +10,9 @@ interface MicrosoftClarityProps {
 }
 
 export function MicrosoftClarity({
-  projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID,
-  enabled = process.env.NEXT_PUBLIC_ENABLE_CLARITY === 'true',
-  debugMode = process.env.NEXT_PUBLIC_ANALYTICS_DEBUG === 'true'
+  projectId = process.env.NEXT_PUBLIC_CLARITY_ID,
+  enabled = process.env.ENABLE_ANALYTICS !== 'false',
+  debugMode = process.env.NEXT_PUBLIC_ANALYTICS_DEBUG === 'true' || process.env.NODE_ENV === 'development'
 }: MicrosoftClarityProps) {
   
   useEffect(() => {

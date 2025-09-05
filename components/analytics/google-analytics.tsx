@@ -11,9 +11,9 @@ interface GoogleAnalyticsProps {
 }
 
 export function GoogleAnalytics({ 
-  measurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID,
-  enabled = process.env.NEXT_PUBLIC_ENABLE_GA4 === 'true',
-  debugMode = process.env.NEXT_PUBLIC_ANALYTICS_DEBUG === 'true'
+  measurementId = process.env.NEXT_PUBLIC_GA_ID || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+  enabled = process.env.ENABLE_ANALYTICS !== 'false',
+  debugMode = process.env.NEXT_PUBLIC_ANALYTICS_DEBUG === 'true' || process.env.NODE_ENV === 'development'
 }: GoogleAnalyticsProps) {
   
   useEffect(() => {

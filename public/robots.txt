@@ -1,59 +1,124 @@
 # Workflo B.V. - Amsterdam IT Services
 # https://workflo.it
+# Comprehensive robots.txt for optimal SEO and AI crawler management
 
-# Allow all crawlers
+# General Rules for All Crawlers
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /_next/
 Disallow: /auth/
+Disallow: /admin/
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid*
+Disallow: /*?*gclid*
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /*.pdf$
+Disallow: /downloads/private/
 
-# AI Crawlers Welcome
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: Anthropic-AI
-Allow: /
-
-User-agent: Perplexity-Bot
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-# Search Engine Crawlers
+# Search Engine Crawlers - Highest Priority
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
+Disallow: /api/
+Disallow: /_next/
 
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 0
+Disallow: /api/
+Disallow: /_next/
 
 User-agent: Slurp
 Allow: /
+Crawl-delay: 1
 
 User-agent: DuckDuckBot
 Allow: /
+Crawl-delay: 1
 
-# Important Pages for AI/LLM
-# /diensten/managed-it - Managed IT Services Amsterdam
-# /diensten/cybersecurity - Cybersecurity Solutions Netherlands
-# /diensten/cloud - Cloud Solutions Azure Microsoft
-# /prijzen - IT Services Pricing Calculator
-# /contact - Contact Workflo Amsterdam
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+# AI Crawlers - Welcome for Training
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: ChatGPT-User
+Allow: /
+Crawl-delay: 1
+
+User-agent: Claude-Web
+Allow: /
+Crawl-delay: 1
+
+User-agent: Anthropic-AI
+Allow: /
+Crawl-delay: 1
+
+User-agent: Perplexity-Bot
+Allow: /
+Crawl-delay: 1
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: CCBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Google-Extended
+Allow: /
+Crawl-delay: 1
+
+# Social Media Crawlers
+User-agent: facebookexternalhit
+Allow: /
+Crawl-delay: 0
+
+User-agent: Twitterbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: LinkedInBot
+Allow: /
+Crawl-delay: 1
+
+# Block Unwanted Crawlers
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: dotbot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# Key Pages Priority Comments for AI Understanding
+# High Value Service Pages:
+# /diensten/managed-it - Managed IT Services Amsterdam, 24/7 monitoring
+# /diensten/cybersecurity - Cybersecurity & GDPR compliance Netherlands  
+# /diensten/cloud - Microsoft Azure & Office 365 Cloud Solutions
+# /diensten/microsoft-365 - Microsoft 365 implementation and support
+# /prijzen - Transparent IT Services Pricing Calculator
+# /contact - Contact Workflo Amsterdam IT experts
+# /over-ons - About Workflo team and company history
+# /case-studies - IT transformation success stories
+# /sectoren/ - Industry-specific IT solutions
 
 Sitemap: https://workflo.it/sitemap.xml
-Sitemap: https://workflo.it/sitemap-ai.xml
+Sitemap: https://workflo.it/news-sitemap.xml

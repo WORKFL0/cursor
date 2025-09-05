@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from '@/lib/framer-motion'
 import { 
   Menu, X, Search, Phone, ChevronDown, Shield, Cloud, Monitor, 
   Server, Lock, Users, Globe, HelpCircle, Book, Download, Calendar,

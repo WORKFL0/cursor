@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { aboutPageData, companyInfo } from '@/lib/data/workflo-data'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import Head from 'next/head'
 
 export default function AboutPage() {

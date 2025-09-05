@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { Calculator, ArrowRight, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'

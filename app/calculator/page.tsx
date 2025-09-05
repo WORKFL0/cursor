@@ -31,7 +31,7 @@ export default function CalculatorPage() {
   
   // Calculate estimated hours based on FTE (1 hour per FTE per month average)
   useEffect(() => {
-    setEstimatedHours(users[0])
+    setEstimatedHours(users[0] || 10)
   }, [users])
   
   // Correct pricing logic based on Diensten omschrijving.md

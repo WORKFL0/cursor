@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Calendar, Clock, User, ArrowRight, Star } from 'lucide-react'
 import { NewsArticle, getCategoryById } from '@/lib/data/news-data'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'

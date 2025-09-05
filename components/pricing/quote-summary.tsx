@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 import { Download, Mail, Calculator, TrendingDown } from 'lucide-react'
 import { PricingQuote, serviceCategories } from '@/lib/data/pricing-data'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'

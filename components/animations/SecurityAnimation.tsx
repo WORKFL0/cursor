@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 
 export default function SecurityAnimation() {
   // Placeholder animation - lottie-react dependency not installed

@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Bot, User, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { motion, AnimatePresence } from 'framer-motion';
-// import ReactMarkdown from 'react-markdown';
+import { motion, AnimatePresence } from '@/lib/framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   id: string;
@@ -17,6 +18,8 @@ interface Message {
   suggestedActions?: string[];
   relatedContent?: Array<{ title: string; url: string; type: string }>;
   ticketNumber?: string;
+  isStreaming?: boolean;
+  copied?: boolean;
 }
 
 export function AIChatbot() {
@@ -28,7 +31,10 @@ export function AIChatbot() {
   const [suggestedActions, setSuggestedActions] = useState<string[]>([]);
   const [requiresTicket, setRequiresTicket] = useState(false);
   const [userInfo, setUserInfo] = useState<{ name?: string; email?: string; phone?: string; company?: string }>({});
+  const [streamingMessage, setStreamingMessage] = useState<string>('');
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     // Generate session ID
@@ -39,7 +45,7 @@ export function AIChatbot() {
       setMessages([{
         id: '1',
         role: 'assistant',
-        content: 'Hallo! Ik ben WorkBot, je digitale IT-adviseur van Workflo. Waar kan ik je vandaag mee helpen?',
+        content: 'Hallo! Ik ben **WorkBot**, je digitale IT-adviseur van Workflo. \n\nIk kan je helpen met:\n- 🛠️ IT ondersteuning en problemen\n- 📋 Informatie over onze diensten\n- 💬 Offerte aanvragen\n- 🎯 De juiste oplossing vinden\n\nWaar kan ik je vandaag mee helpen?',
         timestamp: new Date(),
         suggestedActions: [
           'Vertel over jullie diensten',
@@ -62,6 +68,11 @@ export function AIChatbot() {
   const sendMessage = async (messageText: string = input) => {
     if (!messageText.trim()) return;
 
+    // Cancel any ongoing stream
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -73,50 +84,109 @@ export function AIChatbot() {
     setInput('');
     setIsLoading(true);
     setSuggestedActions([]);
+    setStreamingMessage('');
+
+    // Create new AbortController for this request
+    abortControllerRef.current = new AbortController();
 
     try {
       const response = await fetch('/api/ai/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           message: messageText,
           sessionId,
           userInfo,
           createTicket: requiresTicket,
+          stream: true, // Enable streaming
         }),
+        signal: abortControllerRef.current.signal,
       });
 
       if (!response.ok) {
         throw new Error(`API returned ${response.status}: ${response.statusText}`);
       }
 
-      const data = await response.json();
-      
-      if (!data.response) {
-        throw new Error('Invalid response from API');
-      }
-      
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.response,
-        timestamp: new Date(),
-        suggestedActions: data.suggestedActions,
-        relatedContent: data.relatedContent,
-        ticketNumber: data.ticketNumber,
-      };
+      // Check if streaming is supported
+      const contentType = response.headers.get('content-type');
+      if (contentType?.includes('text/event-stream') || response.body) {
+        // Handle streaming response
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+        const assistantMessageId = (Date.now() + 1).toString();
+        
+        let accumulatedContent = '';
+        
+        // Add initial streaming message
+        const streamMessage: Message = {
+          id: assistantMessageId,
+          role: 'assistant',
+          content: '',
+          timestamp: new Date(),
+          isStreaming: true,
+        };
+        setMessages(prev => [...prev, streamMessage]);
 
-      setMessages(prev => [...prev, assistantMessage]);
-      setSuggestedActions(data.suggestedActions || []);
-      
-      // Check if we need to collect ticket info
-      if (data.requiresTicket) {
-        setRequiresTicket(true);
-      } else if (data.ticketCreated) {
-        setRequiresTicket(false);
+        if (reader) {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            const chunk = decoder.decode(value);
+            accumulatedContent += chunk;
+            
+            // Update the streaming message
+            setMessages(prev => prev.map(msg => 
+              msg.id === assistantMessageId 
+                ? { ...msg, content: accumulatedContent }
+                : msg
+            ));
+          }
+        }
+
+        // Mark streaming as complete
+        setMessages(prev => prev.map(msg => 
+          msg.id === assistantMessageId 
+            ? { ...msg, isStreaming: false }
+            : msg
+        ));
+      } else {
+        // Fallback to non-streaming response
+        const data = await response.json();
+        
+        if (!data.response) {
+          throw new Error('Invalid response from API');
+        }
+        
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: data.response,
+          timestamp: new Date(),
+          suggestedActions: data.suggestedActions,
+          relatedContent: data.relatedContent,
+          ticketNumber: data.ticketNumber,
+        };
+
+        setMessages(prev => [...prev, assistantMessage]);
+        setSuggestedActions(data.suggestedActions || []);
+        
+        // Check if we need to collect ticket info
+        if (data.requiresTicket) {
+          setRequiresTicket(true);
+        } else if (data.ticketCreated) {
+          setRequiresTicket(false);
+        }
       }
       
-    } catch (error) {
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Request was aborted');
+        return;
+      }
+      
       console.error('Chat error:', error);
       
       // Provide a more helpful error message based on the error type
@@ -139,11 +209,22 @@ export function AIChatbot() {
       }]);
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
   };
 
   const handleSuggestedAction = (action: string) => {
     sendMessage(action);
+  };
+
+  const copyToClipboard = async (text: string, messageId: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedMessageId(messageId);
+      setTimeout(() => setCopiedMessageId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
   };
 
   return (
@@ -210,7 +291,7 @@ export function AIChatbot() {
                           <Bot className="h-4 w-4 text-gray-700" />
                         )}
                       </div>
-                      <div>
+                      <div className="relative group">
                         <div
                           className={`rounded-lg p-3 ${
                             message.role === 'user'
@@ -218,8 +299,59 @@ export function AIChatbot() {
                               : 'bg-gray-100 text-gray-900'
                           }`}
                         >
+                          {message.role === 'assistant' && (
+                            <button
+                              onClick={() => copyToClipboard(message.content, message.id)}
+                              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                              title="Copy message"
+                            >
+                              {copiedMessageId === message.id ? (
+                                <Check className="h-4 w-4 text-green-600" />
+                              ) : (
+                                <Copy className="h-4 w-4 text-gray-500 hover:text-gray-700" />
+                              )}
+                            </button>
+                          )}
                           <div className="text-sm leading-relaxed">
-                            {message.content}
+                            {message.role === 'assistant' ? (
+                              <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                  p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
+                                  ul: ({children}) => <ul className="list-disc list-inside mb-2 last:mb-0 space-y-1">{children}</ul>,
+                                  ol: ({children}) => <ol className="list-decimal list-inside mb-2 last:mb-0 space-y-1">{children}</ol>,
+                                  li: ({children}) => <li className="ml-2">{children}</li>,
+                                  code: ({inline, children}) => 
+                                    inline ? (
+                                      <code className="px-1 py-0.5 bg-gray-200 rounded text-sm">{children}</code>
+                                    ) : (
+                                      <pre className="bg-gray-800 text-gray-100 p-2 rounded overflow-x-auto my-2">
+                                        <code>{children}</code>
+                                      </pre>
+                                    ),
+                                  a: ({href, children}) => (
+                                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                      {children}
+                                    </a>
+                                  ),
+                                  strong: ({children}) => <strong className="font-semibold">{children}</strong>,
+                                  em: ({children}) => <em className="italic">{children}</em>,
+                                  h3: ({children}) => <h3 className="font-semibold text-base mt-2 mb-1">{children}</h3>,
+                                  blockquote: ({children}) => (
+                                    <blockquote className="border-l-4 border-gray-300 pl-3 my-2 italic">
+                                      {children}
+                                    </blockquote>
+                                  ),
+                                }}
+                              >
+                                {message.content}
+                              </ReactMarkdown>
+                            ) : (
+                              message.content
+                            )}
+                            {message.isStreaming && (
+                              <span className="inline-block w-1 h-4 bg-gray-600 animate-pulse ml-1" />
+                            )}
                           </div>
                           {message.ticketNumber && (
                             <div className="mt-2 p-2 bg-green-100 dark:bg-green-900/20 rounded border border-green-300 dark:border-green-700">
@@ -275,15 +407,19 @@ export function AIChatbot() {
                   </div>
                 ))}
                 
-                {/* Loading indicator */}
-                {isLoading && (
+                {/* Enhanced Loading indicator with typing animation */}
+                {isLoading && !messages.some(m => m.isStreaming) && (
                   <div className="flex justify-start">
                     <div className="flex items-center space-x-2">
                       <div className="rounded-full p-2 bg-gray-200">
                         <Bot className="h-4 w-4 text-gray-700" />
                       </div>
                       <div className="bg-gray-100 rounded-lg p-3">
-                        <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
+                        <div className="flex space-x-1">
+                          <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
+                          <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
+                          <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -334,7 +470,8 @@ export function AIChatbot() {
                     <Send className="h-4 w-4" />
                   </Button>
                 </form>
-                <p className="text-xs text-gray-500 mt-2 text-center">
+                <p className="text-xs text-gray-500 mt-2 text-center flex items-center justify-center gap-1">
+                  <Sparkles className="h-3 w-3" />
                   Powered by AI • 24/7 Beschikbaar
                 </p>
               </div>

@@ -196,15 +196,16 @@ describe('HubSpot Forms Integration', () => {
       process.env.HUBSPOT_ACCESS_TOKEN = 'test-token'
       
       let attemptCount = 0
-      jest.spyOn(hubspotService as any, 'withRetry').mockImplementation(
-        async (operation: any, operationName: string) => {
+      const mockWithRetry = jest.fn()
+        .mockImplementation(async () => {
           attemptCount++
           if (attemptCount < 3) {
             throw new Error('Temporary failure')
           }
           return { success: true, contactId: 'test-id' }
-        }
-      )
+        })
+      
+      jest.spyOn(hubspotService as any, 'withRetry').mockImplementation(mockWithRetry)
 
       const result = await hubspotService.createOrUpdateContact({
         email: 'test@example.com'

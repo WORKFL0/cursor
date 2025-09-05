@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
 
 interface SkeletonLoaderProps {
   count?: number

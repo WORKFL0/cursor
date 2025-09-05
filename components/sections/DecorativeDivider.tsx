@@ -1,20 +1,28 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from '@/lib/framer-motion'
+import Image from 'next/image'
 
 export default function DecorativeDivider() {
   return (
     <div className="relative py-8 sm:py-12 overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center">
-        <motion.img
-          src="/images/yellow-slash.svg"
-          alt=""
-          className="h-24 opacity-20"
+        <motion.div
           initial={{ x: -100, opacity: 0 }}
           whileInView={{ x: 0, opacity: 0.2 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-        />
+          className="h-24 opacity-20 relative"
+        >
+          <Image
+            src="/images/yellow-slash.svg"
+            alt="Decorative slash separator"
+            width={96}
+            height={96}
+            className="h-24 w-auto"
+            priority={false}
+          />
+        </motion.div>
       </div>
       
       {/* Animated Lines */}
