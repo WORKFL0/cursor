@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { motion, AnimatePresence } from '@/lib/framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useLanguage } from '@/lib/contexts/language-context'
 import { X, Mail, Phone, MessageSquare, Building2, User, CheckCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
