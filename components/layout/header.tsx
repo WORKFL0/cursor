@@ -19,9 +19,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Menu, X, Phone, HeadphonesIcon, ChevronRight, Globe, Monitor, Shield, Cloud, Settings2, Mail, MapPin, ChevronDown, Calendar } from 'lucide-react'
+import { Menu, X, Phone, HeadphonesIcon, ChevronRight, Globe, Monitor, Shield, Cloud, Settings2, Mail, MapPin, ChevronDown, Calendar, Building2, Heart, Megaphone, User, Camera, ShoppingCart, Building, HardDrive } from 'lucide-react'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
-import { navigation, serviceCategories } from '@/lib/data/workflo-data'
+import { navigation, serviceNavigationCategories, sectors } from '@/lib/data/workflo-data'
 import LanguageSwitcher from '@/components/shared/language-switcher'
 import { ThemeToggle } from '@/components/shared/theme-toggle'
 
@@ -41,15 +41,24 @@ export function Header() {
     return false
   }
 
-  // Service icons mapping for mega menu
-  const serviceIcons = {
-    'managed-it': Monitor,
-    'cloud': Cloud,
-    'cybersecurity': Shield,
+  // Icon mapping for services and sectors
+  const iconMap = {
+    Monitor: Monitor,
+    Shield: Shield,
+    Phone: Phone,
+    HardDriveIcon: HardDrive,
+    Building2: Building2,
+    Heart: Heart,
+    Megaphone: Megaphone,
+    User: User,
+    Camera: Camera,
+    ShoppingCart: ShoppingCart,
+    Building: Building,
+    Cloud: Cloud
   }
 
   return (
-    <header className="bg-background/95 backdrop-blur-md sticky top-0 z-50 border-b border-workflo-yellow/20 shadow-lg shadow-workflo-yellow/5">
+    <header className="bg-background/95 backdrop-blur-md sticky top-0 z-50 border-b border-workflo-yellow/20 shadow-lg shadow-workflo-yellow/5 transition-all duration-300">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo - Clickable Home Link */}
@@ -84,91 +93,96 @@ export function Header() {
                   <NavigationMenuItem key={item.href}>
                     {item.children ? (
                       <>
-                        <NavigationMenuTrigger className={`h-10 px-4 text-sm font-medium transition-all duration-200 ${
-                          isActivePage(item.href) 
-                            ? 'text-primary bg-primary/5 border-b-2 border-primary rounded-b-none' 
-                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                        }`}>
+                        <NavigationMenuTrigger 
+                          className={`h-10 px-4 text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:scale-[1.02] ${
+                            isActivePage(item.href) 
+                              ? 'text-primary bg-primary/5 border-b-2 border-primary rounded-b-none' 
+                              : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                          }`}
+                          aria-label={`${getNavTitle(item)} menu`}>
                           {getNavTitle(item)}
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
                           {/* Services Mega Menu */}
                           {item.href === '/diensten' ? (
-                            <div className="w-[800px] p-6">
-                              <div className="grid grid-cols-3 gap-6">
-                                <div className="space-y-4">
-                                  <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                                    {language === 'nl' ? 'Hoofddiensten' : 'Core Services'}
-                                  </h4>
-                                  {serviceCategories.map((service) => {
-                                    const IconComponent = serviceIcons[service.id as keyof typeof serviceIcons]
-                                    return (
-                                      <Link
-                                        key={service.id}
-                                        href={`/diensten/${service.slug}`}
-                                        className="group flex items-start space-x-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
-                                      >
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-md bg-workflo-yellow/20 flex items-center justify-center group-hover:bg-workflo-yellow/30 transition-colors">
+                            <div className="w-[900px] p-6">
+                              <div className="grid grid-cols-4 gap-6">
+                                {Object.entries(serviceNavigationCategories).map(([key, category]) => {
+                                  const IconComponent = iconMap[category.icon as keyof typeof iconMap]
+                                  return (
+                                    <div key={key} className="space-y-3">
+                                      <div className="flex items-center space-x-2 mb-4">
+                                        <div className="flex-shrink-0 w-6 h-6 rounded-md bg-workflo-yellow/20 flex items-center justify-center">
                                           {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
                                         </div>
-                                        <div>
-                                          <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                            {language === 'nl' ? service.nameNL : service.name}
-                                          </div>
-                                          <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                                            {language === 'nl' ? service.descriptionNL : service.description}
-                                          </div>
+                                        <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+                                          {language === 'nl' ? category.titleNL : category.title}
+                                        </h4>
+                                      </div>
+                                      <div className="space-y-1">
+                                        {category.services.map((service) => (
+                                          <Link
+                                            key={service.href}
+                                            href={service.href}
+                                            className="group block p-2 rounded-md hover:bg-muted/50 hover:scale-[1.01] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                            aria-describedby={`service-${service.href.replace(/\//g, '-')}-desc`}
+                                          >
+                                            <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                                              {language === 'nl' ? service.titleNL : service.title}
+                                            </div>
+                                            <div 
+                                              className="text-xs text-muted-foreground mt-1 line-clamp-2"
+                                              id={`service-${service.href.replace(/\//g, '-')}-desc`}
+                                            >
+                                              {language === 'nl' ? service.descriptionNL : service.description}
+                                            </div>
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                              <div className="border-t border-border mt-6 pt-4 flex justify-between items-center">
+                                <Link href="/diensten" className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+                                  {language === 'nl' ? 'Alle diensten bekijken' : 'View all services'}
+                                  <ChevronRight className="ml-1 w-4 h-4" />
+                                </Link>
+                                <Link href="/prijzen" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                                  {language === 'nl' ? 'Prijzen & Pakketten' : 'Pricing & Packages'}
+                                  <ChevronRight className="ml-1 w-4 h-4" />
+                                </Link>
+                              </div>
+                            </div>
+                          ) : item.href === '/sectoren' ? (
+                            <div className="w-[700px] p-6">
+                              <div className="grid grid-cols-3 gap-4">
+                                {sectors.map((sector) => {
+                                  const IconComponent = iconMap[sector.icon as keyof typeof iconMap]
+                                  return (
+                                    <Link
+                                      key={sector.href}
+                                      href={sector.href}
+                                      className="group flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/50 hover:scale-[1.01] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                      aria-label={`IT solutions for ${language === 'nl' ? sector.titleNL : sector.title}`}
+                                    >
+                                      <div className="flex-shrink-0 w-8 h-8 rounded-md bg-workflo-yellow/20 flex items-center justify-center group-hover:bg-workflo-yellow/30 transition-colors">
+                                        {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
+                                      </div>
+                                      <div>
+                                        <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                                          {language === 'nl' ? sector.titleNL : sector.title}
                                         </div>
-                                      </Link>
-                                    )
-                                  })}
-                                </div>
-                                <div className="space-y-4">
-                                  <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                                    {language === 'nl' ? 'Specialisaties' : 'Specializations'}
-                                  </h4>
-                                  <Link href="/diensten/voip-telefonie" className="group flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                      VoIP Telefonie
-                                    </span>
-                                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                                  </Link>
-                                  <Link href="/diensten/hardware-as-a-service" className="group flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                      Hardware as a Service
-                                    </span>
-                                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                                  </Link>
-                                  <Link href="/diensten/backup-disaster-recovery" className="group flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                      Backup & Disaster Recovery
-                                    </span>
-                                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                                  </Link>
-                                </div>
-                                <div className="space-y-4">
-                                  <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                                    {language === 'nl' ? 'Meer Informatie' : 'More Info'}
-                                  </h4>
-                                  <Link href="/prijzen" className="group flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                      {language === 'nl' ? 'Prijzen & Pakketten' : 'Pricing & Packages'}
-                                    </span>
-                                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                                  </Link>
-                                  <Link href="/case-studies" className="group flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                      {language === 'nl' ? 'Case Studies' : 'Case Studies'}
-                                    </span>
-                                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                                  </Link>
-                                  <div className="pt-3 border-t border-border">
-                                    <Link href="/diensten" className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-                                      {language === 'nl' ? 'Alle diensten bekijken' : 'View all services'}
-                                      <ChevronRight className="ml-1 w-4 h-4" />
+                                      </div>
                                     </Link>
-                                  </div>
-                                </div>
+                                  )
+                                })}
+                              </div>
+                              <div className="border-t border-border mt-6 pt-4">
+                                <Link href="/sectoren" className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+                                  {language === 'nl' ? 'Alle sectoren bekijken' : 'View all sectors'}
+                                  <ChevronRight className="ml-1 w-4 h-4" />
+                                </Link>
                               </div>
                             </div>
                           ) : (
@@ -245,14 +259,14 @@ export function Header() {
               <DropdownMenuContent align="end" className="w-48">
                 <div className="px-3 py-2">
                   <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-2">
-                    <Globe className="h-3 w-3" />
+                    <Globe className="h-4 w-4" />
                     <span>Language</span>
                   </div>
                   <LanguageSwitcher />
                 </div>
                 <div className="border-t px-3 py-2">
                   <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-2">
-                    <Settings2 className="h-3 w-3" />
+                    <Settings2 className="h-4 w-4" />
                     <span>Theme</span>
                   </div>
                   <ThemeToggle />
@@ -370,40 +384,109 @@ export function Header() {
                 
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto p-4">
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     {navigation.map((item) => (
                       <div key={item.href} className="space-y-1">
                         {item.children ? (
                           <>
-                            <div className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg ${
-                              isActivePage(item.href) 
-                                ? 'text-primary bg-primary/5' 
-                                : 'text-muted-foreground'
-                            }`}>
+                            <Link
+                              href={item.href}
+                              className={`flex items-center justify-between px-3 py-3 text-sm font-semibold rounded-lg transition-colors ${
+                                isActivePage(item.href) 
+                                  ? 'text-primary bg-primary/10' 
+                                  : 'text-foreground hover:text-primary hover:bg-muted/50'
+                              }`}
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
                               <span>{getNavTitle(item)}</span>
                               <ChevronRight className="w-4 h-4" />
-                            </div>
-                            <div className="ml-4 space-y-1">
-                              {item.children.map((child) => (
-                                <Link
-                                  key={child.href}
-                                  href={child.href}
-                                  className={`block px-3 py-2 text-sm rounded-lg transition-colors ${
-                                    isActivePage(child.href)
-                                      ? 'text-primary bg-primary/10 font-medium'
-                                      : 'text-foreground hover:text-primary hover:bg-muted/50'
-                                  }`}
-                                  onClick={() => setMobileMenuOpen(false)}
-                                >
-                                  {getLocalizedValue(child as any, 'title')}
-                                </Link>
-                              ))}
-                            </div>
+                            </Link>
+                            
+                            {/* Services submenu with categories */}
+                            {item.href === '/diensten' && (
+                              <div className="ml-4 space-y-3 pb-2">
+                                {Object.entries(serviceNavigationCategories).map(([key, category]) => {
+                                  const IconComponent = iconMap[category.icon as keyof typeof iconMap]
+                                  return (
+                                    <div key={key} className="space-y-1">
+                                      <div className="flex items-center space-x-2 px-2 py-1">
+                                        <div className="flex-shrink-0 w-5 h-5 rounded bg-workflo-yellow/20 flex items-center justify-center">
+                                          {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
+                                        </div>
+                                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                                          {language === 'nl' ? category.titleNL : category.title}
+                                        </span>
+                                      </div>
+                                      {category.services.map((service) => (
+                                        <Link
+                                          key={service.href}
+                                          href={service.href}
+                                          className={`block px-3 py-2 ml-2 text-sm rounded-lg transition-colors ${
+                                            isActivePage(service.href)
+                                              ? 'text-primary bg-primary/10 font-medium'
+                                              : 'text-foreground hover:text-primary hover:bg-muted/50'
+                                          }`}
+                                          onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                          {language === 'nl' ? service.titleNL : service.title}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            )}
+                            
+                            {/* Sectors submenu */}
+                            {item.href === '/sectoren' && (
+                              <div className="ml-4 space-y-1 pb-2">
+                                {sectors.map((sector) => {
+                                  const IconComponent = iconMap[sector.icon as keyof typeof iconMap]
+                                  return (
+                                    <Link
+                                      key={sector.href}
+                                      href={sector.href}
+                                      className={`flex items-center space-x-2 px-3 py-2 text-sm rounded-lg transition-colors ${
+                                        isActivePage(sector.href)
+                                          ? 'text-primary bg-primary/10 font-medium'
+                                          : 'text-foreground hover:text-primary hover:bg-muted/50'
+                                      }`}
+                                      onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                      <div className="flex-shrink-0 w-4 h-4 rounded bg-workflo-yellow/20 flex items-center justify-center">
+                                        {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
+                                      </div>
+                                      <span>{language === 'nl' ? sector.titleNL : sector.title}</span>
+                                    </Link>
+                                  )
+                                })}
+                              </div>
+                            )}
+                            
+                            {/* Other children (e.g., About Us) */}
+                            {item.href !== '/diensten' && item.href !== '/sectoren' && (
+                              <div className="ml-4 space-y-1 pb-2">
+                                {item.children.map((child) => (
+                                  <Link
+                                    key={child.href}
+                                    href={child.href}
+                                    className={`block px-3 py-2 text-sm rounded-lg transition-colors ${
+                                      isActivePage(child.href)
+                                        ? 'text-primary bg-primary/10 font-medium'
+                                        : 'text-foreground hover:text-primary hover:bg-muted/50'
+                                    }`}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                  >
+                                    {getLocalizedValue(child as any, 'title')}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
                           </>
                         ) : (
                           <Link
                             href={item.href}
-                            className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                            className={`block px-3 py-3 text-sm font-semibold rounded-lg transition-colors ${
                               isActivePage(item.href)
                                 ? 'text-primary bg-primary/10'
                                 : 'text-foreground hover:text-primary hover:bg-muted/50'
