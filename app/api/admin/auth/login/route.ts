@@ -55,8 +55,7 @@ export async function POST(request: NextRequest) {
     expiresAt.setDate(expiresAt.getDate() + 7) // 7 days
 
     // Create session
-    const { error: sessionError } = await supabase
-      .from('admin_sessions')
+    const { error: sessionError } = await (supabase.from('admin_sessions') as any)
       .insert({
         user_id: (user as any).id,
         token,
@@ -74,8 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update last login
-    await supabase
-      .from('admin_users')
+    await (supabase.from('admin_users') as any)
       .update({
         last_login_at: new Date().toISOString(),
         login_count: (user as any).login_count + 1,
@@ -83,7 +81,7 @@ export async function POST(request: NextRequest) {
       .eq('id', (user as any).id)
 
     // Log activity
-    await supabase.rpc('log_admin_activity', {
+    await (supabase as any).rpc('log_admin_activity', {
       p_user_id: (user as any).id,
       p_action: 'login',
       p_ip_address: (request as any).ip || request.headers.get('x-forwarded-for'),
