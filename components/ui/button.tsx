@@ -19,12 +19,13 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 hover:shadow-md",
         ghost: "hover:bg-accent hover:text-accent-foreground hover:shadow-sm",
         link: "text-primary underline-offset-4 hover:underline",
-        workflo: "bg-workflo-yellow text-foreground shadow-lg hover:bg-workflo-yellow-dark font-semibold border border-border hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 transform-gpu",
+        workflo: "bg-workflo-yellow text-workflo-black shadow-sm hover:bg-workflo-yellow-dark font-semibold hover:shadow-md hover:scale-[1.02] active:scale-95 transition-all duration-200",
+        "workflo-secondary": "bg-transparent border-2 border-workflo-black dark:border-gray-200 text-workflo-black dark:text-gray-100 font-semibold hover:bg-workflo-black hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-950 transition-all duration-200 hover:scale-[1.02] active:scale-95",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
+        lg: "h-11 rounded-lg px-8 py-4", // Art Director spec: 32px horizontal, 16px vertical
         icon: "h-9 w-9",
       },
     },
@@ -37,7 +38,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 

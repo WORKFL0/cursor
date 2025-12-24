@@ -17,11 +17,11 @@ interface CSRFTokenEntry {
 
 class CSRFTokenStore {
   private store = new Map<string, CSRFTokenEntry>()
-  
+
   set(token: string, entry: CSRFTokenEntry): void {
     this.store.set(token, entry)
   }
-  
+
   get(token: string): CSRFTokenEntry | undefined {
     const entry = this.store.get(token)
     if (entry && Date.now() - entry.createdAt > CSRF_TOKEN_LIFETIME) {
@@ -30,11 +30,11 @@ class CSRFTokenStore {
     }
     return entry
   }
-  
+
   delete(token: string): void {
     this.store.delete(token)
   }
-  
+
   // Mark token as used (single-use tokens)
   use(token: string): boolean {
     const entry = this.get(token)
@@ -44,7 +44,7 @@ class CSRFTokenStore {
     entry.used = true
     return true
   }
-  
+
   // Cleanup expired tokens
   cleanup(): void {
     const now = Date.now()
@@ -85,15 +85,15 @@ function createTokenHash(token: string, secret: string): string {
 export function generateCSRFToken(): { token: string; secret: string } {
   const token = generateSecureToken(CSRF_TOKEN_LENGTH)
   const secret = generateSecureToken(CSRF_SECRET_LENGTH)
-  
+
   const entry: CSRFTokenEntry = {
     secret,
     createdAt: Date.now(),
     used: false
   }
-  
+
   tokenStore.set(token, entry)
-  
+
   return { token, secret }
 }
 
@@ -105,19 +105,19 @@ function verifyCSRFToken(token: string, providedHash: string): boolean {
   if (!entry || entry.used) {
     return false
   }
-  
+
   const expectedHash = createTokenHash(token, entry.secret)
-  
+
   // Use timing-safe comparison
   if (expectedHash.length !== providedHash.length) {
     return false
   }
-  
+
   let result = 0
   for (let i = 0; i < expectedHash.length; i++) {
     result |= expectedHash.charCodeAt(i) ^ providedHash.charCodeAt(i)
   }
-  
+
   return result === 0
 }
 
@@ -130,14 +130,14 @@ function extractCSRFToken(request: NextRequest): string | null {
   if (headerToken) {
     return headerToken
   }
-  
+
   // Try body for form submissions
   const contentType = request.headers.get('content-type') || ''
   if (contentType.includes('application/x-www-form-urlencoded')) {
     // Would need to parse form data - simplified for now
     return null
   }
-  
+
   return null
 }
 
@@ -155,12 +155,12 @@ function isOriginAllowed(origin: string | null, allowedOrigins: string[]): boole
   if (!origin) {
     return false
   }
-  
+
   // Parse origin to get just the host
   try {
     const originUrl = new URL(origin)
     const originHost = `${originUrl.protocol}//${originUrl.host}`
-    
+
     return allowedOrigins.some(allowed => {
       if (allowed === '*') return true
       if (allowed.startsWith('*.')) {
@@ -190,7 +190,7 @@ export interface CSRFOptions {
  * Default CSRF configuration
  */
 const defaultCSRFOptions: CSRFOptions = {
-  allowedOrigins: ['http://localhost:3000', 'https://workflo.nl', 'https://www.workflo.nl'],
+  allowedOrigins: ['http://localhost:3000', 'https://workflo.nl', 'https://www.workflo.nl', 'https://workflo.it', 'https://www.workflo.it'],
   requireSameOrigin: true,
   ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
   skipRoutes: ['/api/health', '/api/metrics'],
@@ -215,17 +215,17 @@ export function checkCSRF(
   const config = { ...defaultCSRFOptions, ...options }
   const method = request.method.toUpperCase()
   const pathname = new URL(request.url).pathname
-  
+
   // Skip CSRF check for ignored methods
   if (config.ignoreMethods?.includes(method)) {
     return { valid: true }
   }
-  
+
   // Skip CSRF check for specified routes
   if (config.skipRoutes?.some(route => pathname.startsWith(route))) {
     return { valid: true }
   }
-  
+
   // Origin validation
   const origin = getRequestOrigin(request)
   if (config.requireSameOrigin || config.allowedOrigins.length > 0) {
@@ -236,7 +236,7 @@ export function checkCSRF(
         code: 'MISSING_ORIGIN'
       }
     }
-    
+
     if (!isOriginAllowed(origin, config.allowedOrigins)) {
       return {
         valid: false,
@@ -245,13 +245,13 @@ export function checkCSRF(
       }
     }
   }
-  
+
   // For state-changing methods, require CSRF token
   if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
-    const token = config.customTokenExtractor 
+    const token = config.customTokenExtractor
       ? config.customTokenExtractor(request)
       : extractCSRFToken(request)
-    
+
     if (!token) {
       return {
         valid: false,
@@ -259,11 +259,11 @@ export function checkCSRF(
         code: 'MISSING_CSRF_TOKEN'
       }
     }
-    
+
     // For this implementation, we'll use a simpler token validation
     // In a real app, you'd validate against the stored secret
     const isValid = validateSimpleCSRFToken(token)
-    
+
     if (!isValid) {
       return {
         valid: false,
@@ -272,7 +272,7 @@ export function checkCSRF(
       }
     }
   }
-  
+
   return { valid: true }
 }
 
@@ -325,46 +325,46 @@ export function createCSRFErrorResponse(result: CSRFResult) {
 export class DoubleSubmitCSRF {
   private cookieName: string
   private headerName: string
-  
+
   constructor(cookieName = 'csrf-token', headerName = 'x-csrf-token') {
     this.cookieName = cookieName
     this.headerName = headerName
   }
-  
+
   generateToken(): string {
     return generateSecureToken(24)
   }
-  
+
   verify(request: NextRequest): boolean {
     const cookieValue = this.getCookieValue(request, this.cookieName)
     const headerValue = request.headers.get(this.headerName)
-    
+
     if (!cookieValue || !headerValue) {
       return false
     }
-    
+
     // Timing-safe comparison
     return this.safeCompare(cookieValue, headerValue)
   }
-  
+
   private getCookieValue(request: NextRequest, name: string): string | null {
     const cookies = request.headers.get('cookie')
     if (!cookies) return null
-    
+
     const match = cookies.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`))
     return match && match[1] ? decodeURIComponent(match[1]) : null
   }
-  
+
   private safeCompare(a: string, b: string): boolean {
     if (a.length !== b.length) {
       return false
     }
-    
+
     let result = 0
     for (let i = 0; i < a.length; i++) {
       result |= a.charCodeAt(i) ^ b.charCodeAt(i)
     }
-    
+
     return result === 0
   }
 }

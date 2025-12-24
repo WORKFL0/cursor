@@ -123,7 +123,7 @@ class RSSService {
       id: `internal-${article.id}`,
       title: language === 'nl' ? article.titleNL : article.title,
       description: language === 'nl' ? article.excerptNL : article.excerpt,
-      link: `https://workflo.nl/nieuws/${article.slug}`,
+      link: `https://workflo.it/nieuws/${article.slug}`,
       pubDate: article.publishedAt,
       author: article.author,
       category: article.category,
@@ -137,9 +137,9 @@ class RSSService {
    */
   private async getExternalArticles(category?: string, language: 'nl' | 'en' = 'nl'): Promise<RSSItem[]> {
     const items: RSSItem[] = []
-    
+
     // Filter feeds by language and category
-    const relevantFeeds = this.config.feeds.filter(feed => 
+    const relevantFeeds = this.config.feeds.filter(feed =>
       feed.enabled &&
       feed.language === language &&
       (!category || feed.category === category)
@@ -174,10 +174,10 @@ class RSSService {
     try {
       // Note: In a real implementation, you would need a server-side solution
       // to fetch RSS feeds due to CORS restrictions
-      
+
       // For now, we'll simulate external RSS items
       const mockItems = this.generateMockExternalItems(feed)
-      
+
       // Cache the results
       this.cache.set(cacheKey, {
         items: mockItems,
@@ -187,12 +187,12 @@ class RSSService {
       return mockItems
     } catch (error) {
       console.error(`Error fetching RSS feed from ${feed.name}:`, error)
-      
+
       // Return cached data if available, even if stale
       if (cached) {
         return cached.items
       }
-      
+
       return []
     }
   }
@@ -272,7 +272,7 @@ class RSSService {
     language?: 'nl' | 'en'
   } = {}): Promise<string> {
     const items = await this.getCombinedFeed(options)
-    const siteUrl = 'https://workflo.nl'
+    const siteUrl = 'https://workflo.it'
     const language = options.language || 'nl'
 
     const rssItems = items.map(item => `
@@ -282,16 +282,16 @@ class RSSService {
       <link>${item.link}</link>
       <guid>${item.link}</guid>
       <pubDate>${item.pubDate.toUTCString()}</pubDate>
-      <author>noreply@workflo.nl (${item.author})</author>
+      <author>noreply@workflo.it (${item.author})</author>
       <category>${item.category}</category>
       <source url="${item.isExternal ? item.link : siteUrl}">${item.source}</source>
     </item>
   `).join('')
 
-    const title = language === 'nl' 
+    const title = language === 'nl'
       ? 'Workflo IT Services - Nieuws & Updates'
       : 'Workflo IT Services - News & Updates'
-    
+
     const description = language === 'nl'
       ? 'Latest nieuws, updates en inzichten van Workflo en relevante IT-bronnen.'
       : 'Latest news, updates and insights from Workflo and relevant IT sources.'
@@ -306,8 +306,8 @@ class RSSService {
     <language>${language === 'nl' ? 'nl-NL' : 'en-US'}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <ttl>30</ttl>
-    <webMaster>noreply@workflo.nl (Workflo IT Team)</webMaster>
-    <managingEditor>noreply@workflo.nl (Workflo IT Team)</managingEditor>
+    <webMaster>noreply@workflo.it (Workflo IT Team)</webMaster>
+    <managingEditor>noreply@workflo.it (Workflo IT Team)</managingEditor>
     <generator>Workflo RSS Service v1.0</generator>
     <image>
       <url>${siteUrl}/images/logo-yellow.png</url>
@@ -362,16 +362,16 @@ class RSSService {
    */
   public updateFeedConfig(feedUrl: string, updates: Partial<ExternalRSSFeed>): boolean {
     const feedIndex = this.config.feeds.findIndex(feed => feed.url === feedUrl)
-    
+
     if (feedIndex === -1) {
       return false
     }
 
     this.config.feeds[feedIndex] = { ...this.config.feeds[feedIndex], ...updates } as any
-    
+
     // Clear cache for this feed to force refresh
     this.cache.delete(feedUrl)
-    
+
     return true
   }
 }

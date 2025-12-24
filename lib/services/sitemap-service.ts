@@ -20,7 +20,7 @@ class SitemapService {
 
   constructor() {
     this.config = {
-      baseUrl: 'https://workflo.nl',
+      baseUrl: 'https://workflo.it',
       defaultChangefreq: 'weekly',
       defaultPriority: 0.8
     }
@@ -62,113 +62,113 @@ class SitemapService {
       changefreq: SitemapUrl['changefreq']
       images?: string[]
     }> = [
-      {
-        path: '',
-        priority: 1.0,
-        changefreq: 'daily',
-        images: [
-          `${this.config.baseUrl}/images/workflo-building.jpg`,
-          `${this.config.baseUrl}/images/logo-yellow.png`
-        ]
-      },
-      {
-        path: '/contact',
-        priority: 0.95,
-        changefreq: 'monthly',
-        images: [`${this.config.baseUrl}/images/workflo-building.jpg`]
-      },
-      {
-        path: '/diensten',
-        priority: 0.9,
-        changefreq: 'weekly'
-      },
-      {
-        path: '/over-ons',
-        priority: 0.85,
-        changefreq: 'monthly',
-        images: [
-          `${this.config.baseUrl}/images/team/florian.jpg`,
-          `${this.config.baseUrl}/images/team/marcello.jpg`,
-          `${this.config.baseUrl}/images/team/nam.jpg`,
-          `${this.config.baseUrl}/images/team/samir.jpg`
-        ]
-      },
-      {
-        path: '/prijzen',
-        priority: 0.9,
-        changefreq: 'weekly'
-      },
-      {
-        path: '/tevredenheidscheck',
-        priority: 0.85,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/nieuws',
-        priority: 0.8,
-        changefreq: 'daily'
-      },
-      {
-        path: '/case-studies',
-        priority: 0.75,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/portfolio',
-        priority: 0.75,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/testimonials',
-        priority: 0.7,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/faq',
-        priority: 0.7,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/werken-bij',
-        priority: 0.6,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/referral',
-        priority: 0.6,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/servicedesk',
-        priority: 0.65,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/downloads',
-        priority: 0.5,
-        changefreq: 'monthly'
-      },
-      {
-        path: '/privacy',
-        priority: 0.3,
-        changefreq: 'yearly'
-      },
-      {
-        path: '/terms',
-        priority: 0.3,
-        changefreq: 'yearly'
-      },
-      {
-        path: '/cookies',
-        priority: 0.3,
-        changefreq: 'yearly'
-      },
-      {
-        path: '/afspraak',
-        priority: 0.8,
-        changefreq: 'monthly'
-      }
-    ]
+        {
+          path: '',
+          priority: 1.0,
+          changefreq: 'daily',
+          images: [
+            `${this.config.baseUrl}/images/workflo-building.jpg`,
+            `${this.config.baseUrl}/images/logo-yellow.png`
+          ]
+        },
+        {
+          path: '/contact',
+          priority: 0.95,
+          changefreq: 'monthly',
+          images: [`${this.config.baseUrl}/images/workflo-building.jpg`]
+        },
+        {
+          path: '/diensten',
+          priority: 0.9,
+          changefreq: 'weekly'
+        },
+        {
+          path: '/over-ons',
+          priority: 0.85,
+          changefreq: 'monthly',
+          images: [
+            `${this.config.baseUrl}/images/team/florian.jpg`,
+            `${this.config.baseUrl}/images/team/marcello.jpg`,
+            `${this.config.baseUrl}/images/team/nam.jpg`,
+            `${this.config.baseUrl}/images/team/samir.jpg`
+          ]
+        },
+        {
+          path: '/prijzen',
+          priority: 0.9,
+          changefreq: 'weekly'
+        },
+        {
+          path: '/tevredenheidscheck',
+          priority: 0.85,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/nieuws',
+          priority: 0.8,
+          changefreq: 'daily'
+        },
+        {
+          path: '/case-studies',
+          priority: 0.75,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/portfolio',
+          priority: 0.75,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/testimonials',
+          priority: 0.7,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/faq',
+          priority: 0.7,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/werken-bij',
+          priority: 0.6,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/referral',
+          priority: 0.6,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/servicedesk',
+          priority: 0.65,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/downloads',
+          priority: 0.5,
+          changefreq: 'monthly'
+        },
+        {
+          path: '/privacy',
+          priority: 0.3,
+          changefreq: 'yearly'
+        },
+        {
+          path: '/terms',
+          priority: 0.3,
+          changefreq: 'yearly'
+        },
+        {
+          path: '/cookies',
+          priority: 0.3,
+          changefreq: 'yearly'
+        },
+        {
+          path: '/afspraak',
+          priority: 0.8,
+          changefreq: 'monthly'
+        }
+      ]
 
     return staticPages.map(page => ({
       loc: `${this.config.baseUrl}${page.path}`,

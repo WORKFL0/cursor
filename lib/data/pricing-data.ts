@@ -81,7 +81,7 @@ export const serviceCategories: ServiceCategory[] = [
       '10 support hours (€100/hour)',
       'High priority response',
       '4-hour guaranteed response time',
-      'Hours never expire',
+      '12 months validity',
       'Monthly balance updates',
       'Best hourly rate'
     ],
@@ -89,7 +89,7 @@ export const serviceCategories: ServiceCategory[] = [
       '10 support uren (€100/uur)',
       'Hoge prioriteit respons',
       '4 uur gegarandeerde responstijd',
-      'Uren verlopen nooit',
+      '12 maanden geldig',
       'Maandelijkse saldo updates',
       'Beste uurtarief'
     ]
@@ -112,7 +112,7 @@ export const serviceCategories: ServiceCategory[] = [
       '20 support hours (€90/hour)',
       'High priority response',
       '4-hour guaranteed response time',
-      'Hours never expire',
+      '12 months validity',
       'Monthly balance updates',
       'Lowest hourly rate'
     ],
@@ -120,7 +120,7 @@ export const serviceCategories: ServiceCategory[] = [
       '20 support uren (€90/uur)',
       'Hoge prioriteit respons',
       '4 uur gegarandeerde responstijd',
-      'Uren verlopen nooit',
+      '12 maanden geldig',
       'Maandelijkse saldo updates',
       'Laagste uurtarief'
     ]

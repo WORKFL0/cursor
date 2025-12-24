@@ -1,0 +1,194 @@
+{
+  "timestamp": "2025-11-13T14:31:04.069Z",
+  "results": [
+    {
+      "path": "/",
+      "url": "http://localhost:3000/",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/contact",
+      "url": "http://localhost:3000/contact",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/diensten",
+      "url": "http://localhost:3000/diensten",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/over-ons",
+      "url": "http://localhost:3000/over-ons",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/prijzen",
+      "url": "http://localhost:3000/prijzen",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/werken-bij",
+      "url": "http://localhost:3000/werken-bij",
+      "status": 200,
+      "title": "Werken bij Workflo | Join ons IT Team in Amsterdam | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/tevredenheidscheck",
+      "url": "http://localhost:3000/tevredenheidscheck",
+      "status": 200,
+      "title": "IT Tevredenheidscheck | Workflo | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/nieuws",
+      "url": "http://localhost:3000/nieuws",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/faq",
+      "url": "http://localhost:3000/faq",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/testimonials",
+      "url": "http://localhost:3000/testimonials",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/sectoren/architecten",
+      "url": "http://localhost:3000/sectoren/architecten",
+      "status": 200,
+      "title": "IT voor Architecten | Workflo - Specialized IT Solutions | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/sectoren/financiele-sector",
+      "url": "http://localhost:3000/sectoren/financiele-sector",
+      "status": 200,
+      "title": "IT voor de Financiële Sector | Workflo - Secure Financial IT | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/sectoren/gezondheidszorg",
+      "url": "http://localhost:3000/sectoren/gezondheidszorg",
+      "status": 200,
+      "title": "IT voor Gezondheidszorg | Workflo - GDPR Compliant IT Solutions | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/sectoren/marketing-reclame",
+      "url": "http://localhost:3000/sectoren/marketing-reclame",
+      "status": 200,
+      "title": "IT voor Marketing & Reclame | Workflo - Creative Agency IT Solutions | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/sectoren/media",
+      "url": "http://localhost:3000/sectoren/media",
+      "status": 200,
+      "title": "IT voor Media & Productie | Workflo - Professional Media IT Solutions | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/sectoren/retail",
+      "url": "http://localhost:3000/sectoren/retail",
+      "status": 200,
+      "title": "IT voor Retail & E-commerce | Workflo - Omnichannel Retail Solutions | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/sectoren/zzp",
+      "url": "http://localhost:3000/sectoren/zzp",
+      "status": 200,
+      "title": "IT voor ZZP'ers & Freelancers | Workflo - Professional Freelancer IT | Workflo IT Amsterdam",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/calculator",
+      "url": "http://localhost:3000/calculator",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/privacy",
+      "url": "http://localhost:3000/privacy",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/terms",
+      "url": "http://localhost:3000/terms",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    },
+    {
+      "path": "/cookies",
+      "url": "http://localhost:3000/cookies",
+      "status": 200,
+      "title": "Workflo | Amsterdam IT Services - Managed IT, Cloud & Cybersecurity",
+      "hasContent": true,
+      "errors": [],
+      "working": true
+    }
+  ]
+}

@@ -4,13 +4,34 @@ export interface ServiceFeature {
   included: boolean;
 }
 
+export interface ServiceTier {
+  name: string;
+  price: number;
+  features?: string[];
+}
+
+export interface ServiceAddon {
+  available: boolean;
+  price: number;
+  description: string;
+}
+
 export interface ServicePricing {
-  type: 'per_user' | 'fixed' | 'custom';
+  type: 'per_user' | 'fixed' | 'custom' | 'included_in_msp' | 'tiered' | 'addon';
   basePrice?: number;
   remote?: number;
   onsite?: number;
   setup?: number;
   minimum?: number;
+  // For included_in_msp type
+  includedIn?: string[];
+  mspMinimum?: number;
+  message?: string;
+  standaloneNotAvailable?: boolean;
+  addon?: ServiceAddon;
+  // For tiered pricing (like M365)
+  tiers?: ServiceTier[];
+  note?: string;
 }
 
 export interface ServiceFAQ {
@@ -251,9 +272,11 @@ export const servicesData: Service[] = [
       'Vertrouwen van klanten behouden'
     ],
     pricing: {
-      type: 'per_user',
-      basePrice: 35,
-      setup: 200
+      type: 'included_in_msp',
+      includedIn: ['remote', 'enterprise'],
+      mspMinimum: 60,
+      message: 'Inbegrepen in alle MSP pakketten',
+      standaloneNotAvailable: true
     },
     faqs: [
       {
@@ -329,9 +352,14 @@ export const servicesData: Service[] = [
       'Geïntegreerde videobellen (Teams)'
     ],
     pricing: {
-      type: 'per_user',
-      basePrice: 45,
-      setup: 75
+      type: 'tiered',
+      tiers: [
+        { name: 'Business Basic', price: 6.90, features: ['Web apps', 'Email', '1TB OneDrive'] },
+        { name: 'Business Standard', price: 14.30, features: ['Desktop apps', 'Email', '1TB OneDrive'] },
+        { name: 'Business Premium', price: 25.30, features: ['Advanced security', 'Device management'] }
+      ],
+      setup: 50,
+      note: 'Microsoft licenties + Workflo setup & support'
     },
     faqs: [
       {
@@ -407,9 +435,14 @@ export const servicesData: Service[] = [
       'Gemoedsrust voor management'
     ],
     pricing: {
-      type: 'per_user',
-      basePrice: 20,
-      setup: 150
+      type: 'included_in_msp',
+      includedIn: ['remote', 'enterprise'],
+      addon: {
+        available: true,
+        price: 10,
+        description: 'Extra capaciteit bovenop MSP backup'
+      },
+      message: 'Basisbackup inbegrepen in MSP pakketten'
     },
     faqs: [
       {

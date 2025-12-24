@@ -64,9 +64,19 @@ export function HubSpotContactModal({
           hubspotFormRef.current.destroy()
         }
       } catch (error) {
-        console.warn('Error destroying HubSpot form:', error)
+        // Silently catch cleanup errors - they're expected when DOM is already gone
+        console.debug('HubSpot form cleanup (expected):', error)
       } finally {
         hubspotFormRef.current = null
+      }
+    }
+
+    // Clear the form container safely
+    if (formRef.current) {
+      try {
+        formRef.current.innerHTML = ''
+      } catch (error) {
+        console.debug('Form container cleanup:', error)
       }
     }
   }, [])
@@ -144,9 +154,24 @@ export function HubSpotContactModal({
     }
 
     try {
-      // Clear any existing content
-      if (formRef.current) {
-        formRef.current.innerHTML = ''
+      // Clear any existing content safely
+      const container = formRef.current
+      if (container && container.parentNode) {
+        // Extra safety check: ensure container is still in DOM
+        try {
+          // Remove children one by one to avoid removeChild errors
+          while (container.firstChild && container.contains(container.firstChild)) {
+            container.removeChild(container.firstChild)
+          }
+        } catch (clearError) {
+          // If clearing fails, try alternative method
+          console.debug('Clearing via removeChild failed, using innerHTML:', clearError)
+          try {
+            container.innerHTML = ''
+          } catch (innerError) {
+            console.debug('innerHTML clear also failed:', innerError)
+          }
+        }
       }
 
       // Create form

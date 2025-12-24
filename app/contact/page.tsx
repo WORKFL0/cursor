@@ -8,7 +8,7 @@ import { motion } from '@/lib/framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { contactPageData } from '@/lib/data/workflo-data'
-import { HubSpotContactForm } from '@/components/forms/HubSpotContactForm'
+import { CustomContactForm } from '@/components/forms/CustomContactForm'
 import DangerTape from '@/components/shared/danger-tape'
 import { PhoneLink } from '@/components/ui/phone-link'
 
@@ -71,9 +71,9 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div>
-              <HubSpotContactForm />
+              <CustomContactForm />
             </div>
-            
+
             {/* Contact Information */}
             <div className="space-y-8">
               {/* Direct Contact Card with Danger Tape */}
@@ -85,47 +85,47 @@ export default function ContactPage() {
                 <Card className="bg-card border-2 border-workflo-yellow relative overflow-hidden">
                   {/* Simple yellow accent stripe */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-workflo-yellow"></div>
-                
-                <CardHeader className="pt-6">
-                  <CardTitle className="text-xl font-bold text-foreground">
-                    {language === 'nl' ? 'Direct Contact' : 'Direct Contact'}
-                  </CardTitle>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  <PhoneLink 
-                    phoneNumber={contactPageData.location.phone}
-                    sublabel={language === 'nl' ? 'Bel ons direct' : 'Call us directly'}
-                    label={contactPageData.location.phone}
-                  />
-                  
-                  <a 
-                    href={`mailto:${contactPageData.location.email}`}
-                    className="flex items-center gap-3 hover:underline group"
-                  >
-                    <div className="p-3 bg-workflo-yellow/20 rounded-lg group-hover:bg-workflo-yellow/30 transition-colors">
-                      <Mail className="w-6 h-6 text-foreground" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">
-                        {language === 'nl' ? 'Email ons' : 'Email us'}
+
+                  <CardHeader className="pt-6">
+                    <CardTitle className="text-xl font-bold text-foreground">
+                      {language === 'nl' ? 'Direct Contact' : 'Direct Contact'}
+                    </CardTitle>
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    <PhoneLink
+                      phoneNumber={contactPageData.location.phone}
+                      sublabel={language === 'nl' ? 'Bel ons direct' : 'Call us directly'}
+                      label={contactPageData.location.phone}
+                    />
+
+                    <a
+                      href={`mailto:${contactPageData.location.email}`}
+                      className="flex items-center gap-3 hover:underline group"
+                    >
+                      <div className="p-3 bg-workflo-yellow/20 rounded-lg group-hover:bg-workflo-yellow/30 transition-colors">
+                        <Mail className="w-6 h-6 text-foreground" />
                       </div>
-                      <div className="text-xl font-semibold text-foreground">{contactPageData.location.email}</div>
+                      <div>
+                        <div className="text-sm text-muted-foreground">
+                          {language === 'nl' ? 'Email ons' : 'Email us'}
+                        </div>
+                        <div className="text-xl font-semibold text-foreground">{contactPageData.location.email}</div>
+                      </div>
+                    </a>
+
+                    <div className="mt-6 pt-6 border-t border-border">
+                      <p className="text-sm text-muted-foreground mb-2">
+                        {language === 'nl' ? 'Spoed? Bel direct!' : 'Emergency? Call directly!'}
+                      </p>
+                      <p className="font-semibold text-foreground">
+                        {language === 'nl' ? 'Reactie binnen 15 minuten' : 'Response within 15 minutes'}
+                      </p>
                     </div>
-                  </a>
-                  
-                  <div className="mt-6 pt-6 border-t border-border">
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {language === 'nl' ? 'Spoed? Bel direct!' : 'Emergency? Call directly!'}
-                    </p>
-                    <p className="font-semibold text-foreground">
-                      {language === 'nl' ? 'Reactie binnen 15 minuten' : 'Response within 15 minutes'}
-                    </p>
-                  </div>
-                </CardContent>
+                  </CardContent>
                 </Card>
               </div>
-              
+
               {/* Office Info */}
               <Card className="bg-card shadow-xl">
                 <div className="p-8">
@@ -146,7 +146,7 @@ export default function ContactPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Office Hours */}
                   <div className="mb-8">
                     <div className="flex items-start gap-4">
@@ -169,7 +169,7 @@ export default function ContactPage() {
                               <span className="font-medium">09:00 - 17:00</span>
                             </div>
                           </div>
-                          
+
                           <div className="border-l-4 border-workflo-yellow pl-3">
                             <div className="text-sm font-medium text-foreground mb-1">
                               {language === 'nl' ? 'Telefonische bereikbaarheid' : 'Phone availability'}
@@ -181,7 +181,7 @@ export default function ContactPage() {
                               <span className="font-medium">08:00 - 23:00</span>
                             </div>
                           </div>
-                          
+
                           <div className="text-sm text-primary font-medium mt-2">
                             {language === 'nl' ? contactPageData.hours.supportNL : contactPageData.hours.support}
                           </div>
@@ -189,7 +189,7 @@ export default function ContactPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Google Maps Embed */}
                   <div className="mb-6">
                     <div className="bg-card rounded-xl overflow-hidden shadow-lg">
@@ -205,11 +205,11 @@ export default function ContactPage() {
                       />
                     </div>
                   </div>
-                  
+
                   {/* Navigate Button */}
-                  <a 
-                    href="https://maps.google.com/maps/dir/?api=1&destination=Koivistokade+3,1013+AC+Amsterdam,Netherlands" 
-                    target="_blank" 
+                  <a
+                    href="https://maps.google.com/maps/dir/?api=1&destination=Koivistokade+3,1013+AC+Amsterdam,Netherlands"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-3 w-full px-6 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                   >
@@ -218,7 +218,7 @@ export default function ContactPage() {
                   </a>
                 </div>
               </Card>
-              
+
             </div>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function ContactPage() {
                 {language === 'nl' ? 'Praktische Informatie' : 'Practical Information'}
               </h2>
               <p className="text-lg text-muted-foreground">
-                {language === 'nl' 
+                {language === 'nl'
                   ? 'Alles wat je moet weten voor een bezoek aan ons kantoor'
                   : 'Everything you need to know for visiting our office'
                 }
@@ -254,7 +254,7 @@ export default function ContactPage() {
                     {language === 'nl' ? 'Bereikbaarheid' : 'Accessibility'}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {language === 'nl' 
+                    {language === 'nl'
                       ? '30+ minuten lopen van Amsterdam Centraal Station of eindhalte van bus 48 stopt voor de deur'
                       : '30+ minutes walk from Amsterdam Central Station or bus 48 terminus stops right in front'
                     }
@@ -310,7 +310,7 @@ export default function ContactPage() {
                 {language === 'nl' ? 'Veelgestelde Vragen' : 'Frequently Asked Questions'}
               </h2>
               <p className="text-lg text-muted-foreground">
-                {language === 'nl' 
+                {language === 'nl'
                   ? 'Antwoorden op de meest gestelde vragen over onze diensten'
                   : 'Answers to the most common questions about our services'
                 }
@@ -324,7 +324,7 @@ export default function ContactPage() {
                     {language === 'nl' ? 'Hoe snel kunnen jullie beginnen?' : 'How quickly can you start?'}
                   </h3>
                   <p className="text-muted-foreground text-sm">
-                    {language === 'nl' 
+                    {language === 'nl'
                       ? 'Voor urgente situaties kunnen we binnen 24 uur starten. Voor geplande projecten hanteren we meestal een doorlooptijd van 1-2 weken.'
                       : 'For urgent situations we can start within 24 hours. For planned projects we usually have a lead time of 1-2 weeks.'
                     }
@@ -338,7 +338,7 @@ export default function ContactPage() {
                     {language === 'nl' ? 'Werken jullie ook buiten Amsterdam?' : 'Do you work outside Amsterdam?'}
                   </h3>
                   <p className="text-muted-foreground text-sm">
-                    {language === 'nl' 
+                    {language === 'nl'
                       ? 'Ja, we bedienen klanten in heel Nederland. Voor locaties buiten de Randstad rekenen we reiskosten.'
                       : 'Yes, we serve clients throughout the Netherlands. For locations outside the Randstad we charge travel costs.'
                     }
@@ -352,7 +352,7 @@ export default function ContactPage() {
                     {language === 'nl' ? 'Bieden jullie 24/7 ondersteuning?' : 'Do you offer 24/7 support?'}
                   </h3>
                   <p className="text-muted-foreground text-sm">
-                    {language === 'nl' 
+                    {language === 'nl'
                       ? 'Voor managed service klanten bieden we 24/7 monitoring en ondersteuning. Voor andere klanten zijn we bereikbaar tijdens kantooruren.'
                       : 'For managed service clients we offer 24/7 monitoring and support. For other clients we are available during business hours.'
                     }
@@ -366,7 +366,7 @@ export default function ContactPage() {
                     {language === 'nl' ? 'Wat zijn de kosten?' : 'What are the costs?'}
                   </h3>
                   <p className="text-muted-foreground text-sm">
-                    {language === 'nl' 
+                    {language === 'nl'
                       ? 'Kosten variëren per project. We bieden altijd een gratis intake en offerte aan. Neem contact op voor een persoonlijk gesprek.'
                       : 'Costs vary per project. We always offer a free intake and quote. Contact us for a personal consultation.'
                     }

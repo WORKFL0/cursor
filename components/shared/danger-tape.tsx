@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
+import { LifeBuoy } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface DangerTapeProps {
@@ -11,14 +12,14 @@ interface DangerTapeProps {
   animate?: boolean
 }
 
-export default function DangerTape({ 
+export default function DangerTape({
   variant = 'subtle',
   className = '',
   children,
   text,
   animate = false
 }: DangerTapeProps) {
-  
+
   const getTapeStyle = () => {
     switch (variant) {
       case 'subtle':
@@ -61,10 +62,10 @@ export default function DangerTape({
   }
 
   const tapeStyle = getTapeStyle()
-  
+
   if (children || text) {
     return (
-      <div className={cn('relative', className)}>
+      <div className={cn('relative pointer-events-none', className)}>
         {children && (
           <div className="relative z-10">
             {children}
@@ -72,16 +73,16 @@ export default function DangerTape({
         )}
         {text && (
           <div className="relative z-10 bg-workflo-yellow text-black px-4 py-2 font-bold text-center uppercase tracking-wider border-2 border-black shadow-lg">
-            <div 
+            <div
               className="absolute inset-0 opacity-20"
               style={{
                 backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, #000000 10px, #000000 20px)',
               }}
             />
-            <span className="relative z-10">⚠️ {text} ⚠️</span>
+            <span className="relative z-10">{text}</span>
           </div>
         )}
-        <div 
+        <div
           className={cn(
             'absolute inset-0',
             animate && 'animate-pulse'
@@ -91,11 +92,11 @@ export default function DangerTape({
       </div>
     )
   }
-  
+
   return (
-    <div 
+    <div
       className={cn(
-        'w-full',
+        'w-full pointer-events-none',
         animate && 'animate-pulse',
         className
       )}
@@ -105,12 +106,12 @@ export default function DangerTape({
 }
 
 // Helper component for danger tape sections
-export function DangerTapeSection({ 
-  children, 
+export function DangerTapeSection({
+  children,
   className = '',
   title,
-  subtitle 
-}: { 
+  subtitle
+}: {
   children: ReactNode
   className?: string
   title?: string
@@ -137,38 +138,29 @@ export function DangerTapeSection({
   )
 }
 
-// Emergency Alert Banner
-export function EmergencyAlert({ 
-  message, 
+// Premium Support Banner - Art Director Design System
+// CALM blue background, LifeBuoy icon, no alarm styling
+export function EmergencyAlert({
+  message,
   action,
-  onClose 
-}: { 
+  onClose
+}: {
   message: string
   action?: ReactNode
   onClose?: () => void
 }) {
   return (
-    <div className="relative bg-red-600 text-white py-3 px-4">
-      <DangerTape variant="warning" className="absolute top-0 left-0 right-0" />
-      <div className="relative z-10 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <span className="text-workflo-yellow text-xl animate-pulse">🚨</span>
-          <span className="font-bold uppercase tracking-wide">{message}</span>
+    <div className="relative bg-blue-50 dark:bg-blue-950/20 border-y border-blue-100 dark:border-blue-900/30 py-4 px-4">
+      <div className="relative z-10 container mx-auto flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex items-center gap-3">
+          {/* Art Director: LifeBuoy icon - calm, helpful */}
+          <LifeBuoy className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-2 flex-shrink-0" />
+          <span className="text-base font-medium text-gray-800 dark:text-gray-200">{message}</span>
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
           {action}
-          {onClose && (
-            <button 
-              onClick={onClose}
-              className="text-white hover:text-workflo-yellow transition-colors"
-              aria-label="Close alert"
-            >
-              ✕
-            </button>
-          )}
         </div>
       </div>
-      <DangerTape variant="warning" className="absolute bottom-0 left-0 right-0" />
     </div>
   )
 }

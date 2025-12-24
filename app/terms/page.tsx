@@ -227,9 +227,9 @@ export default function TermsOfServicePage() {
                       {language === 'nl' ? 'Vaste maandprijzen' : 'Fixed Monthly Rates'}
                     </h3>
                     <p className="text-blue-800">
-                      {language === 'nl' 
-                        ? 'Managed IT services hebben vaste maandprijzen per computer, geen verborgen kosten.'
-                        : 'Managed IT services have fixed monthly rates per computer, no hidden costs.'
+                      {language === 'nl'
+                        ? 'Managed IT services hebben vaste maandprijzen per gebruiker, geen verborgen kosten.'
+                        : 'Managed IT services have fixed monthly rates per user, no hidden costs.'
                       }
                     </p>
                   </div>

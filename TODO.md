@@ -2,23 +2,23 @@
 
 ## 🚀 High Priority / Urgent
 - [ ] **Over Ons pagina** - Bedrijfsinformatie, team, missie/visie
-- [ ] **Diensten/Producten pagina's** - Alle services uitgebreid beschreven
+- [ ] **Diensten/Producten pagina's** - Alle services uitgebreid beschreven (in een style van een copyrighter die in het achterhoofd houdt dat IT een aparte taal is die vele normale mensen niet begrijpen of willen snappen, dat doen wij voor ze)
   - [ ] Managed IT Services
   - [ ] Cloud Oplossingen
   - [ ] Cybersecurity
   - [ ] Microsoft 365
   - [ ] Backup & Disaster Recovery
-  - [ ] VoIP Telefonie
-  - [ ] Hardware as a Service
+  - [ ] Mac beheer
+  - [ ] Break Fix (uitleggen wat het verschil is met Managed IT Services)
 
 ## 🎯 Features / Nieuwe Functionaliteiten
-- [ ] **RSS Nieuws Feed** - Blog/nieuws sectie met RSS
+- [ ] **RSS Nieuws Feed** - Blog/nieuws sectie met RSS verbeteren
 - [ ] **Klanten Recensies/Testimonials** - Reviews van tevreden klanten
 - [ ] **Q&A / FAQ Sectie** - Veelgestelde vragen
 - [ ] **"Gewerkt Voor" sectie** - Aparte sectie voor projecten/cases
 - [ ] **Klanten sectie** - Huidige klanten vs projecten onderscheid
 - [ ] **Contact formulier** - Werkend formulier met validatie
-- [ ] **Nieuwsbrief aanmelding** - Email capture voor marketing
+- [ ] **Nieuwsbrief aanmelding** - Email capture voor marketing. Altijd de hubspot form gebruiken
 
 ## 🐛 Bugs / Fixes
 - [ ] Video animaties toevoegen (workflo-hero-animation.mp4 ontbreekt)
@@ -37,10 +37,11 @@
 - [ ] **Algemene Voorwaarden pagina** - Terms of Service
 - [ ] **Cookie Policy pagina** - Cookie gebruik uitleg
 - [ ] **Disclaimer pagina**
-- [ ] Case studies toevoegen
-- [ ] Blog posts/nieuws artikelen
+- [ ] Case studies toevoegen van onze linkedin pagina
+- [ ] 
 
 ## 🎨 Design / UI Updates
+- [ ] meer animaties en gradiant gebruik om een moderne feel te geven
 - [ ] Meer gebruik van Workflo geel (#f2f400) door de site
 - [ ] Consistente spacing en typography
 - [ ] Betere foto's/illustraties toevoegen

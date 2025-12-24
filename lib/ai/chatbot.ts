@@ -46,7 +46,7 @@ export interface ChatbotResponse {
 }
 
 // Intent classification
-export type ChatIntent = 
+export type ChatIntent =
   | 'greeting'
   | 'service_inquiry'
   | 'pricing_question'
@@ -60,7 +60,7 @@ export type ChatIntent =
 export class WorkBot {
   private searchEngine = getSearchEngine();
   private haloClient = getHaloClient();
-  
+
   // Classify user intent (Dutch and English)
   private async classifyIntent(message: string): Promise<{ intent: ChatIntent; confidence: number }> {
     const intents: Record<ChatIntent, string[]> = {
@@ -74,11 +74,11 @@ export class WorkBot {
       feedback: ['feedback', 'suggestion', 'improve', 'better', 'love', 'great', 'excellent', 'suggestie', 'verbeteren', 'beter', 'geweldig', 'uitstekend', 'top'],
       general_question: ['what', 'how', 'why', 'when', 'where', 'tell me', 'wat', 'hoe', 'waarom', 'wanneer', 'waar', 'vertel'],
     };
-    
+
     const lowerMessage = message.toLowerCase();
     let bestIntent: ChatIntent = 'general_question';
     let highestScore = 0;
-    
+
     for (const [intent, keywords] of Object.entries(intents)) {
       const score = keywords.filter(keyword => lowerMessage.includes(keyword)).length;
       if (score > highestScore) {
@@ -86,11 +86,11 @@ export class WorkBot {
         bestIntent = intent as ChatIntent;
       }
     }
-    
+
     const confidence = Math.min(highestScore / 3, 1); // Normalize confidence
     return { intent: bestIntent, confidence };
   }
-  
+
   // Generate contextual response
   public async generateResponse(
     message: string,
@@ -98,7 +98,7 @@ export class WorkBot {
     useAI: boolean = true
   ): Promise<ChatbotResponse> {
     const { intent, confidence } = await this.classifyIntent(message);
-    
+
     // Search for relevant content
     const searchResults = await this.searchEngine.search(message, { limit: 3 });
     const relatedContent = searchResults.map(r => ({
@@ -106,46 +106,46 @@ export class WorkBot {
       url: r.url,
       type: r.type,
     }));
-    
+
     let response: ChatbotResponse = {
       message: '',
       relatedContent,
     };
-    
+
     // Handle different intents
     switch (intent) {
       case 'greeting':
         response = this.handleGreeting();
         break;
-        
+
       case 'service_inquiry':
         response = await this.handleServiceInquiry(message, searchResults);
         break;
-        
+
       case 'pricing_question':
         response = this.handlePricingQuestion();
         break;
-        
+
       case 'technical_support':
         response = await this.handleTechnicalSupport(message, session);
         break;
-        
+
       case 'contact_request':
         response = this.handleContactRequest();
         break;
-        
+
       case 'lead_qualification':
         response = await this.handleLeadQualification(message, session);
         break;
-        
+
       case 'complaint':
         response = this.handleComplaint();
         break;
-        
+
       case 'feedback':
         response = this.handleFeedback();
         break;
-        
+
       default:
         if (useAI) {
           response = await this.generateAIResponse(message, session, searchResults);
@@ -153,11 +153,11 @@ export class WorkBot {
           response = this.generateFallbackResponse();
         }
     }
-    
+
     response.relatedContent = relatedContent;
     return response;
   }
-  
+
   // Handle greeting
   private handleGreeting(): ChatbotResponse {
     const greetings = [
@@ -165,7 +165,7 @@ export class WorkBot {
       "Goedendag! Ik ben WorkBot en help je graag met al jouw vragen over onze IT-diensten. Wat wil je weten?",
       "Welkom bij Workflo! Als WorkBot sta ik klaar om je te informeren over onze managed IT services, cloud oplossingen en meer. Waar ben je in geïnteresseerd?",
     ];
-    
+
     return {
       message: greetings[Math.floor(Math.random() * greetings.length)] || greetings[0] || "Hallo! Hoe kan ik je helpen?",
       suggestedActions: [
@@ -176,7 +176,7 @@ export class WorkBot {
       ],
     };
   }
-  
+
   // Handle service inquiry
   private async handleServiceInquiry(
     message: string,
@@ -219,17 +219,17 @@ export class WorkBot {
         url: '/diensten/hardware-as-a-service',
       },
     };
-    
+
     const lowerMessage = message.toLowerCase();
     let matchedService = null;
-    
+
     for (const [key, service] of Object.entries(services)) {
       if (lowerMessage.includes(key)) {
         matchedService = service;
         break;
       }
     }
-    
+
     if (matchedService) {
       return {
         message: `${matchedService.title}: ${matchedService.description}\n\nWil je meer weten over deze dienst of met ons team spreken?`,
@@ -246,13 +246,13 @@ export class WorkBot {
         }],
       };
     }
-    
+
     return {
       message: "Wij bieden een uitgebreid scala aan IT-diensten waaronder Managed IT, Cloud Oplossingen, Cybersecurity, Backup & Recovery, Microsoft 365, VoIP Telefonie en Hardware as a Service. Welk gebied interesseert je het meest?",
       suggestedActions: Object.values(services).map(s => s.title),
     };
   }
-  
+
   // Handle pricing questions
   private handlePricingQuestion(): ChatbotResponse {
     return {
@@ -267,7 +267,7 @@ export class WorkBot {
       nextQuestion: "Om een nauwkeurige offerte te maken, kun je mij vertellen over jouw bedrijfsgrootte en belangrijkste IT-behoeften?",
     };
   }
-  
+
   // Handle technical support
   private async handleTechnicalSupport(message: string, session?: ChatSession): Promise<ChatbotResponse> {
     const response: ChatbotResponse = {
@@ -290,11 +290,11 @@ export class WorkBot {
 
     return response;
   }
-  
+
   // Handle contact request
   private handleContactRequest(): ChatbotResponse {
     return {
-      message: "Ik breng je graag in contact met ons team! Je kunt ons bereiken via:\n\n📧 E-mail: info@workflo.nl\n📞 Telefoon: +31 20 123 4567\n📍 Kantoor: Amsterdam\n\nWil je een consultatie inplannen?",
+      message: "Ik breng je graag in contact met ons team! Je kunt ons bereiken via:\n\n📧 E-mail: info@workflo.it\n📞 Telefoon: +31 20 123 4567\n📍 Kantoor: Amsterdam\n\nWil je een consultatie inplannen?",
       suggestedActions: [
         "Consultatie inplannen",
         "E-mail sturen",
@@ -304,7 +304,7 @@ export class WorkBot {
       shouldCollectInfo: true,
     };
   }
-  
+
   // Handle lead qualification
   private async handleLeadQualification(
     message: string,
@@ -317,10 +317,10 @@ export class WorkBot {
       "What's your timeline for implementing a solution?",
       "What's your approximate budget range?",
     ];
-    
-    const currentStep = session?.context.leadQualification ? 
+
+    const currentStep = session?.context.leadQualification ?
       Object.keys(session.context.leadQualification).length : 0;
-    
+
     if (currentStep < questions.length) {
       return {
         message: "Great! I'd like to understand your needs better to provide the most relevant information.",
@@ -329,13 +329,13 @@ export class WorkBot {
         nextQuestion: questions[currentStep],
       };
     }
-    
+
     return {
       message: "Thank you for providing this information! Based on your needs, I've identified several solutions that could help. Our sales team will reach out shortly with a personalized proposal.",
       suggestedActions: ["View recommended services", "Schedule call", "Download brochure"],
     };
   }
-  
+
   // Handle complaints
   private handleComplaint(): ChatbotResponse {
     return {
@@ -349,7 +349,7 @@ export class WorkBot {
       shouldCollectInfo: true,
     };
   }
-  
+
   // Handle feedback
   private handleFeedback(): ChatbotResponse {
     return {
@@ -363,7 +363,7 @@ export class WorkBot {
       shouldCollectInfo: true,
     };
   }
-  
+
   // Generate AI response using LLM
   private async generateAIResponse(
     message: string,
@@ -372,16 +372,16 @@ export class WorkBot {
   ): Promise<ChatbotResponse> {
     try {
       // Build context from search results
-      const context = searchResults?.map(r => 
+      const context = searchResults?.map(r =>
         `${r.title}: ${r.highlight}`
       ).join('\n\n');
-      
+
       // Build conversation history
       const history = session?.messages.slice(-5).map(m => ({
         role: m.role as 'user' | 'assistant',
         content: m.content,
       })) || [];
-      
+
       const systemPrompt = `${AI_CONFIG.chatbot.systemPrompt}
       
       Available context from our knowledge base:
@@ -391,18 +391,18 @@ export class WorkBot {
       ${JSON.stringify(session?.context.userInfo || {})}
       
       Provide a helpful, concise response. If you're not sure about something, offer to connect them with our team.`;
-      
+
       const messages = [
         { role: 'system' as const, content: systemPrompt },
         ...history,
         { role: 'user' as const, content: message },
       ];
-      
+
       const response = await getChatCompletion(messages);
-      
+
       // Generate suggested actions based on response
       const suggestedActions = this.generateSuggestedActions(response);
-      
+
       return {
         message: response,
         suggestedActions,
@@ -412,7 +412,7 @@ export class WorkBot {
       return this.generateFallbackResponse();
     }
   }
-  
+
   // Generate fallback response
   private generateFallbackResponse(): ChatbotResponse {
     return {
@@ -425,11 +425,11 @@ export class WorkBot {
       ],
     };
   }
-  
+
   // Generate suggested actions based on context
   private generateSuggestedActions(response: string): string[] {
     const actions: string[] = [];
-    
+
     if (response.toLowerCase().includes('service')) {
       actions.push('View all services');
     }
@@ -442,10 +442,10 @@ export class WorkBot {
     if (actions.length === 0) {
       actions.push('Learn more', 'Contact us', 'View services');
     }
-    
+
     return actions.slice(0, 4);
   }
-  
+
   // Create new chat session
   public createSession(userInfo?: any): ChatSession {
     return {
@@ -458,7 +458,7 @@ export class WorkBot {
       updatedAt: new Date(),
     };
   }
-  
+
   // Add message to session
   public addMessageToSession(
     session: ChatSession,
@@ -466,12 +466,12 @@ export class WorkBot {
   ): ChatSession {
     session.messages.push(message);
     session.updatedAt = new Date();
-    
+
     // Keep only last N messages to prevent context overflow
     if (session.messages.length > AI_CONFIG.chatbot.maxConversationLength) {
       session.messages = session.messages.slice(-AI_CONFIG.chatbot.maxConversationLength);
     }
-    
+
     return session;
   }
 
@@ -526,7 +526,7 @@ export class WorkBot {
   public async checkTicketStatus(ticketId: string): Promise<string> {
     try {
       const ticket = await this.haloClient.getTicketStatus(ticketId);
-      
+
       if (!ticket) {
         return 'Ticket niet gevonden. Controleer het ticketnummer of neem contact op met support.';
       }
@@ -540,7 +540,7 @@ export class WorkBot {
       };
 
       const statusText = statusMessages[ticket.status || 'new'] || ticket.status;
-      
+
       return `Ticket ${ticketId}: ${statusText}\n\nLaatst bijgewerkt: ${ticket.updatedAt?.toLocaleString('nl-NL')}`;
     } catch (error) {
       console.error('Error checking ticket status:', error);

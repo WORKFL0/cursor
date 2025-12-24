@@ -10,7 +10,9 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 4
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -47,7 +49,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Desktop Chrome",
         "name": "Desktop Chrome",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -64,7 +68,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Desktop Firefox",
         "name": "Desktop Firefox",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -81,7 +87,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Desktop Safari",
         "name": "Desktop Safari",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -98,7 +106,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -116,7 +126,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -133,7 +145,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Tablet",
         "name": "Tablet",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -150,7 +164,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Accessibility",
         "name": "Accessibility",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -167,7 +183,9 @@
         "outputDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "Performance",
         "name": "Performance",
         "testDir": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests",
@@ -188,25 +206,544 @@
     "workers": 6,
     "webServer": null
   },
-  "suites": [],
-  "errors": [
+  "suites": [
     {
-      "message": "Error: browserType.launch: Executable doesn't exist at /Users/florian/Library/Caches/ms-playwright/chromium_headless_shell-1187/chrome-mac/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-      "stack": "Error: browserType.launch: Executable doesn't exist at /Users/florian/Library/Caches/ms-playwright/chromium_headless_shell-1187/chrome-mac/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝\n    at globalSetup (/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/setup/playwright-global-setup.ts:12:34)",
-      "location": {
-        "file": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/setup/playwright-global-setup.ts",
-        "column": 34,
-        "line": 12
-      },
-      "snippet": "\u001b[90m   at \u001b[39msetup/playwright-global-setup.ts:12\n\n  10 |   \n  11 |   // Launch a browser to warm up the application\n> 12 |   const browser = await chromium.launch();\n     |                                  ^\n  13 |   const context = await browser.newContext();\n  14 |   const page = await context.newPage();\n  15 |   "
+      "title": "e2e/pre-launch-qa.spec.ts",
+      "file": "e2e/pre-launch-qa.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Pre-Launch QA: Homepage Critical Issues",
+          "file": "e2e/pre-launch-qa.spec.ts",
+          "line": 63,
+          "column": 6,
+          "specs": [
+            {
+              "title": "1. CRITICAL: Scan for dummy numbers (0+, 0., 0%, 0/)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 20953,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n🔍 Scanning for dummy numbers...\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T16:42:54.372Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-2735f--for-dummy-numbers-0-0-0-0--Desktop-Chrome/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c093e1a32314e4f39885-eeea26b2beb3de5cb83b",
+              "file": "e2e/pre-launch-qa.spec.ts",
+              "line": 92,
+              "column": 7
+            },
+            {
+              "title": "2. HIGH: Check for duplicate client logos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 332,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n🔍 Checking for duplicate client logos...\n\n"
+                        },
+                        {
+                          "text": "\n================================================================================\n"
+                        },
+                        {
+                          "text": "PRE-LAUNCH QA REPORT GENERATED\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "# Pre-Launch QA Report\nGenerated: 13-11-2025, 17:43:22\n\n## Executive Summary\n\nTotal Issues Found: **2**\n- 🔴 Critical: **2** (MUST fix before launch)\n- 🟠 High: **0** (Should fix before launch)\n- 🟡 Medium: **0** (Fix if time permits)\n\n---\n\n## 🔴 CRITICAL ISSUES (2)\n\n**These MUST be fixed before going live!**\n\n### 1. Dummy Numbers: Section: root-level, Element 1\n\n**Issue:** Found dummy number: \"Mon-Fri: 9:00 - 17:00\" (00 (double zero))\n\n**Fix:** Replace with actual statistics or remove if data unavailable\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/dummy-number-root-level-0.png`\n\n---\n\n### 2. Dummy Numbers: Section: root-level, Element 2\n\n**Issue:** Found dummy number: \"KvK: 87460807 | BTW: NL864300852B01\" (00 (double zero))\n\n**Fix:** Replace with actual statistics or remove if data unavailable\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/dummy-number-root-level-1.png`\n\n---\n\n## Summary by Category\n\n- **Dummy Numbers**: 2 issue(s)\n\n## Next Steps\n\n1. Fix all CRITICAL issues immediately\n2. Address HIGH priority issues before launch\n3. Review MEDIUM issues and fix if time allows\n4. Re-run this test suite after fixes\n5. Get stakeholder sign-off before deployment\n\n---\n\n**Test Environment:** localhost:3000\n**Test Date:** 13-11-2025, 17:43:22\n**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`\n\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md\n"
+                        },
+                        {
+                          "text": "================================================================================\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T16:43:22.106Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-bf902--for-duplicate-client-logos-Desktop-Chrome/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c093e1a32314e4f39885-a882ac5be27d354fb651",
+              "file": "e2e/pre-launch-qa.spec.ts",
+              "line": 143,
+              "column": 7
+            },
+            {
+              "title": "3. CRITICAL: Find empty buttons and missing text",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1443,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n🔍 Checking for empty buttons...\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T16:42:54.365Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-fc0a3-ty-buttons-and-missing-text-Desktop-Chrome/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c093e1a32314e4f39885-a38565fa5bf6baadad1f",
+              "file": "e2e/pre-launch-qa.spec.ts",
+              "line": 189,
+              "column": 7
+            },
+            {
+              "title": "4. MEDIUM: Check video fallback messages",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 659,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n🔍 Checking video elements...\n\n"
+                        },
+                        {
+                          "text": "\n================================================================================\n"
+                        },
+                        {
+                          "text": "PRE-LAUNCH QA REPORT GENERATED\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "# Pre-Launch QA Report\nGenerated: 13-11-2025, 17:43:03\n\n## Executive Summary\n\nTotal Issues Found: **4**\n- 🔴 Critical: **2** (MUST fix before launch)\n- 🟠 High: **0** (Should fix before launch)\n- 🟡 Medium: **2** (Fix if time permits)\n\n---\n\n## 🔴 CRITICAL ISSUES (2)\n\n**These MUST be fixed before going live!**\n\n### 1. Empty Buttons: Button #12 (id: none, class: inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:shadow-lg h-8 rounded-md px-3 text-xs bg-workflo-yellow hover:bg-workflo-yellow-dark text-black)\n\n**Issue:** Button has no text, aria-label, or value\n\n**Fix:** Add button text or aria-label for accessibility\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/empty-button-11.png`\n\n---\n\n### 2. Empty Buttons: Button #16 (id: none, class: fixed bottom-6 right-6 z-50 bg-workflo-yellow hover:bg-workflo-yellow/90 text-black rounded-full p-4 shadow-lg transition-colors)\n\n**Issue:** Button has no text, aria-label, or value\n\n**Fix:** Add button text or aria-label for accessibility\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/empty-button-15.png`\n\n---\n\n## 🟡 MEDIUM PRIORITY ISSUES (2)\n\n### 1. Video Fallbacks: Video element 1\n\n**Issue:** Default browser fallback message visible\n\n**Fix:** Replace with custom Dutch fallback message or ensure video loads properly\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/video-fallback-0.png`\n\n---\n\n### 2. Video Fallbacks: Video element 2\n\n**Issue:** Default browser fallback message visible\n\n**Fix:** Replace with custom Dutch fallback message or ensure video loads properly\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/video-fallback-1.png`\n\n---\n\n## Summary by Category\n\n- **Empty Buttons**: 2 issue(s)\n- **Video Fallbacks**: 2 issue(s)\n\n## Next Steps\n\n1. Fix all CRITICAL issues immediately\n2. Address HIGH priority issues before launch\n3. Review MEDIUM issues and fix if time allows\n4. Re-run this test suite after fixes\n5. Get stakeholder sign-off before deployment\n\n---\n\n**Test Environment:** localhost:3000\n**Test Date:** 13-11-2025, 17:43:03\n**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`\n\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md\n"
+                        },
+                        {
+                          "text": "================================================================================\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T16:43:02.451Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-d84df-eck-video-fallback-messages-Desktop-Chrome/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c093e1a32314e4f39885-003a4c054d9ff270d986",
+              "file": "e2e/pre-launch-qa.spec.ts",
+              "line": 242,
+              "column": 7
+            },
+            {
+              "title": "5. HIGH: Analyze CTA inconsistencies",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 30000,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/e2e/pre-launch-qa.spec.ts",
+                            "column": 37,
+                            "line": 305
+                          },
+                          "message": "Error: locator.textContent: Target page, context or browser has been closed\n\n  303 |\n  304 |       for (const element of elements) {\n> 305 |         const text = (await element.textContent())?.trim();\n      |                                     ^\n  306 |         if (text && text.length > 3) { // Ignore very short text\n  307 |           ctaTexts.set(text, (ctaTexts.get(text) || 0) + 1);\n  308 |\n    at /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/e2e/pre-launch-qa.spec.ts:305:37"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "\n🔍 Analyzing CTAs for consistency...\n\n"
+                        },
+                        {
+                          "text": "\n================================================================================\n"
+                        },
+                        {
+                          "text": "PRE-LAUNCH QA REPORT GENERATED\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "# Pre-Launch QA Report\nGenerated: 13-11-2025, 17:43:31\n\n## Executive Summary\n\nTotal Issues Found: **0**\n- 🔴 Critical: **0** (MUST fix before launch)\n- 🟠 High: **0** (Should fix before launch)\n- 🟡 Medium: **0** (Fix if time permits)\n\n---\n\n## Summary by Category\n\n\n## Next Steps\n\n1. Fix all CRITICAL issues immediately\n2. Address HIGH priority issues before launch\n3. Review MEDIUM issues and fix if time allows\n4. Re-run this test suite after fixes\n5. Get stakeholder sign-off before deployment\n\n---\n\n**Test Environment:** localhost:3000\n**Test Date:** 13-11-2025, 17:43:31\n**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`\n\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md\n"
+                        },
+                        {
+                          "text": "================================================================================\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T16:42:54.364Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/test-finished-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/trace.zip"
+                        }
+                      ]
+                    },
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30001,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/e2e/pre-launch-qa.spec.ts",
+                            "column": 37,
+                            "line": 305
+                          },
+                          "message": "Error: locator.textContent: Target page, context or browser has been closed\n\n  303 |\n  304 |       for (const element of elements) {\n> 305 |         const text = (await element.textContent())?.trim();\n      |                                     ^\n  306 |         if (text && text.length > 3) { // Ignore very short text\n  307 |           ctaTexts.set(text, (ctaTexts.get(text) || 0) + 1);\n  308 |\n    at /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/e2e/pre-launch-qa.spec.ts:305:37"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "\n🔍 Analyzing CTAs for consistency...\n\n"
+                        },
+                        {
+                          "text": "\n================================================================================\n"
+                        },
+                        {
+                          "text": "PRE-LAUNCH QA REPORT GENERATED\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "# Pre-Launch QA Report\nGenerated: 13-11-2025, 17:44:06\n\n## Executive Summary\n\nTotal Issues Found: **0**\n- 🔴 Critical: **0** (MUST fix before launch)\n- 🟠 High: **0** (Should fix before launch)\n- 🟡 Medium: **0** (Fix if time permits)\n\n---\n\n## Summary by Category\n\n\n## Next Steps\n\n1. Fix all CRITICAL issues immediately\n2. Address HIGH priority issues before launch\n3. Review MEDIUM issues and fix if time allows\n4. Re-run this test suite after fixes\n5. Get stakeholder sign-off before deployment\n\n---\n\n**Test Environment:** localhost:3000\n**Test Date:** 13-11-2025, 17:44:06\n**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`\n\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md\n"
+                        },
+                        {
+                          "text": "================================================================================\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-11-13T16:43:32.612Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/test-finished-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c093e1a32314e4f39885-da510fe5ec337e71b34b",
+              "file": "e2e/pre-launch-qa.spec.ts",
+              "line": 284,
+              "column": 7
+            },
+            {
+              "title": "6. HIGH: Check for English words in Dutch content",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1375,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n🔍 Checking for language inconsistencies...\n\n"
+                        },
+                        {
+                          "text": "\n================================================================================\n"
+                        },
+                        {
+                          "text": "PRE-LAUNCH QA REPORT GENERATED\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "# Pre-Launch QA Report\nGenerated: 13-11-2025, 17:44:12\n\n## Executive Summary\n\nTotal Issues Found: **6**\n- 🔴 Critical: **0** (MUST fix before launch)\n- 🟠 High: **6** (Should fix before launch)\n- 🟡 Medium: **0** (Fix if time permits)\n\n---\n\n## 🟠 HIGH PRIORITY ISSUES (6)\n\n**Strongly recommended to fix before launch**\n\n### 1. Language Inconsistency: Found 1 occurrence(s)\n\n**Issue:** English word \"remote working\" found in Dutch content\n\n**Fix:** Replace with Dutch equivalent: \"thuiswerken\"\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-remote-working.png`\n\n---\n\n### 2. Language Inconsistency: Found 2 occurrence(s)\n\n**Issue:** English word \"setup\" found in Dutch content\n\n**Fix:** Replace with Dutch equivalent: \"installatie\"\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-setup.png`\n\n---\n\n### 3. Language Inconsistency: Found 2 occurrence(s)\n\n**Issue:** English word \"remote\" found in Dutch content\n\n**Fix:** Replace with Dutch equivalent: \"op afstand\"\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-remote.png`\n\n---\n\n### 4. Language Inconsistency: Found 5 occurrence(s)\n\n**Issue:** English word \"business\" found in Dutch content\n\n**Fix:** Replace with Dutch equivalent: \"bedrijf\"\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-business.png`\n\n---\n\n### 5. Language Inconsistency: Found 7 occurrence(s)\n\n**Issue:** English word \"support\" found in Dutch content\n\n**Fix:** Replace with Dutch equivalent: \"ondersteuning\"\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-support.png`\n\n---\n\n### 6. Language Inconsistency: Found 16 occurrence(s)\n\n**Issue:** English word \"service\" found in Dutch content\n\n**Fix:** Replace with Dutch equivalent: \"dienst\"\n\n**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-service.png`\n\n---\n\n## Summary by Category\n\n- **Language Inconsistency**: 6 issue(s)\n\n## Next Steps\n\n1. Fix all CRITICAL issues immediately\n2. Address HIGH priority issues before launch\n3. Review MEDIUM issues and fix if time allows\n4. Re-run this test suite after fixes\n5. Get stakeholder sign-off before deployment\n\n---\n\n**Test Environment:** localhost:3000\n**Test Date:** 13-11-2025, 17:44:12\n**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`\n\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md\n"
+                        },
+                        {
+                          "text": "================================================================================\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T16:44:07.540Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-4ea6e-lish-words-in-Dutch-content-Desktop-Chrome/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c093e1a32314e4f39885-ede7eaa5a29701ea6b8e",
+              "file": "e2e/pre-launch-qa.spec.ts",
+              "line": 347,
+              "column": 7
+            },
+            {
+              "title": "7. COMPREHENSIVE: Full page screenshot for reference",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1421,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n📸 Capturing full page screenshot...\n\n"
+                        },
+                        {
+                          "text": "✅ Full page screenshot saved\n\n"
+                        },
+                        {
+                          "text": "\n================================================================================\n"
+                        },
+                        {
+                          "text": "PRE-LAUNCH QA REPORT GENERATED\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "# Pre-Launch QA Report\nGenerated: 13-11-2025, 17:43:02\n\n## Executive Summary\n\nTotal Issues Found: **0**\n- 🔴 Critical: **0** (MUST fix before launch)\n- 🟠 High: **0** (Should fix before launch)\n- 🟡 Medium: **0** (Fix if time permits)\n\n---\n\n## Summary by Category\n\n\n## Next Steps\n\n1. Fix all CRITICAL issues immediately\n2. Address HIGH priority issues before launch\n3. Review MEDIUM issues and fix if time allows\n4. Re-run this test suite after fixes\n5. Get stakeholder sign-off before deployment\n\n---\n\n**Test Environment:** localhost:3000\n**Test Date:** 13-11-2025, 17:43:02\n**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`\n\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md\n"
+                        },
+                        {
+                          "text": "================================================================================\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T16:42:54.368Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/e2e-pre-launch-qa-Pre-Laun-5d936-ge-screenshot-for-reference-Desktop-Chrome/test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c093e1a32314e4f39885-86fabe0d143ea482de17",
+              "file": "e2e/pre-launch-qa.spec.ts",
+              "line": 389,
+              "column": 7
+            }
+          ]
+        }
+      ]
     }
   ],
+  "errors": [],
   "stats": {
-    "startTime": "2025-08-26T14:49:22.064Z",
-    "duration": 530.1690000000001,
-    "expected": 0,
+    "startTime": "2025-11-13T16:42:51.737Z",
+    "duration": 81164.59300000001,
+    "expected": 6,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

@@ -1,673 +1,613 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { motion } from '@/lib/framer-motion'
-import { useLanguage } from '@/lib/contexts/language-context'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { useToast } from '@/hooks/use-toast'
-import { HubSpotNewsletterSignup } from '@/components/forms/HubSpotNewsletterSignup'
-import { 
-  Gift, 
-  Users, 
-  Trophy, 
-  Star, 
-  Euro, 
-  Send, 
-  Mail, 
-  UserPlus,
-  CheckCircle,
-  TrendingUp,
-  Zap,
-  Award,
-  Heart,
-  Sparkles,
-  ArrowRight,
-  Copy,
-  Share2
-} from 'lucide-react'
-import Link from 'next/link'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  CurrencyEuroIcon,
+  ArrowPathIcon,
+  TrophyIcon,
+  UserGroupIcon,
+  ClipboardDocumentCheckIcon,
+  RocketLaunchIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export default function ReferralPage() {
-  const { language } = useLanguage()
-  const { toast } = useToast()
-  const [referralCode, setReferralCode] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState('newsletter')
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  // Form states
-  const [newsletterEmail, setNewsletterEmail] = useState('')
-  const [referralForm, setReferralForm] = useState({
-    name: '',
-    email: '',
-    company: '',
-    phone: '',
-    referredBy: ''
-  })
-  const [inviteEmails, setInviteEmails] = useState('')
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
-  const rewards = [
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const whyJoinItems = [
     {
-      level: 1,
-      referrals: 1,
-      reward: language === 'nl' ? '€50 korting' : '€50 discount',
-      icon: Gift,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100 dark:bg-green-900/20'
+      icon: CurrencyEuroIcon,
+      title: 'Aantrekkelijke directe beloning',
+      description: 'Ontvang €150 tot €1.000 bij elke succesvolle referral, afhankelijk van de contractwaarde',
     },
     {
-      level: 2,
-      referrals: 3,
-      reward: language === 'nl' ? '€150 korting' : '€150 discount',
-      icon: Star,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100 dark:bg-blue-900/20'
+      icon: ArrowPathIcon,
+      title: 'Blijvende inkomsten',
+      description: '5% commissie op alle maandelijkse betalingen, zolang de klant actief blijft',
     },
     {
-      level: 3,
-      referrals: 5,
-      reward: language === 'nl' ? '1 maand gratis service' : '1 month free service',
-      icon: Trophy,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/20'
+      icon: TrophyIcon,
+      title: 'Extra milestone bonussen',
+      description: 'Verdien extra bij 1, 3, 5 en 10 succesvolle referrals — tot €1.850 in bonussen',
+    },
+  ];
+
+  const howItWorksSteps = [
+    {
+      step: '01',
+      title: 'Deel de contactgegevens',
+      description:
+        'Ken je een bedrijf dat baat heeft bij professionele IT-ondersteuning? Stuur ons de contactgegevens of gebruik je persoonlijke referral-link.',
+      icon: UserGroupIcon,
     },
     {
-      level: 4,
-      referrals: 10,
-      reward: language === 'nl' ? 'iPad Pro' : 'iPad Pro',
-      icon: Award,
-      color: 'text-workflo-yellow',
-      bgColor: 'bg-workflo-yellow dark:bg-workflo-yellow/20'
-    }
-  ]
+      step: '02',
+      title: 'Wij nemen het over',
+      description:
+        'Ons team neemt contact op, voert de gesprekken en zorgt voor een goede match. Jij hoeft verder niets te doen — we houden je op de hoogte.',
+      icon: ClipboardDocumentCheckIcon,
+    },
+    {
+      step: '03',
+      title: 'Verdien direct én doorlopend',
+      description:
+        'Bij contractondertekening krijg je direct €150-€1.000 uitbetaald. Daarna ontvang je maandelijks 5% commissie op alle betalingen van de klant.',
+      icon: CurrencyEuroIcon,
+    },
+  ];
 
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    
-    // Simulate API call
-    setTimeout(() => {
-      toast({
-        title: language === 'nl' ? 'Succesvol aangemeld!' : 'Successfully subscribed!',
-        description: language === 'nl' 
-          ? 'Je ontvangt binnenkort onze nieuwsbrief met exclusieve aanbiedingen.'
-          : 'You will receive our newsletter with exclusive offers soon.',
-      })
-      setNewsletterEmail('')
-      setIsLoading(false)
-    }, 1000)
-  }
+  const rewardStructure = [
+    {
+      range: '€0 - €5.000',
+      upfront: '€150',
+      commission: '5%',
+    },
+    {
+      range: '€5.000 - €15.000',
+      upfront: '€300',
+      commission: '5%',
+    },
+    {
+      range: '€15.000 - €30.000',
+      upfront: '€500',
+      commission: '5%',
+    },
+    {
+      range: '€30.000+',
+      upfront: '€1.000',
+      commission: '5%',
+    },
+  ];
 
-  const handleReferralSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    
-    // Generate referral code
-    const code = `WF${Math.random().toString(36).substring(2, 8).toUpperCase()}`
-    
-    setTimeout(() => {
-      setReferralCode(code)
-      toast({
-        title: language === 'nl' ? 'Welkom bij het Referral Program!' : 'Welcome to the Referral Program!',
-        description: language === 'nl' 
-          ? `Je persoonlijke referral code is: ${code}`
-          : `Your personal referral code is: ${code}`,
-      })
-      setReferralForm({ name: '', email: '', company: '', phone: '', referredBy: '' })
-      setIsLoading(false)
-    }, 1000)
-  }
+  const milestoneBonuses = [
+    {
+      milestone: '1 referral',
+      bonus: '€100',
+      icon: '🎯',
+    },
+    {
+      milestone: '3 referrals',
+      bonus: '€250',
+      icon: '🚀',
+    },
+    {
+      milestone: '5 referrals',
+      bonus: '€500',
+      icon: '⭐',
+    },
+    {
+      milestone: '10 referrals',
+      bonus: '€1.000',
+      icon: '👑',
+    },
+  ];
 
-  const handleInviteFriends = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    
-    const emails = inviteEmails.split(',').map(e => e.trim()).filter(e => e)
-    
-    setTimeout(() => {
-      toast({
-        title: language === 'nl' ? 'Uitnodigingen verstuurd!' : 'Invitations sent!',
-        description: language === 'nl' 
-          ? `${emails.length} uitnodigingen zijn verstuurd.`
-          : `${emails.length} invitations have been sent.`,
-      })
-      setInviteEmails('')
-      setIsLoading(false)
-    }, 1000)
-  }
-
-  const copyReferralCode = () => {
-    if (referralCode) {
-      navigator.clipboard.writeText(referralCode)
-      toast({
-        title: language === 'nl' ? 'Gekopieerd!' : 'Copied!',
-        description: language === 'nl' 
-          ? 'Referral code is gekopieerd naar klembord.'
-          : 'Referral code copied to clipboard.',
-      })
-    }
-  }
+  const faqs = [
+    {
+      question: 'Wanneer ontvang ik mijn beloning?',
+      answer:
+        'De directe beloning (€150-€1.000) ontvang je binnen 30 dagen na contractondertekening. De maandelijkse commissie van 5% betalen we uit binnen 14 dagen nadat de klant zijn factuur heeft betaald.',
+    },
+    {
+      question: 'Hoe lang blijf ik commissie ontvangen?',
+      answer:
+        'Zolang de klant actief is bij Workflo, blijf je 5% commissie ontvangen op alle maandelijkse betalingen. Dit kan jaren zijn. Komt een klant later terug? Dan hervat de commissie automatisch.',
+    },
+    {
+      question: 'Wat als de klant zijn contract beëindigt?',
+      answer:
+        'De directe beloning blijft altijd van jou. De maandelijkse commissie stopt zodra de klant zijn contract beëindigt. Keert de klant in de toekomst terug, dan hervatten we de commissiebetalingen.',
+    },
+    {
+      question: 'Hoeveel bedrijven kan ik verwijzen?',
+      answer:
+        'Er is geen limiet. Je kunt zoveel bedrijven doorverwijzen als je wilt, en tegelijk aan meerdere referrals werken. Hoe meer referrals, hoe meer milestone bonussen je verdient.',
+    },
+    {
+      question: 'Welke bedrijven komen in aanmerking?',
+      answer:
+        'Elk bedrijf dat nog geen klant is bij Workflo. We richten ons vooral op MKB-bedrijven met 10-250 medewerkers die IT-ondersteuning, managed services of cybersecurity-oplossingen nodig hebben.',
+    },
+    {
+      question: 'Moet ik zelf verkopen?',
+      answer:
+        'Nee. Jij geeft alleen de contactgegevens door. Ons salesteam voert alle gesprekken, demo\'s en onderhandelingen. Je kunt desgewenst bij gesprekken aanwezig zijn, maar dat hoeft niet.',
+    },
+    {
+      question: 'Hoe werkt de uitbetaling?',
+      answer:
+        'Je ontvangt maandelijks een overzicht per e-mail. Uitbetaling gebeurt via bankoverschrijving naar je opgegeven rekening. Bedragen vanaf €100 worden direct uitbetaald; lagere bedragen worden gecumuleerd.',
+    },
+    {
+      question: 'Kan ik de status van mijn referrals volgen?',
+      answer:
+        'Ja. Je krijgt toegang tot een persoonlijk dashboard waar je realtime ziet: welke referrals in welke fase zitten, hoeveel commissie je hebt verdiend, wanneer uitbetalingen plaatsvinden, en je voortgang naar milestone bonussen.',
+    },
+    {
+      question: 'Wat is de jaarlijkse contractwaarde?',
+      answer:
+        'Dit is het totale bedrag dat de klant per jaar betaalt voor onze diensten. Een klant met bijvoorbeeld €2.000/maand betaalt €24.000 per jaar — dat valt in de categorie €15.000-€30.000, waarmee je €500 directe beloning krijgt.',
+    },
+    {
+      question: 'Zijn er kosten aan verbonden?',
+      answer:
+        'Nee. Deelname aan ons referral programma is volledig gratis. Er zijn geen verplichtingen, targets of lidmaatschapskosten. Je verdient alleen als je een succesvolle referral doet.',
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-black">
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5" />
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="container mx-auto px-4 relative z-10"
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 100 }}
-              className="inline-flex items-center justify-center w-20 h-20 bg-primary/20 rounded-full mb-6"
-            >
-              <Gift className="w-10 h-10 text-primary" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-neutral-50 via-white to-neutral-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 py-20 sm:py-32">
+        <div className="absolute inset-0 bg-grid-neutral-900/[0.04] dark:bg-grid-white/[0.02] bg-[size:32px_32px]" />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="mx-auto max-w-3xl text-center"
+          >
+            <motion.div variants={fadeInUp} className="mb-8">
+              <span className="inline-flex items-center gap-2 rounded-full bg-neutral-900 dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-neutral-900">
+                <TrophyIcon className="h-4 w-4" />
+                Referral Programma
+              </span>
             </motion.div>
-            
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground dark:text-white mb-6">
-              {language === 'nl' 
-                ? 'Word Beloond voor het Delen van Workflo'
-                : 'Get Rewarded for Sharing Workflo'
-              }
-            </h1>
-            
-            <p className="text-xl text-muted-foreground dark:text-gray-300 mb-8">
-              {language === 'nl'
-                ? 'Verdien kortingen, gratis services en exclusieve beloningen door vrienden en collega\'s door te verwijzen naar onze IT-diensten.'
-                : 'Earn discounts, free services, and exclusive rewards by referring friends and colleagues to our IT services.'
-              }
-            </p>
-
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Badge variant="secondary" className="px-4 py-2">
-                <Users className="w-4 h-4 mr-2" />
-                {language === 'nl' ? '50+ Actieve Verwijzers' : '50+ Active Referrers'}
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <Euro className="w-4 h-4 mr-2" />
-                {language === 'nl' ? '€50.000+ Uitgekeerd' : '€50,000+ Paid Out'}
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <Trophy className="w-4 h-4 mr-2" />
-                {language === 'nl' ? 'Top Rewards Programma' : 'Top Rewards Program'}
-              </Badge>
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-16 bg-card dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-5xl mx-auto"
-          >
-            <h2 className="text-3xl font-bold text-center text-foreground dark:text-white mb-12">
-              {language === 'nl' ? 'Hoe Het Werkt' : 'How It Works'}
-            </h2>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  step: 1,
-                  icon: UserPlus,
-                  title: language === 'nl' ? 'Meld Je Aan' : 'Sign Up',
-                  description: language === 'nl' 
-                    ? 'Registreer voor ons referral programma en ontvang je unieke code'
-                    : 'Register for our referral program and receive your unique code'
-                },
-                {
-                  step: 2,
-                  icon: Share2,
-                  title: language === 'nl' ? 'Deel & Verwijs' : 'Share & Refer',
-                  description: language === 'nl'
-                    ? 'Deel je code met vrienden, familie en zakelijke contacten'
-                    : 'Share your code with friends, family, and business contacts'
-                },
-                {
-                  step: 3,
-                  icon: Gift,
-                  title: language === 'nl' ? 'Verdien Beloningen' : 'Earn Rewards',
-                  description: language === 'nl'
-                    ? 'Ontvang kortingen en prijzen voor elke succesvolle verwijzing'
-                    : 'Receive discounts and prizes for every successful referral'
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="h-full hover:shadow-lg transition-shadow">
-                    <CardContent className="pt-6">
-                      <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4 mx-auto">
-                        <item.icon className="w-8 h-8 text-primary" />
-                      </div>
-                      <div className="text-center">
-                        <Badge className="mb-2">{language === 'nl' ? 'Stap' : 'Step'} {item.step}</Badge>
-                        <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-muted-foreground dark:text-muted-foreground">
-                          {item.description}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+            <motion.h1
+              variants={fadeInUp}
+              className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-5xl lg:text-6xl"
+            >
+              Verdien €150-€1.000 per referral + 5% blijvende commissie
+            </motion.h1>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-400"
+            >
+              Ken je bedrijven die betere IT-ondersteuning nodig hebben? Verwijs ze door naar Workflo en verdien direct én doorlopend. Simpel, transparant, zonder gedoe.
+            </motion.p>
+            <motion.div
+              variants={fadeInUp}
+              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+              <Link
+                href="#hoe-werkt-het"
+                className="w-full sm:w-auto rounded-lg bg-neutral-900 dark:bg-white px-8 py-3.5 text-base font-semibold text-white dark:text-neutral-900 shadow-sm hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all duration-200 hover:scale-105"
+              >
+                Aan de slag
+              </Link>
+              <Link
+                href="#beloningen"
+                className="w-full sm:w-auto rounded-lg border-2 border-neutral-900 dark:border-white px-8 py-3.5 text-base font-semibold text-neutral-900 dark:text-white hover:bg-neutral-900 dark:hover:bg-white hover:text-white dark:hover:text-neutral-900 transition-all duration-200"
+              >
+                Bekijk beloningen
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Rewards Tiers */}
-      <section className="py-16 bg-muted/50 dark:bg-gray-800">
-        <div className="container mx-auto px-4">
+      {/* Why Join Section */}
+      <section className="py-20 sm:py-32 bg-white dark:bg-neutral-950">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-5xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mx-auto max-w-2xl text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-center text-foreground dark:text-white mb-4">
-              {language === 'nl' ? 'Beloningen & Prijzen' : 'Rewards & Prizes'}
-            </h2>
-            <p className="text-center text-muted-foreground dark:text-gray-300 mb-12">
-              {language === 'nl' 
-                ? 'Hoe meer je verwijst, hoe groter de beloningen!'
-                : 'The more you refer, the bigger the rewards!'
-              }
-            </p>
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl"
+            >
+              Waarom deelnemen aan ons programma?
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-4 text-lg text-neutral-600 dark:text-neutral-400"
+            >
+              Aantrekkelijke beloningen, volledige transparantie en geen verplichtingen
+            </motion.p>
+          </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {rewards.map((reward, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <Card className="h-full hover:shadow-xl transition-all">
-                    <CardHeader>
-                      <div className={`w-full p-4 rounded-lg ${reward.bgColor}`}>
-                        <reward.icon className={`w-12 h-12 ${reward.color} mx-auto`} />
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {whyJoinItems.map((item, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="group relative overflow-hidden rounded-2xl bg-neutral-50 dark:bg-neutral-900 p-8 transition-all duration-300 hover:shadow-xl hover:shadow-neutral-200/50 dark:hover:shadow-neutral-800/50 hover:-translate-y-1"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900 dark:bg-white transition-transform duration-300 group-hover:scale-110">
+                  <item.icon className="h-6 w-6 text-white dark:text-neutral-900" />
+                </div>
+                <h3 className="mt-6 text-xl font-semibold text-neutral-900 dark:text-white">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-neutral-600 dark:text-neutral-400">{item.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section id="hoe-werkt-het" className="py-20 sm:py-32 bg-neutral-50 dark:bg-neutral-900">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mx-auto max-w-2xl text-center mb-16"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl"
+            >
+              Zo werkt het
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-4 text-lg text-neutral-600 dark:text-neutral-400"
+            >
+              Drie stappen naar je eerste beloning — wij doen het zware werk
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 gap-8 lg:grid-cols-3"
+          >
+            {howItWorksSteps.map((step, index) => (
+              <motion.div key={index} variants={fadeInUp} className="relative">
+                <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-neutral-950 p-8 shadow-sm ring-1 ring-neutral-200 dark:ring-neutral-800 transition-all duration-300 hover:shadow-lg hover:ring-neutral-300 dark:hover:ring-neutral-700">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-neutral-900 dark:bg-white">
+                      <step.icon className="h-7 w-7 text-white dark:text-neutral-900" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold text-neutral-500 dark:text-neutral-400">
+                        STEP {step.step}
                       </div>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <Badge variant="outline" className="mb-2">
-                        {language === 'nl' ? 'Level' : 'Level'} {reward.level}
-                      </Badge>
-                      <h3 className="text-lg font-semibold text-foreground dark:text-white mb-2">
-                        {reward.referrals} {language === 'nl' ? 'Verwijzingen' : 'Referrals'}
+                      <h3 className="mt-2 text-xl font-semibold text-neutral-900 dark:text-white">
+                        {step.title}
                       </h3>
-                      <p className="text-xl font-bold text-primary">
-                        {reward.reward}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
-                <CardContent className="py-8">
-                  <Sparkles className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-foreground dark:text-white mb-2">
-                    {language === 'nl' ? 'Exclusieve VIP Status' : 'Exclusive VIP Status'}
-                  </h3>
-                  <p className="text-muted-foreground dark:text-gray-300 mb-4">
-                    {language === 'nl' 
-                      ? '20+ verwijzingen: Word VIP partner met permanente kortingen en prioriteit support'
-                      : '20+ referrals: Become a VIP partner with permanent discounts and priority support'
-                    }
+                    </div>
+                  </div>
+                  <p className="mt-4 text-neutral-600 dark:text-neutral-400 flex-1">
+                    {step.description}
                   </p>
-                  <Badge className="bg-primary text-primary-foreground">
-                    {language === 'nl' ? '25% Levenslange Korting' : '25% Lifetime Discount'}
-                  </Badge>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+                {index < howItWorksSteps.length - 1 && (
+                  <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-neutral-300 to-neutral-200 dark:from-neutral-700 dark:to-neutral-800" />
+                )}
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Sign Up Forms */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="newsletter">
-                  <Mail className="w-4 h-4 mr-2" />
-                  {language === 'nl' ? 'Nieuwsbrief' : 'Newsletter'}
-                </TabsTrigger>
-                <TabsTrigger value="referral">
-                  <Users className="w-4 h-4 mr-2" />
-                  {language === 'nl' ? 'Referral Program' : 'Referral Program'}
-                </TabsTrigger>
-                <TabsTrigger value="invite">
-                  <Send className="w-4 h-4 mr-2" />
-                  {language === 'nl' ? 'Nodig Uit' : 'Invite'}
-                </TabsTrigger>
-              </TabsList>
+      {/* Reward Structure Section */}
+      <section id="beloningen" className="py-20 sm:py-32 bg-white dark:bg-neutral-950">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mx-auto max-w-2xl text-center mb-16"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl"
+            >
+              Beloningsstructuur
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-4 text-lg text-neutral-600 dark:text-neutral-400"
+            >
+              Transparante beloningen op basis van contractwaarde
+            </motion.p>
+          </motion.div>
 
-              {/* Newsletter Tab */}
-              <TabsContent value="newsletter">
-                <HubSpotNewsletterSignup variant="full" />
-              </TabsContent>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={fadeInUp}
+            className="mx-auto max-w-4xl"
+          >
+            <div className="overflow-hidden rounded-2xl bg-neutral-50 dark:bg-neutral-900 shadow-lg ring-1 ring-neutral-200 dark:ring-neutral-800">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
+                  <thead className="bg-neutral-100 dark:bg-neutral-800">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-900 dark:text-white">
+                        Jaarlijkse contractwaarde
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-900 dark:text-white">
+                        Direct uitbetaling
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-900 dark:text-white">
+                        Maandelijkse commissie
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 bg-white dark:bg-neutral-950">
+                    {rewardStructure.map((tier, index) => (
+                      <tr
+                        key={index}
+                        className="transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-900"
+                      >
+                        <td className="px-6 py-4 text-sm font-medium text-neutral-900 dark:text-white">
+                          {tier.range}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
+                          {tier.upfront}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
+                          {tier.commission} commissie
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-              {/* Referral Program Tab */}
-              <TabsContent value="referral">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>
-                      {language === 'nl' ? 'Word Referral Partner' : 'Become a Referral Partner'}
-                    </CardTitle>
-                    <CardDescription>
-                      {language === 'nl' 
-                        ? 'Registreer je voor ons referral programma en begin direct met het verdienen van beloningen.'
-                        : 'Register for our referral program and start earning rewards immediately.'
-                      }
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {referralCode ? (
-                      <div className="space-y-6">
-                        <div className="bg-primary/10 p-6 rounded-lg text-center">
-                          <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-                          <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
-                            {language === 'nl' ? 'Je bent aangemeld!' : 'You\'re signed up!'}
-                          </h3>
-                          <p className="text-muted-foreground dark:text-gray-300 mb-4">
-                            {language === 'nl' ? 'Je persoonlijke referral code:' : 'Your personal referral code:'}
-                          </p>
-                          <div className="flex items-center justify-center gap-2">
-                            <code className="text-2xl font-mono font-bold text-primary bg-card dark:bg-gray-800 px-4 py-2 rounded">
-                              {referralCode}
-                            </code>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={copyReferralCode}
-                            >
-                              <Copy className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </div>
-                        <Button asChild className="w-full">
-                          <Link href="/dashboard">
-                            {language === 'nl' ? 'Naar Dashboard' : 'Go to Dashboard'}
-                            <ArrowRight className="w-4 h-4 ml-2" />
-                          </Link>
-                        </Button>
-                      </div>
-                    ) : (
-                      <form onSubmit={handleReferralSignup} className="space-y-4">
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="name">
-                              {language === 'nl' ? 'Volledige Naam' : 'Full Name'}
-                            </Label>
-                            <Input
-                              id="name"
-                              value={referralForm.name}
-                              onChange={(e) => setReferralForm({...referralForm, name: e.target.value})}
-                              required
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="email">
-                              {language === 'nl' ? 'E-mailadres' : 'Email Address'}
-                            </Label>
-                            <Input
-                              id="email"
-                              type="email"
-                              value={referralForm.email}
-                              onChange={(e) => setReferralForm({...referralForm, email: e.target.value})}
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="company">
-                              {language === 'nl' ? 'Bedrijfsnaam' : 'Company Name'}
-                            </Label>
-                            <Input
-                              id="company"
-                              value={referralForm.company}
-                              onChange={(e) => setReferralForm({...referralForm, company: e.target.value})}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="phone">
-                              {language === 'nl' ? 'Telefoonnummer' : 'Phone Number'}
-                            </Label>
-                            <Input
-                              id="phone"
-                              type="tel"
-                              value={referralForm.phone}
-                              onChange={(e) => setReferralForm({...referralForm, phone: e.target.value})}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <Label htmlFor="referredBy">
-                            {language === 'nl' ? 'Referral Code (optioneel)' : 'Referral Code (optional)'}
-                          </Label>
-                          <Input
-                            id="referredBy"
-                            placeholder={language === 'nl' ? 'Als je bent doorverwezen' : 'If you were referred'}
-                            value={referralForm.referredBy}
-                            onChange={(e) => setReferralForm({...referralForm, referredBy: e.target.value})}
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <input type="checkbox" id="terms" required className="rounded" />
-                          <Label htmlFor="terms" className="text-sm">
-                            {language === 'nl' 
-                              ? 'Ik ga akkoord met de voorwaarden van het referral programma'
-                              : 'I agree to the referral program terms and conditions'
-                            }
-                          </Label>
-                        </div>
-                        <Button type="submit" className="w-full" disabled={isLoading}>
-                          {isLoading ? (
-                            language === 'nl' ? 'Registreren...' : 'Registering...'
-                          ) : (
-                            <>
-                              <UserPlus className="w-4 h-4 mr-2" />
-                              {language === 'nl' ? 'Start met Verwijzen' : 'Start Referring'}
-                            </>
-                          )}
-                        </Button>
-                      </form>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Invite Friends Tab */}
-              <TabsContent value="invite">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>
-                      {language === 'nl' ? 'Nodig Vrienden Uit' : 'Invite Friends'}
-                    </CardTitle>
-                    <CardDescription>
-                      {language === 'nl' 
-                        ? 'Stuur uitnodigingen naar vrienden en collega\'s om deel te nemen aan ons referral programma.'
-                        : 'Send invitations to friends and colleagues to join our referral program.'
-                      }
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleInviteFriends} className="space-y-4">
-                      <div>
-                        <Label htmlFor="invite-emails">
-                          {language === 'nl' ? 'E-mailadressen' : 'Email Addresses'}
-                        </Label>
-                        <Textarea
-                          id="invite-emails"
-                          placeholder={language === 'nl' 
-                            ? 'email1@voorbeeld.nl, email2@voorbeeld.nl, ...'
-                            : 'email1@example.com, email2@example.com, ...'
-                          }
-                          value={inviteEmails}
-                          onChange={(e) => setInviteEmails(e.target.value)}
-                          rows={4}
-                          required
-                        />
-                        <p className="text-sm text-gray-500 mt-1">
-                          {language === 'nl' 
-                            ? 'Scheid meerdere e-mailadressen met komma\'s'
-                            : 'Separate multiple email addresses with commas'
-                          }
-                        </p>
-                      </div>
-                      <div>
-                        <Label htmlFor="personal-message">
-                          {language === 'nl' ? 'Persoonlijk Bericht (optioneel)' : 'Personal Message (optional)'}
-                        </Label>
-                        <Textarea
-                          id="personal-message"
-                          placeholder={language === 'nl' 
-                            ? 'Voeg een persoonlijk bericht toe aan je uitnodiging...'
-                            : 'Add a personal message to your invitation...'
-                          }
-                          rows={3}
-                        />
-                      </div>
-                      <Button type="submit" className="w-full" disabled={isLoading}>
-                        {isLoading ? (
-                          language === 'nl' ? 'Versturen...' : 'Sending...'
-                        ) : (
-                          <>
-                            <Send className="w-4 h-4 mr-2" />
-                            {language === 'nl' ? 'Verstuur Uitnodigingen' : 'Send Invitations'}
-                          </>
-                        )}
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
+            {/* Example Box */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={fadeInUp}
+              className="mt-12 rounded-2xl bg-gradient-to-br from-neutral-900 to-neutral-800 dark:from-white dark:to-neutral-100 p-8 shadow-xl"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-white dark:bg-neutral-900">
+                  <CurrencyEuroIcon className="h-6 w-6 text-neutral-900 dark:text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-white dark:text-neutral-900">
+                    Rekenvoorbeeld
+                  </h3>
+                  <p className="mt-2 text-neutral-300 dark:text-neutral-700">
+                    Klant met jaarcontract van €24.000 (€2.000/maand):
+                  </p>
+                  <div className="mt-4 space-y-2 text-sm">
+                    <div className="flex justify-between items-center text-neutral-300 dark:text-neutral-700">
+                      <span>Directe beloning bij ondertekening:</span>
+                      <span className="font-semibold text-white dark:text-neutral-900">€500</span>
+                    </div>
+                    <div className="flex justify-between items-center text-neutral-300 dark:text-neutral-700">
+                      <span>Commissie per maand (5% van €2.000):</span>
+                      <span className="font-semibold text-white dark:text-neutral-900">
+                        €100
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-neutral-300 dark:text-neutral-700">
+                      <span>Totale commissie jaar 1 (12× €100):</span>
+                      <span className="font-semibold text-white dark:text-neutral-900">
+                        €1.200
+                      </span>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-neutral-700 dark:border-neutral-300 flex justify-between items-center">
+                      <span className="font-semibold text-white dark:text-neutral-900">
+                        Totaal eerste jaar:
+                      </span>
+                      <span className="text-2xl font-bold text-white dark:text-neutral-900">
+                        €1.700
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-16 bg-card dark:bg-gray-900">
-        <div className="container mx-auto px-4">
+      {/* Milestone Bonuses Section */}
+      <section className="py-20 sm:py-32 bg-neutral-50 dark:bg-neutral-900">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-5xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mx-auto max-w-2xl text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-center text-foreground dark:text-white mb-12">
-              {language === 'nl' ? 'Waarom Deelnemen?' : 'Why Join?'}
-            </h2>
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl"
+            >
+              Extra milestone bonussen
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-4 text-lg text-neutral-600 dark:text-neutral-400"
+            >
+              Verdien extra bij elke belangrijke mijlpaal — tot €1.850 in bonussen
+            </motion.p>
+          </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: TrendingUp,
-                  title: language === 'nl' ? 'Passief Inkomen' : 'Passive Income',
-                  description: language === 'nl'
-                    ? 'Verdien doorlopend commissie voor elke klant die je aanmeldt'
-                    : 'Earn ongoing commission for every customer you sign up'
-                },
-                {
-                  icon: Zap,
-                  title: language === 'nl' ? 'Snelle Uitbetaling' : 'Fast Payout',
-                  description: language === 'nl'
-                    ? 'Ontvang je beloningen binnen 30 dagen na succesvolle verwijzing'
-                    : 'Receive your rewards within 30 days of successful referral'
-                },
-                {
-                  icon: Heart,
-                  title: language === 'nl' ? 'Help Je Netwerk' : 'Help Your Network',
-                  description: language === 'nl'
-                    ? 'Deel waardevolle IT-oplossingen met je zakelijke contacten'
-                    : 'Share valuable IT solutions with your business contacts'
-                }
-              ].map((benefit, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center"
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto"
+          >
+            {milestoneBonuses.map((milestone, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="relative overflow-hidden rounded-2xl bg-white dark:bg-neutral-950 p-6 shadow-sm ring-1 ring-neutral-200 dark:ring-neutral-800 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              >
+                <div className="text-4xl mb-4">{milestone.icon}</div>
+                <div className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+                  {milestone.bonus}
+                </div>
+                <div className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                  {milestone.milestone}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 sm:py-32 bg-white dark:bg-neutral-950">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center mb-16"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl"
+            >
+              Veelgestelde vragen
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-4 text-lg text-neutral-600 dark:text-neutral-400"
+            >
+              Alles wat je moet weten over ons referral programma
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="space-y-4"
+          >
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="overflow-hidden rounded-xl bg-neutral-50 dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 transition-all duration-200 hover:ring-neutral-300 dark:hover:ring-neutral-700"
+              >
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="flex w-full items-center justify-between gap-4 p-6 text-left transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                 >
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                    <benefit.icon className="w-8 h-8 text-primary" />
+                  <span className="text-lg font-semibold text-neutral-900 dark:text-white">
+                    {faq.question}
+                  </span>
+                  {openFaqIndex === index ? (
+                    <ChevronUpIcon className="h-5 w-5 flex-shrink-0 text-neutral-500 dark:text-neutral-400" />
+                  ) : (
+                    <ChevronDownIcon className="h-5 w-5 flex-shrink-0 text-neutral-500 dark:text-neutral-400" />
+                  )}
+                </button>
+                {openFaqIndex === index && (
+                  <div className="border-t border-neutral-200 dark:border-neutral-800 px-6 py-4">
+                    <p className="text-neutral-600 dark:text-neutral-400">{faq.answer}</p>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-muted-foreground dark:text-muted-foreground">
-                    {benefit.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
+                )}
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-primary/80">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="container mx-auto px-4 text-center"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-            {language === 'nl' 
-              ? 'Begin Vandaag met Verdienen'
-              : 'Start Earning Today'
-            }
-          </h2>
-          <p className="text-xl text-black/80 mb-8 max-w-2xl mx-auto">
-            {language === 'nl'
-              ? 'Sluit je aan bij honderden tevreden partners die al profiteren van ons referral programma.'
-              : 'Join hundreds of satisfied partners already benefiting from our referral program.'
-            }
-          </p>
-          <Button 
-            size="lg" 
-            variant="secondary"
-            onClick={() => setActiveTab('referral')}
-            className="text-lg px-8 py-6"
+      <section className="relative overflow-hidden bg-gradient-to-br from-neutral-900 to-neutral-800 dark:from-white dark:to-neutral-100 py-20 sm:py-32">
+        <div className="absolute inset-0 bg-grid-white/[0.02] dark:bg-grid-neutral-900/[0.04] bg-[size:32px_32px]" />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mx-auto max-w-2xl text-center"
           >
-            <Trophy className="w-5 h-5 mr-2" />
-            {language === 'nl' ? 'Word Referral Partner' : 'Become a Referral Partner'}
-          </Button>
-        </motion.div>
+            <motion.div variants={fadeInUp} className="mb-8">
+              <RocketLaunchIcon className="mx-auto h-16 w-16 text-white dark:text-neutral-900" />
+            </motion.div>
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl font-bold tracking-tight text-white dark:text-neutral-900 sm:text-4xl"
+            >
+              Start vandaag nog met verdienen
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-6 text-lg leading-8 text-neutral-300 dark:text-neutral-700"
+            >
+              Meld je aan voor het referral programma. We sturen je je persoonlijke link en toegang tot het dashboard. Geen gedoe, geen verplichtingen.
+            </motion.p>
+            <motion.div variants={fadeInUp} className="mt-10">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 rounded-lg bg-white dark:bg-neutral-900 px-8 py-4 text-base font-semibold text-neutral-900 dark:text-white shadow-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200 hover:scale-105"
+              >
+                Aanmelden als partner
+                <RocketLaunchIcon className="h-5 w-5" />
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
     </div>
-  )
+  );
 }

@@ -150,16 +150,23 @@ export default function AnalyticsPage() {
     const fetchAnalytics = async () => {
       setIsLoading(true)
       try {
-        // For demo purposes, we'll use mock data
-        // In real implementation:
-        // const token = localStorage.getItem('admin_token')
-        // const response = await fetch(`/api/v1/analytics?range=${dateRange}`, { headers: { 'Authorization': `Bearer ${token}` } })
-        
-        await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call
-        setAnalytics(mockAnalytics)
+        // Fetch real analytics data from API
+        const token = localStorage.getItem('admin_token')
+        const response = await fetch(`/api/admin/analytics?range=${dateRange}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch analytics')
+        }
+
+        const data = await response.json()
+        setAnalytics(data)
       } catch (error) {
         console.error('Failed to fetch analytics:', error)
         setError('Failed to load analytics data')
+        // Fallback to mock data in case of error
+        setAnalytics(mockAnalytics)
       } finally {
         setIsLoading(false)
       }

@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/layout/header'
+import { HeaderNew } from '@/components/layout/header-new'
 import { EnterpriseHeader } from '@/components/layout/enterprise-header'
 import { ModernHeader } from '@/components/navigation/modern-header'
 import { SimpleHeader } from '@/components/navigation/simple-header'
-import { Footer } from '@/components/layout/footer-new'
+import { FooterModern } from '@/components/layout/footer-modern'
 import { Toaster } from '@/components/ui/toaster'
 import { LanguageProvider } from '@/lib/contexts/language-context'
 import { ThemeProvider } from '@/lib/contexts/theme-context'
@@ -13,15 +14,18 @@ import { CookieConsentBanner } from '@/components/shared/cookie-consent'
 import DangerTape from '@/components/shared/danger-tape'
 import { siteConfig } from '@/lib/data/workflo-data'
 import { AnalyticsProvider } from '@/components/analytics/analytics-provider'
+import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { AIChatbot } from '@/components/ai/AIChatbot'
 import PWAInstallPrompt from '@/components/PWAInstallPrompt'
 import BottomNavigation from '@/components/BottomNavigation'
 import LoadingProgressBar from '@/components/LoadingProgressBar'
 import PageTransition from '@/components/PageTransition'
+// import { TestClientInteraction } from '@/components/test-client-interaction'
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
+  axes: ['opsz'], // Explicitly enable optical sizing for Display look
 })
 
 export const metadata: Metadata = {
@@ -397,18 +401,18 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="preconnect" href="https://api.workflo.it" />
-        
+
         {/* Theme and App Configuration */}
         <meta name="theme-color" content="#f2f400" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
         <meta name="msapplication-TileColor" content="#f2f400" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        
+
         {/* Viewport and Compatibility */}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-        
+
         {/* Apple Touch Icons and PWA */}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -424,23 +428,17 @@ export default function RootLayout({
         >
           <LanguageProvider defaultLanguage="nl">
             <AnalyticsProvider>
+              <PageViewTracker />
               <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-workflo-yellow-light/5 via-transparent to-yellow-50/10">
-                {/* Feature flags for different header versions */}
-                {process.env.NEXT_PUBLIC_USE_SIMPLE_HEADER === 'true' ? (
-                  <SimpleHeader />
-                ) : process.env.NEXT_PUBLIC_USE_MODERN_HEADER === 'true' ? (
-                  <ModernHeader />
-                ) : process.env.NEXT_PUBLIC_USE_ENTERPRISE_HEADER === 'true' ? (
-                  <EnterpriseHeader />
-                ) : (
-                  <Header />
-                )}
+                {/* NEW HEADER WITH CSS-ONLY HOVER DROPDOWNS */}
+                <Header />
                 <main className="flex-1 pt-16">{children}</main>
-                <Footer />
+                <FooterModern />
               </div>
               <Toaster />
               <CookieConsentBanner />
               <AIChatbot />
+              {/* <TestClientInteraction /> */}
             </AnalyticsProvider>
           </LanguageProvider>
         </ThemeProvider>

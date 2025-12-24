@@ -1,0 +1,57 @@
+name: Production Deployment
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          password: ${{ secrets.PROD_PASSWORD }}
+          # key: ${{ secrets.PROD_SSH_KEY }} # Optional: Use key if set up, otherwise password
+          port: 22
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            
+            # Application Directory
+            APP_DIR="/var/www/workflo-site"
+            
+            # Ensure directory exists
+            if [ ! -d "$APP_DIR" ]; then
+              sudo mkdir -p /var/www
+              sudo chown -R $USER:$USER /var/www
+              git clone https://github.com/WORKFL0/cursor.git $APP_DIR
+            fi
+            
+            cd $APP_DIR
+            
+            # Pull latest changes
+            git fetch --all
+            git reset --hard origin/main
+            
+            # Install dependencies
+            npm ci
+            
+            # Build application
+            npm run build
+            
+            # Restart PM2
+            pm2 describe workflo-app > /dev/null
+            if [ $? -ne 0 ]; then
+              pm2 start npm --name "workflo-app" -- start
+            else
+              pm2 reload workflo-app
+            fi
+            
+            # Save PM2 list
+            pm2 save

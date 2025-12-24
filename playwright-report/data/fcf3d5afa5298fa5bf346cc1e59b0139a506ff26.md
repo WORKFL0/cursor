@@ -1,0 +1,578 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - link "Workflo Home" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img "Workflo" [ref=e7] [cursor=pointer]
+        - navigation [ref=e8]:
+          - navigation "Main" [ref=e9]:
+            - list [ref=e11]:
+              - listitem [ref=e12]:
+                - button "Services" [ref=e13] [cursor=pointer]:
+                  - text: Services
+                  - img [ref=e14] [cursor=pointer]
+              - listitem [ref=e16]:
+                - button "Sectors" [ref=e17] [cursor=pointer]:
+                  - text: Sectors
+                  - img [ref=e18] [cursor=pointer]
+              - listitem [ref=e20]:
+                - button "About Us" [ref=e21] [cursor=pointer]:
+                  - text: About Us
+                  - img [ref=e22] [cursor=pointer]
+              - listitem [ref=e24]:
+                - link "Contact" [ref=e25] [cursor=pointer]:
+                  - /url: /contact
+        - generic [ref=e26]:
+          - link "Servicedesk" [ref=e27] [cursor=pointer]:
+            - /url: https://servicedesk.workflo.it/portal
+            - img
+            - generic [ref=e28] [cursor=pointer]: Servicedesk
+          - button "Settings" [ref=e29] [cursor=pointer]:
+            - img
+            - generic [ref=e30] [cursor=pointer]: Settings
+          - button "020-30 80 465" [ref=e31] [cursor=pointer]:
+            - img
+            - generic [ref=e32] [cursor=pointer]: 020-30 80 465
+            - img
+    - main [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - generic [ref=e38]: Your browser does not support the video tag.
+          - generic:
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+            - generic:
+              - img
+          - generic [ref=e48]:
+            - generic [ref=e51]: Your IT Partner in Amsterdam
+            - heading "We handle your IT" [level=1] [ref=e52]:
+              - generic [ref=e53]: We handle your IT
+            - paragraph [ref=e54]: So you can focus on your business
+            - paragraph [ref=e55]: No complicated stories. We ensure your computers, internet and systems just work. Always. For a fixed price per month.
+            - generic [ref=e56]:
+              - link "Schedule free IT assessment" [ref=e57] [cursor=pointer]:
+                - /url: /contact
+                - text: Schedule free IT assessment
+                - img
+              - link "View pricing →" [ref=e58] [cursor=pointer]:
+                - /url: /prijzen
+                - text: View pricing
+                - generic [ref=e59] [cursor=pointer]: →
+            - generic [ref=e60]:
+              - generic [ref=e61]:
+                - img [ref=e62]
+                - generic [ref=e64]: No setup costs
+              - generic [ref=e65]:
+                - img [ref=e66]
+                - generic [ref=e68]: Cancel monthly
+              - generic [ref=e69]:
+                - img [ref=e70]
+                - generic [ref=e72]: Help within 1 hour
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - heading "IT Partners van Toonaangevende Bedrijven" [level=2] [ref=e76]
+            - paragraph [ref=e77]: Trots op alle succesvolle samenwerkingen die we hebben opgebouwd
+          - generic [ref=e78]:
+            - generic [ref=e80]:
+              - img "iO" [ref=e82]
+              - img "Leyden Labs" [ref=e84]
+              - img "Hunt Amsterdam" [ref=e86]
+              - img "Voice Industries" [ref=e88]
+              - img "Daily Paper" [ref=e90]
+              - img "TBWA" [ref=e92]
+              - img "John Doornik Casting" [ref=e94]
+              - img "Havas Media" [ref=e96]
+              - img "Greenpeace" [ref=e98]
+              - img "JUMP" [ref=e100]
+              - img "iO" [ref=e102]
+              - img "Leyden Labs" [ref=e104]
+              - img "Hunt Amsterdam" [ref=e106]
+              - img "Voice Industries" [ref=e108]
+              - img "Daily Paper" [ref=e110]
+              - img "TBWA" [ref=e112]
+              - img "John Doornik Casting" [ref=e114]
+              - img "Havas Media" [ref=e116]
+              - img "Greenpeace" [ref=e118]
+              - img "JUMP" [ref=e120]
+            - generic [ref=e122]:
+              - img "LaDress" [ref=e124]
+              - img "Bijvoorkeur" [ref=e126]
+              - img "Klaar" [ref=e128]
+              - img "Workstuff" [ref=e130]
+              - img "Aescap" [ref=e132]
+              - img "BLC FinanceView" [ref=e134]
+              - img "Koschuch" [ref=e136]
+              - img "DMC" [ref=e138]
+              - img "PR Mansion" [ref=e140]
+              - img "Highwood" [ref=e142]
+              - img "LaDress" [ref=e144]
+              - img "Bijvoorkeur" [ref=e146]
+              - img "Klaar" [ref=e148]
+              - img "Workstuff" [ref=e150]
+              - img "Aescap" [ref=e152]
+              - img "BLC FinanceView" [ref=e154]
+              - img "Koschuch" [ref=e156]
+              - img "DMC" [ref=e158]
+              - img "PR Mansion" [ref=e160]
+              - img "Highwood" [ref=e162]
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - generic [ref=e165]: 50+
+              - generic [ref=e166]: Tevreden Klanten
+            - generic [ref=e167]:
+              - generic [ref=e168]: Sinds 2014
+              - generic [ref=e169]: Ervaring
+            - generic [ref=e170]:
+              - generic [ref=e171]: 24/7
+              - generic [ref=e172]: Support
+            - generic [ref=e173]:
+              - generic [ref=e174]: 99.9%
+              - generic [ref=e175]: Uptime
+        - generic [ref=e177]:
+          - generic [ref=e178]:
+            - heading "Industry Expertise" [level=2] [ref=e179]
+            - paragraph [ref=e180]: We understand the unique IT challenges of different industries and provide tailored solutions
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - img "Healthcare" [ref=e185]
+              - generic [ref=e186]:
+                - heading "Healthcare" [level=3] [ref=e187]
+                - paragraph [ref=e188]: Specialized IT solutions for hospitals, clinics and healthcare institutions
+                - generic [ref=e189]: 15+ healthcare institutions
+                - generic [ref=e190]:
+                  - paragraph [ref=e191]: "Including:"
+                  - generic [ref=e192]:
+                    - generic [ref=e193]: HAP Elings
+                    - generic [ref=e194]: Doctor Feelgood
+            - generic [ref=e195]:
+              - img "Financial Services" [ref=e198]
+              - generic [ref=e199]:
+                - heading "Financial Services" [level=3] [ref=e200]
+                - paragraph [ref=e201]: Secure and compliant IT infrastructure for financial institutions
+                - generic [ref=e202]: 8+ financial partners
+                - generic [ref=e203]:
+                  - paragraph [ref=e204]: "Including:"
+                  - generic [ref=e205]:
+                    - generic [ref=e206]: Aescap
+                    - generic [ref=e207]: BLC FinanceView
+            - generic [ref=e208]:
+              - img "Retail & E-commerce" [ref=e211]
+              - generic [ref=e212]:
+                - heading "Retail & E-commerce" [level=3] [ref=e213]
+                - paragraph [ref=e214]: Complete IT support for retail and e-commerce businesses
+                - generic [ref=e215]: 12+ retail clients
+                - generic [ref=e216]:
+                  - paragraph [ref=e217]: "Including:"
+                  - generic [ref=e218]:
+                    - generic [ref=e219]: Daily Paper
+                    - generic [ref=e220]: LaDress
+                    - generic [ref=e221]: Bijvoorkeur
+                    - generic [ref=e222]: "+1"
+          - generic [ref=e223]:
+            - paragraph [ref=e224]: Don't see your industry? No problem!
+            - generic [ref=e225]:
+              - link "Request custom advice" [ref=e226] [cursor=pointer]:
+                - /url: /contact
+                - text: Request custom advice
+                - img [ref=e227] [cursor=pointer]
+              - link "View all sectors" [ref=e229] [cursor=pointer]:
+                - /url: /sectoren
+        - generic [ref=e232]:
+          - generic [ref=e233]:
+            - generic [ref=e235]: Our Services
+            - heading "What we do for you" [level=2] [ref=e236]:
+              - generic [ref=e237]: What we do for you
+            - paragraph [ref=e238]: Everything you need to work worry-free
+          - generic [ref=e239]:
+            - generic [ref=e242]:
+              - generic [ref=e244]:
+                - img [ref=e246]
+                - heading "Your computers work" [level=3] [ref=e248]
+              - generic [ref=e249]:
+                - paragraph [ref=e250]: Laptops, computers and printers that simply do what they should. No crashes, no hassle.
+                - list [ref=e251]:
+                  - listitem [ref=e252]:
+                    - img [ref=e253]
+                    - generic [ref=e256]: Automatic updates
+                  - listitem [ref=e257]:
+                    - img [ref=e258]
+                    - generic [ref=e261]: Solve problems before you notice them
+            - generic [ref=e266]:
+              - generic [ref=e268]:
+                - img [ref=e270]
+                - heading "Your data is secure" [level=3] [ref=e272]
+              - generic [ref=e273]:
+                - paragraph [ref=e274]: Automatic backups and virus protection. Your important files are always safe.
+                - list [ref=e275]:
+                  - listitem [ref=e276]:
+                    - img [ref=e277]
+                    - generic [ref=e280]: Daily backup of your files
+                  - listitem [ref=e281]:
+                    - img [ref=e282]
+                    - generic [ref=e285]: Virus protection
+            - generic [ref=e290]:
+              - generic [ref=e292]:
+                - img [ref=e294]
+                - heading "Help when you need it" [level=3] [ref=e296]
+              - generic [ref=e297]:
+                - paragraph [ref=e298]: A problem? We solve it. Often remotely, sometimes we visit. Always fast.
+                - list [ref=e299]:
+                  - listitem [ref=e300]:
+                    - img [ref=e301]
+                    - generic [ref=e304]: Help within 1 hour
+                  - listitem [ref=e305]:
+                    - img [ref=e306]
+                    - generic [ref=e309]: No complicated language
+          - generic [ref=e312]:
+            - paragraph [ref=e313]: Want to know more about our services?
+            - button "View all services" [ref=e314] [cursor=pointer]:
+              - text: View all services
+              - img [ref=e315] [cursor=pointer]
+        - generic [ref=e319]:
+          - generic [ref=e320]:
+            - generic [ref=e321]: 🚨
+            - generic [ref=e322]: IT PROBLEMS? IMMEDIATE HELP AVAILABLE
+          - button "CALL NOW" [ref=e324] [cursor=pointer]
+        - generic [ref=e328]:
+          - generic [ref=e329]:
+            - heading "How it works" [level=2] [ref=e330]
+            - paragraph [ref=e331]: In 3 simple steps to worry-free IT
+          - generic [ref=e333]:
+            - generic [ref=e334]:
+              - generic [ref=e335]:
+                - img [ref=e337]
+                - generic [ref=e339]:
+                  - generic [ref=e340]:
+                    - generic [ref=e341]: "1"
+                    - heading "We make an appointment for a network scan" [level=3] [ref=e342]
+                  - paragraph [ref=e343]: We visit for a free consultation. No obligations. We look at your current situation and perform a network scan to assess your current IT setup.
+              - generic [ref=e344]:
+                - img [ref=e346]
+                - generic [ref=e349]:
+                  - generic [ref=e350]:
+                    - generic [ref=e351]: "2"
+                    - heading "We create advice based on our scan" [level=3] [ref=e352]
+                  - paragraph [ref=e353]: Prefer to take our advice to someone else? No problem! We charge 2 hours for the effort of creating the report and advice. If you agree to work with us, these costs are waived and we arrange everything. New devices, software, security. You don't have to worry about anything.
+              - generic [ref=e354]:
+                - img [ref=e356]
+                - generic [ref=e359]:
+                  - generic [ref=e360]:
+                    - generic [ref=e361]: "3"
+                    - heading "You work worry-free!" [level=3] [ref=e362]
+                  - paragraph [ref=e363]: From that moment we ensure everything works. We ensure everything stays safe and secure. For a fixed price per month. No surprises, no hassle.
+            - link "Start free consultation" [ref=e365] [cursor=pointer]:
+              - /url: /contact
+              - text: Start free consultation
+              - img
+        - generic [ref=e367]:
+          - generic [ref=e370]: Your browser does not support the video tag.
+          - generic [ref=e372]:
+            - heading "Technology that Works" [level=2] [ref=e373]
+            - paragraph [ref=e374]: We use the latest technologies to future-proof your IT infrastructure
+            - generic [ref=e375]:
+              - generic [ref=e377]:
+                - generic [ref=e378]: 🤖
+                - heading "Proactive Monitoring" [level=3] [ref=e379]
+                - paragraph [ref=e380]: AI-driven systems that solve problems before you notice them
+              - generic [ref=e382]:
+                - generic [ref=e383]: ☁️
+                - heading "Cloud-First Approach" [level=3] [ref=e384]
+                - paragraph [ref=e385]: Modern cloud solutions for maximum flexibility and scalability
+              - generic [ref=e387]:
+                - generic [ref=e388]: 🛡️
+                - heading "Zero-Trust Security" [level=3] [ref=e389]
+                - paragraph [ref=e390]: Advanced security that verifies and protects every access
+        - generic [ref=e394]:
+          - heading "What does it cost?" [level=2] [ref=e395]
+          - paragraph [ref=e396]: Transparent pricing per user/workplace. Calculate immediately what our services cost for your company.
+          - generic [ref=e397]:
+            - generic [ref=e398]:
+              - img [ref=e399]
+              - heading "Calculate your monthly costs" [level=3] [ref=e401]
+              - paragraph [ref=e402]: Use our calculator to immediately see what our IT support costs
+            - link "Open Price Calculator" [ref=e403] [cursor=pointer]:
+              - /url: /calculator
+              - img
+              - text: Open Price Calculator
+            - generic [ref=e404]:
+              - paragraph [ref=e405]: More than 5 users? You automatically get a discount!
+              - link "Request custom quote" [ref=e406] [cursor=pointer]:
+                - /url: /contact
+                - text: Request custom quote
+                - img
+        - generic [ref=e408]:
+          - generic [ref=e409]:
+            - heading "What Our Clients Say" [level=2] [ref=e410]
+            - paragraph [ref=e411]: Discover why businesses trust Workflo for their IT needs
+            - link "View all reviews" [ref=e412] [cursor=pointer]:
+              - /url: /testimonials
+              - text: View all reviews
+              - img
+          - generic [ref=e413]:
+            - generic [ref=e414]:
+              - heading "What our clients say" [level=2] [ref=e415]
+              - generic [ref=e416]:
+                - button "Previous testimonials" [ref=e417] [cursor=pointer]:
+                  - img
+                - button "Next testimonials" [ref=e418] [cursor=pointer]:
+                  - img
+            - generic [ref=e420]:
+              - generic [ref=e422]:
+                - generic [ref=e423]:
+                  - img [ref=e424]
+                  - img [ref=e426]
+                  - img [ref=e428]
+                  - img [ref=e430]
+                  - img [ref=e432]
+                - blockquote [ref=e434]: “Every business needs Workflo. They are the IT Masters. Fast, knowledgeable, to the point, down to earth, friendly and super cool! Workflo is the absolute it in IT!”
+                - generic [ref=e435]:
+                  - generic [ref=e437]: EvdP
+                  - generic [ref=e438]:
+                    - paragraph [ref=e439]: Esther van der Plas
+                    - paragraph [ref=e440]: Managing Director • Workflo klant
+                    - paragraph [ref=e441]: Managed IT Services
+              - generic [ref=e443]:
+                - generic [ref=e444]:
+                  - img [ref=e445]
+                  - img [ref=e447]
+                  - img [ref=e449]
+                  - img [ref=e451]
+                  - img [ref=e453]
+                - blockquote [ref=e455]: “Workflo is an extension and integral part of our team. Very involved, easily approachable, solution-oriented, creative and professional. Their integrated approach provides management of employee issues, workplaces and remote working to complex back office system challenges.”
+                - generic [ref=e456]:
+                  - generic [ref=e458]: TM
+                  - generic [ref=e459]:
+                    - paragraph [ref=e460]: Thijs Muller
+                    - paragraph [ref=e461]: CEO • Workflo klant
+                    - paragraph [ref=e462]: Managed IT Services
+              - generic [ref=e464]:
+                - generic [ref=e465]:
+                  - img [ref=e466]
+                  - img [ref=e468]
+                  - img [ref=e470]
+                  - img [ref=e472]
+                  - img [ref=e474]
+                - blockquote [ref=e476]: “Florian and his team are there to help. Whether it is about simple usability issues or the more serious stuff about network, servers, trustworthy backup systems and security. Workflo knows. They solve it instantly. With a smile.”
+                - generic [ref=e477]:
+                  - generic [ref=e479]: PB
+                  - generic [ref=e480]:
+                    - paragraph [ref=e481]: Patrick Beijl
+                    - paragraph [ref=e482]: Commercial Director • Workflo klant
+                    - paragraph [ref=e483]: Managed IT Services
+            - button "Go to slide 1" [ref=e485] [cursor=pointer]
+        - generic [ref=e488]:
+          - generic [ref=e489]:
+            - heading "Workflo in Numbers" [level=2] [ref=e490]
+            - paragraph [ref=e491]: Trusted by businesses throughout the Netherlands
+          - generic [ref=e493]:
+            - generic [ref=e496]:
+              - generic [ref=e498]: 0+
+              - generic [ref=e499]: Happy Clients
+            - generic [ref=e503]:
+              - generic [ref=e505]: 0+
+              - generic [ref=e506]: Years Experience
+            - generic [ref=e510]:
+              - generic [ref=e512]: 0.%
+              - generic [ref=e513]: Uptime Guarantee
+            - generic [ref=e517]:
+              - generic [ref=e519]: 0/
+              - generic [ref=e520]: Support Available
+        - generic [ref=e525]:
+          - heading "Ready to get started?" [level=2] [ref=e526]
+          - paragraph [ref=e527]: Discover how we can become your IT partner
+          - generic [ref=e528]:
+            - link "Start a conversation" [ref=e529] [cursor=pointer]:
+              - /url: /contact
+              - text: Start a conversation
+              - img
+            - link "View our services" [ref=e530] [cursor=pointer]:
+              - /url: /diensten
+    - contentinfo [ref=e531]:
+      - generic [ref=e534]:
+        - heading "Stay Updated" [level=3] [ref=e535]
+        - paragraph [ref=e536]: Get IT tips and company updates
+        - generic [ref=e537]:
+          - generic [ref=e541]:
+            - heading "IT Tips & News" [level=3] [ref=e542]:
+              - img [ref=e544]
+              - text: IT Tips & News
+            - paragraph [ref=e547]: Stay ahead with the latest IT trends and cybersecurity tips
+          - generic [ref=e549]:
+            - textbox "Your email address" [ref=e550]
+            - button [ref=e551] [cursor=pointer]:
+              - img
+          - generic [ref=e552]:
+            - generic [ref=e553]:
+              - generic [ref=e554]:
+                - img [ref=e555]
+                - generic [ref=e557]: No spam
+              - generic [ref=e558]:
+                - img [ref=e559]
+                - generic [ref=e562]: Weekly
+              - generic [ref=e563]:
+                - img [ref=e564]
+                - generic [ref=e566]: Easy out
+            - generic [ref=e567]:
+              - generic [ref=e568]:
+                - img [ref=e569]
+                - text: GDPR compliant
+              - generic [ref=e572]:
+                - img [ref=e573]
+                - img [ref=e575]
+                - img [ref=e577]
+                - img [ref=e579]
+                - img [ref=e581]
+                - generic [ref=e583]: 4.9/5
+      - generic [ref=e584]:
+        - generic [ref=e585]:
+          - generic [ref=e586]:
+            - generic [ref=e587]:
+              - img "Workflo" [ref=e588]
+              - paragraph [ref=e589]: Amsterdam's most trusted IT partner since 2014. We ensure your technology accelerates your growth.
+            - generic [ref=e590]:
+              - generic [ref=e591]:
+                - img [ref=e592]
+                - generic [ref=e595]: Amsterdam
+              - generic [ref=e596]:
+                - img [ref=e597]
+                - generic [ref=e600]: "Mon-Fri: 9:00 - 17:00"
+              - link "Contact details" [ref=e601] [cursor=pointer]:
+                - /url: /contact
+                - text: Contact details
+                - img [ref=e602] [cursor=pointer]
+          - generic [ref=e604]:
+            - heading "Services" [level=3] [ref=e605]
+            - list [ref=e606]:
+              - listitem [ref=e607]:
+                - link "Managed IT" [ref=e608] [cursor=pointer]:
+                  - /url: /diensten/managed-it
+              - listitem [ref=e609]:
+                - link "Cloud Solutions" [ref=e610] [cursor=pointer]:
+                  - /url: /diensten/cloud
+              - listitem [ref=e611]:
+                - link "Cybersecurity" [ref=e612] [cursor=pointer]:
+                  - /url: /diensten/cybersecurity
+              - listitem [ref=e613]:
+                - link "Microsoft 365" [ref=e614] [cursor=pointer]:
+                  - /url: /diensten/microsoft-365
+              - listitem [ref=e615]:
+                - link "VoIP Telefonie" [ref=e616] [cursor=pointer]:
+                  - /url: /diensten/voip-telefonie
+              - listitem [ref=e617]:
+                - link "All Services" [ref=e618] [cursor=pointer]:
+                  - /url: /diensten
+          - generic [ref=e619]:
+            - heading "Company" [level=3] [ref=e620]
+            - list [ref=e621]:
+              - listitem [ref=e622]:
+                - link "About Us" [ref=e623] [cursor=pointer]:
+                  - /url: /over-ons
+              - listitem [ref=e624]:
+                - link "Case Studies" [ref=e625] [cursor=pointer]:
+                  - /url: /case-studies
+              - listitem [ref=e626]:
+                - link "Portfolio" [ref=e627] [cursor=pointer]:
+                  - /url: /portfolio
+              - listitem [ref=e628]:
+                - link "Testimonials" [ref=e629] [cursor=pointer]:
+                  - /url: /testimonials
+              - listitem [ref=e630]:
+                - link "Careers" [ref=e631] [cursor=pointer]:
+                  - /url: /werken-bij
+              - listitem [ref=e632]:
+                - link "News" [ref=e633] [cursor=pointer]:
+                  - /url: /nieuws
+          - generic [ref=e634]:
+            - heading "Support" [level=3] [ref=e635]
+            - list [ref=e636]:
+              - listitem [ref=e637]:
+                - link "FAQ" [ref=e638] [cursor=pointer]:
+                  - /url: /faq
+              - listitem [ref=e639]:
+                - link "Satisfaction Check" [ref=e640] [cursor=pointer]:
+                  - /url: /tevredenheidscheck
+              - listitem [ref=e641]:
+                - link "Pricing" [ref=e642] [cursor=pointer]:
+                  - /url: /prijzen
+              - listitem [ref=e643]:
+                - link "Contact" [ref=e644] [cursor=pointer]:
+                  - /url: /contact
+            - generic [ref=e645]:
+              - link "Servicedesk 24/7" [ref=e647] [cursor=pointer]:
+                - /url: https://servicedesk.workflo.it/portal
+                - text: Servicedesk
+                - img [ref=e648] [cursor=pointer]
+                - generic [ref=e652] [cursor=pointer]: 24/7
+              - link "System Status" [ref=e654] [cursor=pointer]:
+                - /url: https://uptime.workflo.it/status/workflo
+                - text: System Status
+                - img [ref=e655] [cursor=pointer]
+        - generic [ref=e659]:
+          - generic [ref=e660]:
+            - paragraph [ref=e661]: © 2025 Workflo B.V. - IT that simply works.
+            - paragraph [ref=e662]: "KvK: 87460807 | BTW: NL864300852B01"
+          - generic [ref=e663]:
+            - link "Privacy" [ref=e664] [cursor=pointer]:
+              - /url: /privacy
+            - generic [ref=e665]: •
+            - link "Terms" [ref=e666] [cursor=pointer]:
+              - /url: /terms
+            - generic [ref=e667]: •
+            - link "Disclaimer" [ref=e668] [cursor=pointer]:
+              - /url: /disclaimer
+            - generic [ref=e669]: •
+            - link "Cookies" [ref=e670] [cursor=pointer]:
+              - /url: /cookies
+  - region "Notifications (F8)":
+    - list
+  - generic [ref=e672]:
+    - generic [ref=e674]:
+      - generic [ref=e675]:
+        - img [ref=e676]
+        - text: Cookie Preferences
+      - generic [ref=e678]: We use cookies to enhance your experience and optimize our services.
+    - generic [ref=e680]:
+      - button "Accept All" [ref=e681] [cursor=pointer]
+      - button "Reject All" [ref=e682] [cursor=pointer]
+      - button "Customize" [ref=e683] [cursor=pointer]
+  - button [ref=e684] [cursor=pointer]:
+    - img [ref=e685] [cursor=pointer]
+  - generic [ref=e691] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e692] [cursor=pointer]:
+      - img [ref=e693] [cursor=pointer]
+    - generic [ref=e696] [cursor=pointer]:
+      - button "Open issues overlay" [ref=e697] [cursor=pointer]:
+        - generic [ref=e698] [cursor=pointer]:
+          - generic [ref=e699] [cursor=pointer]: "1"
+          - generic [ref=e700] [cursor=pointer]: "2"
+        - generic [ref=e701] [cursor=pointer]:
+          - text: Issue
+          - generic [ref=e702] [cursor=pointer]: s
+      - button "Collapse issues badge" [ref=e703] [cursor=pointer]:
+        - img [ref=e704] [cursor=pointer]
+  - alert [ref=e706]
+```

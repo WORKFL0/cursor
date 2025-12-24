@@ -45,18 +45,37 @@ const config: Config = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			// Workflo brand colors - for backgrounds, borders, and accents only
+  			// Workflo brand colors - Premium Design System
+  			// Apple/DEPT/MediaMonks Quality Level
   			workflo: {
+  				// Primary Yellow - Main accent color (NEVER changes in dark mode)
+  				yellow: '#FFD938',
+  				'yellow-light': '#FFF4BF',
+  				'yellow-dark': '#E6C230',
+
+  				// Primary Black & White - Foundation colors
+  				black: '#111111',
+  				white: '#FFFFFF',
+
+  				// Complete Gray Scale - Light & Dark Mode Support
+  				'gray-50': '#F8F8F8',   // Subtle backgrounds (light mode)
+  				'gray-100': '#EDEDED',  // Card backgrounds, borders (light mode)
+  				'gray-300': '#C1C1C1',  // Secondary text, icons
+  				'gray-600': '#6A6A6A',  // Muted text
+  				'gray-800': '#2A2A2A',  // Borders (dark mode)
+  				'gray-900': '#1A1A1A',  // Card backgrounds (dark mode)
+  				'gray-950': '#0A0A0A',  // Background (dark mode)
+
+  				// Status Colors
+  				success: '#28C76F',
+  				warning: '#FFA100',
+  				error: '#FF4D4D',
+
+  				// Legacy colors (deprecated - kept for backwards compatibility)
   				primary: 'hsl(var(--workflo-primary))',
-  				'primary-light': 'hsl(var(--workflo-primary-light))', 
-  				'primary-dark': 'hsl(var(--workflo-primary-dark))',
-  				secondary: 'hsl(var(--workflo-secondary))',
-  				'secondary-light': 'hsl(var(--workflo-secondary-light))', 
-  				'secondary-dark': 'hsl(var(--workflo-secondary-dark))',
-  				yellow: 'hsl(var(--workflo-yellow))',
-  				'yellow-light': 'hsl(var(--workflo-yellow-light))',
-  				'yellow-dark': 'hsl(var(--workflo-yellow-dark))',
-  				black: '#000000',
+  				navy: '#0F172A',
+  				slate: '#1E293B',
+  				gray: '#64748B',
   			},
   			// Additional semantic colors for better UX
   			success: {
@@ -88,10 +107,15 @@ const config: Config = {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+  		// Art Director Border Radius System (8px standard)
   		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			none: '0',
+  			sm: '0.25rem',      // 4px
+  			DEFAULT: '0.5rem',  // 8px - Standard buttons, inputs
+  			md: '0.75rem',      // 12px - Cards
+  			lg: 'var(--radius)', // CSS variable for flexibility
+  			xl: '1.5rem',       // 24px - Large cards
+  			full: '9999px'      // Pills, avatars
   		},
   		fontFamily: {
   			sans: [
@@ -176,12 +200,21 @@ const config: Config = {
   			'scroll': 'scroll 20s linear infinite',
   			'shimmer': 'shimmer 2s linear infinite',
   		},
-  		// Mobile optimizations
+  		// Premium Design System - 8px Base Grid
   		spacing: {
   			'safe-top': 'env(safe-area-inset-top)',
   			'safe-bottom': 'env(safe-area-inset-bottom)',
   			'safe-left': 'env(safe-area-inset-left)',
   			'safe-right': 'env(safe-area-inset-right)',
+  			// Art Director Spacing Scale (8px base)
+  			'xs': '0.5rem',    // 8px
+  			'sm': '1rem',      // 16px
+  			'md': '1.5rem',    // 24px
+  			'lg': '2rem',      // 32px
+  			'xl': '3rem',      // 48px
+  			'2xl': '4rem',     // 64px
+  			'3xl': '6rem',     // 96px
+  			'4xl': '7.5rem',   // 120px - Section spacing
   		},
   		// Touch-friendly minimum sizes
   		minWidth: {

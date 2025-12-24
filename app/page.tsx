@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, CheckCircle, Shield, Monitor, Headphones, Calendar, FileText, Calculator } from 'lucide-react'
+import { ArrowRight, CheckCircle, Shield, Monitor, Headphones, Calendar, FileText, Calculator, Bot, Cloud } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { homePageData } from '@/lib/data/workflo-data'
@@ -12,6 +12,10 @@ import { TestimonialsCarousel } from '@/components/testimonials/testimonials-car
 import { getFeaturedTestimonials } from '@/lib/data/testimonials-data'
 import DangerTape, { DangerTapeSection, EmergencyAlert } from '@/components/shared/danger-tape'
 import { VideoBackground, VideoSets } from '@/components/shared/video-background'
+import ModernHeroSection from '@/components/sections/ModernHeroSection'
+import ModernServicesSection from '@/components/sections/ModernServicesSection'
+import AnimatedStatsSection from '@/components/sections/AnimatedStatsSection'
+import ProcessSection from '@/components/sections/ProcessSection'
 
 export default function HomePage() {
   const { language } = useLanguage()
@@ -30,7 +34,7 @@ export default function HomePage() {
       ]
     },
     {
-      title: 'Je gegevens zijn veilig', 
+      title: 'Je gegevens zijn veilig',
       titleEN: 'Your data is secure',
       description: 'Automatische backups en bescherming tegen virussen. Je belangrijke bestanden zijn altijd veilig.',
       descriptionEN: 'Automatic backups and virus protection. Your important files are always safe.',
@@ -42,7 +46,7 @@ export default function HomePage() {
     },
     {
       title: 'Hulp als je het nodig hebt',
-      titleEN: 'Help when you need it', 
+      titleEN: 'Help when you need it',
       description: 'Een probleem? Wij lossen het op. Vaak op afstand, soms komen we langs. Altijd snel.',
       descriptionEN: 'A problem? We solve it. Often remotely, sometimes we visit. Always fast.',
       icon: Headphones,
@@ -65,7 +69,7 @@ export default function HomePage() {
     {
       number: 2,
       title: 'Wij maken een advies aan de hand van onze scan',
-      titleEN: 'We create advice based on our scan', 
+      titleEN: 'We create advice based on our scan',
       description: 'Ga je met dit advies liever naar een ander, geen probleem! Dan rekenen we 2 uur voor de moeite van het maken van dit rapport en het gemaakte advies. Als je akkoord gaat, vervallen deze kosten en regelen wij alles. Nieuwe apparaten, software, beveiliging. Je hoeft je nergens zorgen over te maken.',
       descriptionEN: 'Prefer to take our advice to someone else? No problem! We charge 2 hours for the effort of creating the report and advice. If you agree to work with us, these costs are waived and we arrange everything. New devices, software, security. You don\'t have to worry about anything.',
       icon: 'filetext'
@@ -82,51 +86,8 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="relative py-12 sm:py-16 lg:py-20 bg-[#0F172A] overflow-hidden min-h-[60vh] sm:min-h-[70vh] flex items-center">
-        {/* Background Video */}
-        <VideoBackground 
-          videos={VideoSets.hero} 
-          opacity={0.1} 
-          overlay={true}
-        />
-        
-        {/* Yellow accent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1E3A8A]/20 via-transparent to-[#1E3A8A]/10 pointer-events-none" />
-        
-        <div className="container mx-auto px-4 relative z-10 w-full">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-[#f2f400] leading-tight drop-shadow-2xl">
-              {language === 'nl' ? 'Wij regelen je IT' : 'We handle your IT'}
-            </h1>
-            <p className="text-lg sm:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 leading-relaxed">
-              {language === 'nl' 
-                ? 'Zodat je je kunt focussen op je bedrijf. Simpel, betrouwbaar, zonder gedoe.'
-                : 'So you can focus on your business. Simple, reliable, hassle-free.'
-              }
-            </p>
-            <p className="text-base sm:text-lg text-white/80 max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2">
-              {language === 'nl'
-                ? 'Geen ingewikkelde verhalen. Wij zorgen dat je computers, internet en systemen gewoon werken. Altijd. Voor een vaste prijs per maand.'
-                : 'No complicated stories. We ensure your computers, internet and systems just work. Always. For a fixed price per month.'
-              }
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-              <Button size="lg" asChild className="w-full sm:w-auto text-sm sm:text-base bg-[#f2f400] hover:bg-[#FFC107] text-[#0F172A] font-bold shadow-xl shadow-[#f2f400]/30 hover:shadow-2xl hover:shadow-[#f2f400]/40 transition-all duration-300">
-                <Link href="/contact">
-                  {language === 'nl' ? 'Plan mijn gratis IT-scan' : 'Schedule my free IT assessment'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button size="lg" asChild variant="outline" className="w-full sm:w-auto text-sm sm:text-base border-[#f2f400] text-[#f2f400] hover:bg-[#f2f400] hover:text-[#0F172A] font-semibold transition-all duration-300">
-                <Link href="/prijzen">
-                  {language === 'nl' ? 'Bekijk prijzen' : 'View pricing'}
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Modern Hero Section */}
+      <ModernHeroSection />
 
       {/* Client Logos Section */}
       <ClientLogos />
@@ -134,138 +95,46 @@ export default function HomePage() {
       {/* Sector Experience Section */}
       <SectorExperience />
 
-      {/* Services Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-[#374151] via-[#1E3A8A]/20 to-[#374151]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#f2f400] mb-4">
-                {language === 'nl' ? 'Wat wij voor je doen' : 'What we do for you'}
-              </h2>
-              <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-                {language === 'nl' 
-                  ? 'Alles wat je nodig hebt om zorgeloos te kunnen werken'
-                  : 'Everything you need to work worry-free'
-                }
-              </p>
-            </div>
+      {/* Modern Services Section */}
+      <ModernServicesSection />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {services.map((service, index) => (
-                <Card key={index} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border-2 border-[#f2f400]/30 hover:border-[#f2f400] hover:bg-[#f2f400]/5 transition-all duration-300 hover:shadow-xl hover:shadow-[#f2f400]/20 hover:-translate-y-1">
-                  <CardHeader className="p-4 sm:p-6">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#0F172A] rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg shadow-[#0F172A]/30">
-                      <service.icon className="w-6 h-6 sm:w-8 sm:h-8 text-[#f2f400] drop-shadow-sm" />
-                    </div>
-                    <CardTitle className="text-lg sm:text-xl font-bold text-[#0F172A] mb-2 sm:mb-4 leading-tight">
-                      {language === 'nl' ? service.title : service.titleEN}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4 sm:p-6 pt-0">
-                    <p className="text-sm sm:text-base text-[#374151] mb-4 leading-relaxed">
-                      {language === 'nl' ? service.description : service.descriptionEN}
-                    </p>
-                    <ul className="space-y-2 text-sm text-[#374151]">
-                      {service.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                          <span className="leading-relaxed">{language === 'nl' ? feature.nl : feature.en}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Emergency IT Alert */}
-      <EmergencyAlert 
-        message={language === 'nl' ? 'IT PROBLEMEN? DIRECT HULP BESCHIKBAAR' : 'IT PROBLEMS? IMMEDIATE HELP AVAILABLE'}
+      {/* Premium Support Banner - Art Director Design System */}
+      <EmergencyAlert
+        message={language === 'nl' ? 'Hulp nodig? Onze engineers staan voor je klaar' : 'Need help? Our engineers are ready for you'}
         action={
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="ghost"
             size="sm"
             onClick={() => window.open('tel:+31203080465', '_self')}
-            className="bg-card text-destructive hover:bg-muted font-bold"
+            className="text-workflo-black dark:text-white hover:text-workflo-yellow font-medium"
           >
-            {language === 'nl' ? 'BEL NU' : 'CALL NOW'}
+            {language === 'nl' ? 'Bel 020-30 80 465' : 'Call 020-30 80 465'}
           </Button>
         }
       />
 
-      {/* How It Works Section */}
-      <DangerTapeSection 
-        title={language === 'nl' ? 'Zo werkt het' : 'How it works'}
-        subtitle={language === 'nl' ? 'In 3 simpele stappen naar zorgeloze IT' : 'In 3 simple steps to worry-free IT'}
-        className="py-20"
-      >
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-
-            <div className="space-y-8">
-              {steps.map((step, index) => {
-                const iconMap = {
-                  'calendar': Calendar,
-                  'filetext': FileText,
-                  'checkcircle': CheckCircle
-                }
-                const IconComponent = iconMap[step.icon as keyof typeof iconMap] || CheckCircle
-                
-                return (
-                  <div key={index} className="flex items-start gap-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-workflo-yellow/30">
-                      <IconComponent className="w-8 h-8 text-workflo-black" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="w-8 h-8 bg-workflo-yellow rounded-full flex items-center justify-center text-workflo-black font-bold text-sm">{step.number}</span>
-                        <h3 className="text-2xl font-bold text-foreground">
-                          {language === 'nl' ? step.title : step.titleEN}
-                        </h3>
-                      </div>
-                      <p className="text-lg text-muted-foreground leading-relaxed">
-                        {language === 'nl' ? step.description : step.descriptionEN}
-                      </p>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-            <div className="text-center mt-12">
-              <Button size="lg" asChild variant="workflo" className="shadow-xl shadow-workflo-yellow/40 hover:shadow-2xl hover:shadow-workflo-yellow/50 font-semibold transition-all duration-300 hover:scale-105">
-                <Link href="/contact">
-                  {language === 'nl' ? 'Start gratis gesprek' : 'Start free consultation'}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </DangerTapeSection>
+      {/* How It Works Section - New Premium Design */}
+      <ProcessSection />
 
       {/* Tech Excellence Section */}
-      <section className="relative py-20 bg-gradient-to-br from-workflo-yellow-light/20 via-yellow-100/30 to-workflo-yellow-light/10 overflow-hidden">
-        <VideoBackground 
-          videos={VideoSets.code} 
-          opacity={0.08} 
+      <section className="relative workflo-section-spacing bg-gradient-to-br from-workflo-yellow-light/20 via-yellow-100/30 to-workflo-yellow-light/10 overflow-hidden">
+        <VideoBackground
+          videos={VideoSets.code}
+          opacity={0.08}
           overlay={true}
         />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+            <h2 className="workflo-h2 text-workflo-navy dark:text-white workflo-block-spacing">
               {language === 'nl' ? 'Technologie die Werkt' : 'Technology that Works'}
             </h2>
-            <p className="text-xl text-muted-foreground mb-12">
-              {language === 'nl' 
+            <p className="workflo-body text-workflo-gray dark:text-gray-300 mb-12">
+              {language === 'nl'
                 ? 'Wij gebruiken de nieuwste technologieën om jouw IT-infrastructuur toekomstbestendig te maken'
                 : 'We use the latest technologies to future-proof your IT infrastructure'
               }
             </p>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
@@ -273,71 +142,76 @@ export default function HomePage() {
                   titleEN: 'Proactive Monitoring',
                   description: 'AI-gestuurde systemen die problemen oplossen voordat je ze merkt',
                   descriptionEN: 'AI-driven systems that solve problems before you notice them',
-                  icon: '🤖'
+                  icon: Bot
                 },
                 {
                   title: 'Cloud-First Aanpak',
                   titleEN: 'Cloud-First Approach',
                   description: 'Moderne cloud oplossingen voor maximale flexibiliteit en schaalbaarheid',
                   descriptionEN: 'Modern cloud solutions for maximum flexibility and scalability',
-                  icon: '☁️'
+                  icon: Cloud
                 },
                 {
                   title: 'Zero-Trust Security',
                   titleEN: 'Zero-Trust Security',
                   description: 'Geavanceerde beveiliging die elke toegang verifieert en beschermt',
                   descriptionEN: 'Advanced security that verifies and protects every access',
-                  icon: '🛡️'
+                  icon: Shield
                 }
-              ].map((feature, index) => (
-                <Card key={index} className="bg-card/90 backdrop-blur-sm border-workflo-yellow/20 hover:border-workflo-yellow hover:bg-workflo-yellow-light/30 hover:shadow-xl hover:shadow-workflo-yellow/20 transition-all duration-300 hover:-translate-y-1">
-                  <CardContent className="p-6 text-center">
-                    <div className="text-4xl mb-4 filter drop-shadow-sm">{feature.icon}</div>
-                    <h3 className="text-xl font-bold text-foreground mb-3">
-                      {language === 'nl' ? feature.title : feature.titleEN}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {language === 'nl' ? feature.description : feature.descriptionEN}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+              ].map((feature, index) => {
+                const IconComponent = feature.icon
+                return (
+                  <Card key={index} className="bg-card/90 backdrop-blur-sm border-workflo-yellow/20 hover:border-workflo-yellow hover:bg-workflo-yellow-light/30 hover:shadow-xl hover:shadow-workflo-yellow/20 transition-all duration-300 hover:-translate-y-1">
+                    <CardContent className="p-6 text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-workflo-yellow/10 rounded-2xl flex items-center justify-center">
+                        <IconComponent className="w-8 h-8 text-workflo-yellow stroke-2" />
+                      </div>
+                      <h3 className="workflo-h3 text-workflo-navy dark:text-white mb-3">
+                        {language === 'nl' ? feature.title : feature.titleEN}
+                      </h3>
+                      <p className="workflo-body text-workflo-gray dark:text-gray-300">
+                        {language === 'nl' ? feature.description : feature.descriptionEN}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
           </div>
         </div>
       </section>
 
       {/* Pricing Calculator Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-[#0F172A] relative overflow-hidden">
+      <section className="workflo-section-spacing bg-workflo-navy relative overflow-hidden">
         {/* Subtle background pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A8A]/10 via-transparent to-[#1E3A8A]/5"></div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#f2f400] mb-6">
+            <h2 className="workflo-h2 text-[#f2f400] workflo-block-spacing">
               {language === 'nl' ? 'Wat kost het?' : 'What does it cost?'}
             </h2>
-            <p className="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              {language === 'nl' 
-                ? 'Transparante prijzen per gebruiker/werkplek. Bereken direct wat onze diensten voor jouw bedrijf kosten.' 
+            <p className="workflo-body text-white/90 mb-8 max-w-2xl mx-auto">
+              {language === 'nl'
+                ? 'Transparante prijzen per gebruiker/werkplek. Bereken direct wat onze diensten voor jouw bedrijf kosten.'
                 : 'Transparent pricing per user/workplace. Calculate immediately what our services cost for your company.'}
             </p>
-            
+
             <div className="bg-[#1E3A8A]/20 backdrop-blur-sm rounded-2xl p-8 sm:p-10 border border-[#f2f400]/30 hover:border-[#f2f400] transition-all duration-300">
               <div className="mb-6">
                 <Calculator className="w-16 h-16 text-[#f2f400] mx-auto mb-4" />
-                <h3 className="text-2xl font-semibold text-white mb-3">
+                <h3 className="workflo-h3 text-white mb-3">
                   {language === 'nl' ? 'Bereken je maandelijkse kosten' : 'Calculate your monthly costs'}
                 </h3>
-                <p className="text-white/80">
-                  {language === 'nl' 
+                <p className="workflo-body text-white/80">
+                  {language === 'nl'
                     ? 'Gebruik onze calculator om direct te zien wat onze IT-ondersteuning kost'
                     : 'Use our calculator to immediately see what our IT support costs'}
                 </p>
               </div>
-              
-              <Button 
-                asChild 
+
+              <Button
+                asChild
                 className="bg-[#f2f400] hover:bg-[#FFC107] text-[#0F172A] font-bold text-lg px-8 py-6 rounded-lg shadow-xl hover:shadow-2xl hover:shadow-[#f2f400]/30 transition-all duration-300 transform hover:-translate-y-1"
               >
                 <Link href="/calculator">
@@ -345,16 +219,16 @@ export default function HomePage() {
                   {language === 'nl' ? 'Open Prijscalculator' : 'Open Price Calculator'}
                 </Link>
               </Button>
-              
+
               <div className="mt-8 pt-8 border-t border-white/10">
                 <p className="text-white/70 mb-4">
-                  {language === 'nl' 
+                  {language === 'nl'
                     ? 'Meer dan 5 gebruikers? Dan krijg je automatisch korting!'
                     : 'More than 5 users? You automatically get a discount!'}
                 </p>
-                <Button 
-                  variant="outline" 
-                  asChild 
+                <Button
+                  variant="outline"
+                  asChild
                   className="border-[#f2f400] text-[#f2f400] hover:bg-[#f2f400] hover:text-[#0F172A] transition-all duration-300"
                 >
                   <Link href="/contact">
@@ -369,14 +243,14 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gradient-to-br from-workflo-yellow-light/40 via-yellow-100/20 to-workflo-yellow-light/30">
+      <section className="workflo-section-spacing bg-gradient-to-br from-workflo-yellow-light/40 via-yellow-100/20 to-workflo-yellow-light/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+          <div className="text-center workflo-block-spacing">
+            <h2 className="workflo-h2 text-workflo-navy dark:text-white mb-4">
               {language === 'nl' ? 'Wat Onze Klanten Zeggen' : 'What Our Clients Say'}
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              {language === 'nl' 
+            <p className="workflo-body text-workflo-gray dark:text-gray-300 max-w-2xl mx-auto mb-8">
+              {language === 'nl'
                 ? 'Ontdek waarom bedrijven vertrouwen op Workflo voor hun IT-behoeften'
                 : 'Discover why businesses trust Workflo for their IT needs'
               }
@@ -393,34 +267,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-br from-workflo-yellow via-workflo-yellow-dark to-workflo-yellow text-workflo-black">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {homePageData.stats.map((stat, index) => (
-                <div key={index} className="hover:scale-110 transition-transform duration-300">
-                  <div className="text-4xl lg:text-5xl font-bold text-workflo-black drop-shadow-sm mb-2">{stat.value}</div>
-                  <div className="text-sm font-medium opacity-90">
-                    {language === 'nl' ? stat.labelNL : stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Animated Stats Section */}
+      <AnimatedStatsSection />
 
 
       {/* CTA Section */}
-      <section className="relative py-20 bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark text-foreground">
+      <section className="relative workflo-section-spacing bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark text-foreground">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">
+            <h2 className="workflo-h2 text-workflo-navy mb-4">
               {language === 'nl' ? 'Klaar om te beginnen?' : 'Ready to get started?'}
             </h2>
-            <p className="text-xl mb-8 opacity-90">
-              {language === 'nl' 
+            <p className="workflo-body text-workflo-navy mb-8 opacity-90">
+              {language === 'nl'
                 ? 'Ontdek hoe wij je IT-partner kunnen worden'
                 : 'Discover how we can become your IT partner'
               }
@@ -428,7 +287,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-workflo-black border-workflo-black/20 font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
                 <Link href="/contact">
-                  {language === 'nl' ? 'Start een gesprek' : 'Start a conversation'}
+                  {language === 'nl' ? 'Plan gratis IT-scan' : 'Schedule free IT assessment'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

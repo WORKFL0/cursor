@@ -1,0 +1,450 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    /* Primary is now dark for proper contrast on light backgrounds */
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 37%; /* Improved from 45.1% to 37% for better contrast */
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.5rem;
+    /* Workflo brand colors - Modern professional palette */
+    --workflo-primary: 220 100% 50%; /* Deep blue #0055FF */
+    --workflo-primary-light: 220 100% 97%; /* Light blue background */
+    --workflo-primary-dark: 220 100% 35%; /* Darker blue for text */
+    --workflo-secondary: 258 60% 50%; /* Purple accent #6B46C1 */
+    --workflo-secondary-light: 258 100% 95%; /* Light purple background */
+    --workflo-secondary-dark: 258 60% 35%; /* Darker purple for text */
+    /* Workflo yellow brand colors */
+    --workflo-yellow: 60 100% 48%; /* Main brand yellow #f2f400 */
+    --workflo-yellow-light: 60 100% 95%; /* Light yellow background */
+    --workflo-yellow-dark: 45 100% 45%; /* Darker yellow for hover states */
+    /* Additional semantic colors for better UX */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%; /* Professional amber warning */
+    --warning-foreground: 0 0% 9%;
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 98%;
+    --chart-1: 220 100% 50%; /* Workflo primary blue */
+    --chart-2: 173 58% 39%; /* Teal */
+    --chart-3: 197 37% 24%; /* Blue-grey */
+    --chart-4: 258 60% 50%; /* Workflo secondary purple */
+    --chart-5: 0 0% 45%; /* Neutral grey */
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 8%; /* Lighter than background for better separation */
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+    /* Primary is now light for proper contrast on dark backgrounds */
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 18%; /* Lighter for better contrast */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 18%; /* Improved contrast */
+    --muted-foreground: 0 0% 71%; /* Improved from 63.9% to 71% for better contrast */
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 18%; /* Improved visibility */
+    --input: 0 0% 18%;
+    --ring: 0 0% 83.1%;
+    /* Workflo colors optimized for dark mode accessibility */
+    --workflo-primary: 220 100% 65%; /* Lighter blue for dark mode readability */
+    --workflo-primary-light: 220 100% 97%; /* Consistent with light mode */
+    --workflo-primary-dark: 220 100% 35%; /* Dark enough for text use */
+    --workflo-secondary: 258 60% 65%; /* Lighter purple for dark mode */
+    --workflo-secondary-light: 258 100% 95%; /* Consistent with light mode */
+    --workflo-secondary-dark: 258 60% 35%; /* Dark enough for text use */
+    /* Workflo yellow colors for dark mode */
+    --workflo-yellow: 60 100% 48%; /* Same yellow works well on dark */
+    --workflo-yellow-light: 60 100% 95%; /* Light yellow background */
+    --workflo-yellow-dark: 45 100% 40%; /* Slightly darker for better contrast */
+    /* Dark mode semantic colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 65%; /* Professional amber warning for dark mode */
+    --warning-foreground: 0 0% 9%;
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 98%;
+    --chart-1: 220 100% 65%; /* Workflo primary blue for dark mode */
+    --chart-2: 160 60% 45%; /* Teal-green */
+    --chart-3: 220 70% 50%; /* Blue instead of orange */
+    --chart-4: 258 60% 65%; /* Workflo secondary purple */
+    --chart-5: 0 0% 60%; /* Neutral grey */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  
+  /* Smooth transitions for theme changes and better UX */
+  * {
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Improved link hover states */
+  a:hover {
+    transition: all 0.2s ease;
+  }
+  
+  /* Enhanced focus states for accessibility */
+  *:focus-visible {
+    @apply outline-2 outline-primary outline-offset-2;
+  }
+  
+  /* Ensure all interactive elements have visible focus states */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  /* Typography System - Art Director Design System */
+  .workflo-h1 {
+    font-size: clamp(3rem, 5vw, 4rem); /* 48px - 64px responsive */
+    font-weight: 700; /* Bold */
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .workflo-h2 {
+    font-size: clamp(2rem, 3.5vw, 3rem); /* 32px - 48px responsive */
+    font-weight: 600; /* Medium */
+    line-height: 1.2;
+  }
+
+  .workflo-h3 {
+    font-size: clamp(1.5rem, 2.5vw, 2rem); /* 24px - 32px responsive */
+    font-weight: 600; /* Medium */
+    line-height: 1.3;
+  }
+
+  .workflo-body-l {
+    font-size: 1.25rem; /* 20px - Body Large */
+    font-weight: 400; /* Regular */
+    line-height: 1.6;
+  }
+
+  .workflo-body {
+    font-size: 1.125rem; /* 18px - Body Medium */
+    font-weight: 400; /* Regular */
+    line-height: 1.6;
+  }
+
+  .workflo-caption {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 400; /* Regular */
+    line-height: 1.4;
+  }
+
+  .workflo-button-text {
+    font-size: 1rem; /* 16px */
+    font-weight: 700; /* Bold */
+    line-height: 1.2;
+  }
+
+  /* Vertical Spacing System - DESIGN_SYSTEM.md Fase 2 */
+  .workflo-section-spacing {
+    @apply py-20 md:py-24 lg:py-32;
+  }
+
+  .workflo-block-spacing {
+    @apply mb-16 md:mb-20;
+  }
+
+  .workflo-element-gap {
+    @apply gap-6;
+  }
+
+  .workflo-tight-gap {
+    @apply gap-3;
+  }
+
+  /* Safe background gradients using Workflo modern colors */
+  .gradient-workflo {
+    background: linear-gradient(135deg, hsl(var(--workflo-primary)) 0%, hsl(var(--workflo-secondary)) 100%);
+  }
+
+  .gradient-workflo-soft {
+    background: linear-gradient(135deg, hsl(var(--workflo-primary-light)) 0%, hsl(var(--workflo-primary)) 20%, transparent 100%);
+  }
+
+  .gradient-workflo-radial {
+    background: radial-gradient(circle at center, hsl(var(--workflo-primary-light)) 0%, transparent 70%);
+  }
+
+  .gradient-section-warm {
+    background: linear-gradient(135deg, hsl(var(--workflo-primary-light)) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  }
+
+  /* Safe text gradient for dark text on light backgrounds */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--muted-foreground)) 100%);
+  }
+
+  /* Workflo modern colors with proper contrast text */
+  .bg-workflo-primary-contrast {
+    background-color: hsl(var(--workflo-primary));
+    color: white;
+  }
+
+  .dark .bg-workflo-primary-contrast {
+    color: white;
+  }
+
+  /* Workflo brand utilities for backgrounds/accents only */
+  .bg-workflo-primary {
+    background-color: hsl(var(--workflo-primary));
+  }
+  
+  .bg-workflo-primary-light {
+    background-color: hsl(var(--workflo-primary-light));
+  }
+  
+  .bg-workflo-secondary {
+    background-color: hsl(var(--workflo-secondary));
+  }
+  
+  .bg-workflo-secondary-light {
+    background-color: hsl(var(--workflo-secondary-light));
+  }
+  
+  .border-workflo-primary {
+    border-color: hsl(var(--workflo-primary));
+  }
+  
+  .border-workflo-secondary {
+    border-color: hsl(var(--workflo-secondary));
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1000ms;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2000ms;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4000ms;
+  }
+
+  .warning-tape {
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--workflo-primary)) 0px,
+      hsl(var(--workflo-primary)) 10px,
+      hsl(var(--background)) 10px,
+      hsl(var(--background)) 20px
+    );
+    opacity: 0.7;
+  }
+
+  .warning-tape-thin {
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--workflo-primary)) 0px,
+      hsl(var(--workflo-primary)) 6px,
+      hsl(var(--muted)) 6px,
+      hsl(var(--muted)) 12px
+    );
+    opacity: 0.5;
+  }
+
+  .warning-tape-vertical {
+    background: repeating-linear-gradient(
+      90deg,
+      hsl(var(--workflo-primary)),
+      hsl(var(--workflo-primary)) 10px,
+      hsl(var(--foreground)) 10px,
+      hsl(var(--foreground)) 20px
+    );
+  }
+
+  .accent-line {
+    background: linear-gradient(
+      to right,
+      transparent,
+      hsl(var(--workflo-primary)),
+      transparent
+    );
+    height: 1px;
+    opacity: 0.5;
+  }
+
+  .bg-grid-gray-100 {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239CA3AF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* News Page Enhancements */
+  .bg-grid-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M0 20l20-20 20 20-20 20z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  /* Smooth scrolling for better UX */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced focus states for accessibility */
+  .focus-visible\:ring-2:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px hsl(var(--ring));
+  }
+
+  /* Custom scrollbar for webkit browsers */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Enhanced UX utilities */
+  .workflo-card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02];
+  }
+
+  .workflo-button-press {
+    @apply active:scale-95 transition-transform duration-75;
+  }
+
+  .workflo-focus-ring {
+    @apply focus-visible:ring-2 focus-visible:ring-workflo-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Workflo gradient animations */
+  @keyframes workflo-pulse {
+    0%, 100% {
+      background-color: hsl(var(--workflo-primary));
+    }
+    50% {
+      background-color: hsl(var(--workflo-secondary));
+    }
+  }
+
+  .workflo-pulse {
+    animation: workflo-pulse 2s infinite;
+  }
+
+  /* Interactive hover effects */
+  .workflo-interactive:hover {
+    @apply transform-gpu transition-transform duration-200;
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .workflo-interactive:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Improved card shadows with Workflo branding */
+  .workflo-card-shadow {
+    box-shadow: 
+      0 4px 6px -1px hsl(var(--workflo-primary) / 0.1),
+      0 2px 4px -1px hsl(var(--workflo-primary) / 0.06),
+      0 0 0 1px hsl(var(--workflo-primary) / 0.05);
+  }
+
+  .workflo-card-shadow:hover {
+    box-shadow: 
+      0 20px 25px -5px hsl(var(--workflo-primary) / 0.15),
+      0 10px 10px -5px hsl(var(--workflo-primary) / 0.1),
+      0 0 0 1px hsl(var(--workflo-primary) / 0.1);
+  }
+}

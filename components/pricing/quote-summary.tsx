@@ -16,18 +16,18 @@ interface QuoteSummaryProps {
   onEmailQuote: () => void
 }
 
-export function QuoteSummary({ 
-  quote, 
-  isYearly, 
-  onExportQuote, 
-  onEmailQuote 
+export function QuoteSummary({
+  quote,
+  isYearly,
+  onExportQuote,
+  onEmailQuote
 }: QuoteSummaryProps) {
   const { language } = useLanguage()
   const { getLocalizedValue } = useLocalizedContent()
 
   const totalPrice = isYearly ? quote.totalYearly : quote.totalMonthly
-  const savingsPercentage = quote.yearlyDiscount > 0 
-    ? Math.round((quote.yearlyDiscount / (quote.totalMonthly * 12)) * 100) 
+  const savingsPercentage = quote.yearlyDiscount > 0
+    ? Math.round((quote.yearlyDiscount / (quote.totalMonthly * 12)) * 100)
     : 0
 
   return (
@@ -40,8 +40,8 @@ export function QuoteSummary({
           </CardTitle>
         </div>
         <CardDescription>
-          {language === 'nl' 
-            ? 'Je gepersonaliseerde IT-diensten offerte' 
+          {language === 'nl'
+            ? 'Je gepersonaliseerde IT-diensten offerte'
             : 'Your personalized IT services quote'
           }
         </CardDescription>
@@ -145,18 +145,18 @@ export function QuoteSummary({
 
         {/* Action Buttons */}
         <div className="space-y-2">
-          <Button 
-            onClick={onExportQuote} 
+          <Button
+            onClick={onExportQuote}
             className="w-full"
             size="lg"
           >
             <Download className="h-4 w-4 mr-2" />
             {language === 'nl' ? 'Download PDF' : 'Download PDF'}
           </Button>
-          
-          <Button 
-            onClick={onEmailQuote} 
-            variant="outline" 
+
+          <Button
+            onClick={onEmailQuote}
+            variant="outline"
             className="w-full"
           >
             <Mail className="h-4 w-4 mr-2" />
@@ -170,7 +170,7 @@ export function QuoteSummary({
             {language === 'nl' ? 'Vragen over deze offerte?' : 'Questions about this quote?'}
           </div>
           <div className="text-sm text-muted-foreground space-y-1">
-            <div>📧 info@workflo.nl</div>
+            <div>📧 info@workflo.it</div>
             <div>📞 +31 (0)20 123 4567</div>
             <div>🕒 Ma-Vr 9:00-17:00</div>
           </div>

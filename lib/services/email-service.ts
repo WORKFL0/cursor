@@ -26,6 +26,22 @@ export interface NewsletterSubscriptionData {
   subscribedAt?: string
 }
 
+export interface ReferralFormData {
+  referrerName: string
+  referrerEmail: string
+  referrerPhone?: string
+  referrerCompany?: string
+  referredName: string
+  referredEmail: string
+  referredPhone?: string
+  referredCompany: string
+  relationship?: string
+  message?: string
+  submittedAt?: string
+  userAgent?: string
+  referrer?: string
+}
+
 export interface EmailTemplateData {
   to: string[]
   subject: string
@@ -34,9 +50,30 @@ export interface EmailTemplateData {
   replyTo?: string
 }
 
+interface EmailSendResult {
+  success: boolean
+  messageId?: string
+  error?: string
+}
+
+interface RetryConfig {
+  maxRetries: number
+  baseDelay: number
+  maxDelay: number
+}
+
 class EmailService {
   private resend: Resend | null = null
   private isInitialized = false
+  private readonly fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@workflo.it'
+  private readonly toEmail = process.env.RESEND_TO_EMAIL || 'info@workflo.it'
+
+  // Retry configuration with exponential backoff
+  private readonly retryConfig: RetryConfig = {
+    maxRetries: 3,
+    baseDelay: 1000, // 1 second
+    maxDelay: 10000  // 10 seconds
+  }
 
   constructor() {
     this.initialize()
@@ -63,191 +100,282 @@ class EmailService {
   }
 
   /**
-   * Send contact form submission email to Workflo team
+   * Retry logic with exponential backoff
    */
-  public async sendContactFormNotification(data: ContactFormData): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  private async retryWithBackoff<T>(
+    operation: () => Promise<T>,
+    context: string
+  ): Promise<T> {
+    let lastError: Error | null = null
+
+    for (let attempt = 0; attempt <= this.retryConfig.maxRetries; attempt++) {
+      try {
+        return await operation()
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error))
+
+        if (attempt < this.retryConfig.maxRetries) {
+          // Calculate exponential backoff delay
+          const delay = Math.min(
+            this.retryConfig.baseDelay * Math.pow(2, attempt),
+            this.retryConfig.maxDelay
+          )
+
+          console.warn(
+            `${context} failed (attempt ${attempt + 1}/${this.retryConfig.maxRetries + 1}). ` +
+            `Retrying in ${delay}ms...`,
+            lastError.message
+          )
+
+          await new Promise(resolve => setTimeout(resolve, delay))
+        }
+      }
+    }
+
+    throw lastError || new Error(`${context} failed after ${this.retryConfig.maxRetries} retries`)
+  }
+
+  /**
+   * Validate email addresses
+   */
+  private validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  /**
+   * Send email with retry logic
+   */
+  private async sendEmailWithRetry(params: {
+    from: string
+    to: string[]
+    subject: string
+    html: string
+    text?: string
+    replyTo?: string
+    tags?: Array<{ name: string; value: string }>
+  }): Promise<EmailSendResult> {
     if (!this.isAvailable()) {
       return { success: false, error: 'Email service not available' }
     }
 
+    // Validate recipient emails
+    for (const email of params.to) {
+      if (!this.validateEmail(email)) {
+        return { success: false, error: `Invalid recipient email: ${email}` }
+      }
+    }
+
+    if (params.replyTo && !this.validateEmail(params.replyTo)) {
+      return { success: false, error: `Invalid reply-to email: ${params.replyTo}` }
+    }
+
     try {
-      const servicesText = data.services && data.services.length > 0 
-        ? `\n\nInteresse in diensten:\n${data.services.map(s => `- ${s}`).join('\n')}`
-        : ''
-
-      const htmlContent = this.generateContactFormHtml(data, servicesText)
-      const textContent = this.generateContactFormText(data, servicesText)
-
-      const result = await this.resend!.emails.send({
-        from: 'noreply@workflo.nl',
-        to: ['info@workflo.nl', 'work@workflo.nl'],
-        subject: `Nieuw contactformulier: ${data.subject}`,
-        html: htmlContent,
-        text: textContent,
-        replyTo: data.email,
-        tags: [
-          { name: 'type', value: 'contact-form' },
-          { name: 'subject', value: data.subject }
-        ]
-      })
+      const result = await this.retryWithBackoff(
+        () => this.resend!.emails.send(params),
+        'Email send'
+      )
 
       if (result.error) {
-        console.error('Email send error:', result.error)
+        console.error('Email send error from Resend:', result.error)
         return { success: false, error: result.error.message }
       }
 
-      console.log('Contact form email sent successfully:', result.data?.id)
       return { success: true, messageId: result.data?.id }
     } catch (error: unknown) {
-      console.error('Failed to send contact form email:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
+      console.error('Failed to send email after retries:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
+      }
     }
+  }
+
+  /**
+   * Send contact form submission email to Workflo team
+   */
+  public async sendContactFormNotification(data: ContactFormData): Promise<EmailSendResult> {
+    const servicesText = data.services && data.services.length > 0
+      ? `\n\nInteresse in diensten:\n${data.services.map(s => `- ${s}`).join('\n')}`
+      : ''
+
+    const htmlContent = this.generateContactFormHtml(data, servicesText)
+    const textContent = this.generateContactFormText(data, servicesText)
+
+    const result = await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: [this.toEmail, 'work@workflo.it'],
+      subject: `Nieuw contactformulier: ${data.subject}`,
+      html: htmlContent,
+      text: textContent,
+      replyTo: data.email,
+      tags: [
+        { name: 'type', value: 'contact-form' },
+        { name: 'subject', value: data.subject.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 50) }
+      ]
+    })
+
+    if (result.success) {
+      console.log('Contact form email sent successfully:', result.messageId)
+    }
+
+    return result
   }
 
   /**
    * Send confirmation email to the person who submitted the form
    */
-  public async sendContactFormConfirmation(data: ContactFormData): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    if (!this.isAvailable()) {
-      return { success: false, error: 'Email service not available' }
-    }
+  public async sendContactFormConfirmation(data: ContactFormData): Promise<EmailSendResult> {
+    const htmlContent = this.generateConfirmationHtml(data)
+    const textContent = this.generateConfirmationText(data)
 
-    try {
-      const htmlContent = this.generateConfirmationHtml(data)
-      const textContent = this.generateConfirmationText(data)
-
-      const result = await this.resend!.emails.send({
-        from: 'noreply@workflo.nl',
-        to: [data.email],
-        subject: 'Bevestiging: We hebben je bericht ontvangen - Workflo',
-        html: htmlContent,
-        text: textContent,
-        replyTo: 'info@workflo.nl',
-        tags: [
-          { name: 'type', value: 'contact-confirmation' }
-        ]
-      })
-
-      if (result.error) {
-        console.error('Confirmation email error:', result.error)
-        return { success: false, error: result.error.message }
-      }
-
-      return { success: true, messageId: result.data?.id }
-    } catch (error: unknown) {
-      console.error('Failed to send confirmation email:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
-    }
+    return await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: [data.email],
+      subject: 'Bevestiging: We hebben je bericht ontvangen - Workflo',
+      html: htmlContent,
+      text: textContent,
+      replyTo: this.toEmail,
+      tags: [
+        { name: 'type', value: 'contact-confirmation' }
+      ]
+    })
   }
 
   /**
    * Send quote request notification email to Workflo team
    */
-  public async sendQuoteRequestNotification(data: QuoteRequestData): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    if (!this.isAvailable()) {
-      return { success: false, error: 'Email service not available' }
+  public async sendQuoteRequestNotification(data: QuoteRequestData): Promise<EmailSendResult> {
+    const servicesText = data.services && data.services.length > 0
+      ? `\n\nGewenste diensten:\n${data.services.map(s => `- ${s}`).join('\n')}`
+      : ''
+
+    const htmlContent = this.generateQuoteRequestHtml(data, servicesText)
+    const textContent = this.generateQuoteRequestText(data, servicesText)
+
+    const urgencyPrefix = data.urgency === 'high' ? '🔥 URGENT - ' : data.urgency === 'low' ? '📋 ' : '⚡ '
+
+    const result = await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: [this.toEmail, 'work@workflo.it'],
+      subject: `${urgencyPrefix}Nieuw offerteverzoek: ${data.services?.join(', ') || 'Geen diensten'}`,
+      html: htmlContent,
+      text: textContent,
+      replyTo: data.email,
+      tags: [
+        { name: 'type', value: 'quote-request' },
+        { name: 'urgency', value: data.urgency || 'medium' },
+        { name: 'services', value: (data.services?.join(',') || 'none').replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 50) }
+      ]
+    })
+
+    if (result.success) {
+      console.log('Quote request email sent successfully:', result.messageId)
     }
 
-    try {
-      const servicesText = data.services && data.services.length > 0 
-        ? `\n\nGewenste diensten:\n${data.services.map(s => `- ${s}`).join('\n')}`
-        : ''
-
-      const htmlContent = this.generateQuoteRequestHtml(data, servicesText)
-      const textContent = this.generateQuoteRequestText(data, servicesText)
-
-      const urgencyPrefix = data.urgency === 'high' ? '🔥 URGENT - ' : data.urgency === 'low' ? '📋 ' : '⚡ '
-      
-      const result = await this.resend!.emails.send({
-        from: 'noreply@workflo.nl',
-        to: ['info@workflo.nl', 'work@workflo.nl'],
-        subject: `${urgencyPrefix}Nieuw offerteverzoek: ${data.services?.join(', ') || 'Geen diensten'}`,
-        html: htmlContent,
-        text: textContent,
-        replyTo: data.email,
-        tags: [
-          { name: 'type', value: 'quote-request' },
-          { name: 'urgency', value: data.urgency || 'medium' },
-          { name: 'services', value: data.services?.join(',') || 'none' }
-        ]
-      })
-
-      if (result.error) {
-        console.error('Quote request email error:', result.error)
-        return { success: false, error: result.error.message }
-      }
-
-      console.log('Quote request email sent successfully:', result.data?.id)
-      return { success: true, messageId: result.data?.id }
-    } catch (error: unknown) {
-      console.error('Failed to send quote request email:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
-    }
+    return result
   }
 
   /**
    * Send quote request confirmation email to the person who submitted the form
    */
-  public async sendQuoteRequestConfirmation(data: ContactFormData): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    if (!this.isAvailable()) {
-      return { success: false, error: 'Email service not available' }
+  public async sendQuoteRequestConfirmation(data: ContactFormData): Promise<EmailSendResult> {
+    const htmlContent = this.generateQuoteConfirmationHtml(data)
+    const textContent = this.generateQuoteConfirmationText(data)
+
+    return await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: [data.email],
+      subject: 'Bevestiging: We hebben je offerteverzoek ontvangen - Workflo',
+      html: htmlContent,
+      text: textContent,
+      replyTo: this.toEmail,
+      tags: [
+        { name: 'type', value: 'quote-confirmation' }
+      ]
+    })
+  }
+
+  /**
+   * Send referral form notification email to Workflo team
+   */
+  public async sendReferralNotification(data: ReferralFormData): Promise<EmailSendResult> {
+    const htmlContent = this.generateReferralNotificationHtml(data)
+    const textContent = this.generateReferralNotificationText(data)
+
+    const result = await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: [this.toEmail, 'work@workflo.it'],
+      subject: `Nieuwe Referral: ${data.referredCompany} - Verwezen door ${data.referrerName}`,
+      html: htmlContent,
+      text: textContent,
+      replyTo: data.referrerEmail,
+      tags: [
+        { name: 'type', value: 'referral' },
+        { name: 'referrer', value: data.referrerEmail.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 50) },
+        { name: 'referred', value: data.referredEmail.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 50) }
+      ]
+    })
+
+    if (result.success) {
+      console.log('Referral notification email sent successfully:', result.messageId)
     }
 
-    try {
-      const htmlContent = this.generateQuoteConfirmationHtml(data)
-      const textContent = this.generateQuoteConfirmationText(data)
+    return result
+  }
 
-      const result = await this.resend!.emails.send({
-        from: 'noreply@workflo.nl',
-        to: [data.email],
-        subject: 'Bevestiging: We hebben je offerteverzoek ontvangen - Workflo',
-        html: htmlContent,
-        text: textContent,
-        replyTo: 'info@workflo.nl',
-        tags: [
-          { name: 'type', value: 'quote-confirmation' }
-        ]
-      })
+  /**
+   * Send referral thank you email to the referrer
+   */
+  public async sendReferralThankYou(data: ReferralFormData): Promise<EmailSendResult> {
+    const htmlContent = this.generateReferralThankYouHtml(data)
+    const textContent = this.generateReferralThankYouText(data)
 
-      if (result.error) {
-        console.error('Quote confirmation email error:', result.error)
-        return { success: false, error: result.error.message }
-      }
+    return await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: [data.referrerEmail],
+      subject: 'Bedankt voor je referral! - Workflo',
+      html: htmlContent,
+      text: textContent,
+      replyTo: this.toEmail,
+      tags: [
+        { name: 'type', value: 'referral-thank-you' }
+      ]
+    })
+  }
 
-      return { success: true, messageId: result.data?.id }
-    } catch (error: unknown) {
-      console.error('Failed to send quote confirmation email:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
-    }
+  /**
+   * Send introduction email to the referred company
+   */
+  public async sendReferralIntroduction(data: ReferralFormData): Promise<EmailSendResult> {
+    const htmlContent = this.generateReferralIntroductionHtml(data)
+    const textContent = this.generateReferralIntroductionText(data)
+
+    return await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: [data.referredEmail],
+      subject: `${data.referrerName} heeft Workflo aan je aanbevolen`,
+      html: htmlContent,
+      text: textContent,
+      replyTo: this.toEmail,
+      tags: [
+        { name: 'type', value: 'referral-introduction' }
+      ]
+    })
   }
 
   /**
    * Send custom email
    */
-  public async sendEmail(data: EmailTemplateData): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    if (!this.isAvailable()) {
-      return { success: false, error: 'Email service not available' }
-    }
-
-    try {
-      const result = await this.resend!.emails.send({
-        from: 'noreply@workflo.nl',
-        to: data.to,
-        subject: data.subject,
-        html: data.html,
-        text: data.text,
-        replyTo: data.replyTo || 'info@workflo.nl'
-      })
-
-      if (result.error) {
-        return { success: false, error: result.error.message }
-      }
-
-      return { success: true, messageId: result.data?.id }
-    } catch (error: unknown) {
-      console.error('Failed to send custom email:', error)
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
-    }
+  public async sendEmail(data: EmailTemplateData): Promise<EmailSendResult> {
+    return await this.sendEmailWithRetry({
+      from: this.fromEmail,
+      to: data.to,
+      subject: data.subject,
+      html: data.html,
+      text: data.text,
+      replyTo: data.replyTo || this.toEmail
+    })
   }
 
   private generateContactFormHtml(data: ContactFormData, servicesText: string): string {
@@ -288,8 +416,8 @@ class EmailService {
         </div>
         
         <div class="content">
-            ${data.subject.includes('support-request') || data.subject.includes('urgent') ? 
-                '<div class="urgent">⚠️ <strong>Mogelijk urgent verzoek!</strong> Controleer het onderwerp en bericht voor urgentie.</div>' : ''}
+            ${data.subject.includes('support-request') || data.subject.includes('urgent') ?
+        '<div class="urgent">⚠️ <strong>Mogelijk urgent verzoek!</strong> Controleer het onderwerp en bericht voor urgentie.</div>' : ''}
             
             <div class="field">
                 <span class="label">Naam:</span>
@@ -344,7 +472,7 @@ class EmailService {
         
         <div class="footer">
             <p><strong>Workflo B.V.</strong> | Koivistokade 3, 1013 AC Amsterdam | 020-30 80 465</p>
-            <p>Dit is een automatisch gegenereerde e-mail van het contactformulier op workflo.nl</p>
+            <p>Dit is een automatisch gegenereerde e-mail van het contactformulier op workflo.it</p>
         </div>
     </div>
 </body>
@@ -435,7 +563,7 @@ Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam | 020-30 80 465
         
         <div class="footer">
             <p><strong>Workflo B.V.</strong> | Koivistokade 3, 1013 AC Amsterdam</p>
-            <p>📞 020-30 80 465 | 📧 <a href="mailto:info@workflo.nl">info@workflo.nl</a> | 🌐 <a href="https://workflo.nl">workflo.nl</a></p>
+            <p>📞 020-30 80 465 | 📧 <a href="mailto:info@workflo.it">info@workflo.it</a> | 🌐 <a href="https://workflo.it">workflo.it</a></p>
         </div>
     </div>
 </body>
@@ -464,7 +592,7 @@ Met vriendelijke groet,
 Het Workflo Team
 
 Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam
-020-30 80 465 | info@workflo.nl | workflo.nl
+020-30 80 465 | info@workflo.it | workflo.it
 `
   }
 
@@ -522,8 +650,8 @@ Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam
         </div>
         
         <div class="content">
-            ${data.urgency === 'high' ? 
-                '<div class="urgent">🔥 <strong>URGENT VERZOEK!</strong> Deze klant heeft aangegeven dat dit een urgente aanvraag is.</div>' : ''}
+            ${data.urgency === 'high' ?
+        '<div class="urgent">🔥 <strong>URGENT VERZOEK!</strong> Deze klant heeft aangegeven dat dit een urgente aanvraag is.</div>' : ''}
             
             <div class="field">
                 <span class="label">Naam:</span>
@@ -587,7 +715,7 @@ Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam
         
         <div class="footer">
             <p><strong>Workflo B.V.</strong> | Koivistokade 3, 1013 AC Amsterdam | 020-30 80 465</p>
-            <p>Dit is een automatisch gegenereerde e-mail van het offerte formulier op workflo.nl</p>
+            <p>Dit is een automatisch gegenereerde e-mail van het offerte formulier op workflo.it</p>
         </div>
     </div>
 </body>
@@ -725,6 +853,394 @@ Met vriendelijke groet,
 Het Workflo Team
 
 "Wij zorgen ervoor dat technologie jouw bedrijf vooruit helpt, niet tegenhoudt."
+
+Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam
+020-30 80 465 | info@workflo.nl | workflo.nl
+`
+  }
+
+  private generateReferralNotificationHtml(data: ReferralFormData): string {
+    const currentDate = new Date().toLocaleDateString('nl-NL', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+
+    return `
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nieuwe Referral - Workflo</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: bold; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 18px; font-weight: bold; color: #059669; margin-bottom: 15px; border-bottom: 2px solid #10b981; padding-bottom: 5px; }
+        .field { margin-bottom: 15px; }
+        .label { font-weight: bold; color: #333; display: block; margin-bottom: 5px; font-size: 14px; }
+        .value { background: #f8f9fa; padding: 12px; border-radius: 4px; border-left: 4px solid #10b981; }
+        .message { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #e9ecef; white-space: pre-wrap; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 14px; color: #666; }
+        .highlight { background: #d1fae5; border: 1px solid #10b981; padding: 15px; border-radius: 6px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Nieuwe Referral!</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px;">Ontvangen op ${currentDate}</p>
+        </div>
+
+        <div class="content">
+            <div class="highlight">
+                <strong>🔥 Hete lead!</strong> ${data.referrerName} heeft ${data.referredCompany} aan ons verwezen.
+            </div>
+
+            <div class="section">
+                <div class="section-title">Verwijzer (Bestaande Klant)</div>
+
+                <div class="field">
+                    <span class="label">Naam:</span>
+                    <div class="value">${data.referrerName}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">E-mail:</span>
+                    <div class="value"><a href="mailto:${data.referrerEmail}">${data.referrerEmail}</a></div>
+                </div>
+
+                ${data.referrerPhone ? `
+                <div class="field">
+                    <span class="label">Telefoon:</span>
+                    <div class="value"><a href="tel:${data.referrerPhone.replace(/\s/g, '')}">${data.referrerPhone}</a></div>
+                </div>
+                ` : ''}
+
+                ${data.referrerCompany ? `
+                <div class="field">
+                    <span class="label">Bedrijf:</span>
+                    <div class="value">${data.referrerCompany}</div>
+                </div>
+                ` : ''}
+            </div>
+
+            <div class="section">
+                <div class="section-title">Verwezen Bedrijf (Nieuwe Lead)</div>
+
+                <div class="field">
+                    <span class="label">Contactpersoon:</span>
+                    <div class="value">${data.referredName}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Bedrijf:</span>
+                    <div class="value"><strong>${data.referredCompany}</strong></div>
+                </div>
+
+                <div class="field">
+                    <span class="label">E-mail:</span>
+                    <div class="value"><a href="mailto:${data.referredEmail}">${data.referredEmail}</a></div>
+                </div>
+
+                ${data.referredPhone ? `
+                <div class="field">
+                    <span class="label">Telefoon:</span>
+                    <div class="value"><a href="tel:${data.referredPhone.replace(/\s/g, '')}">${data.referredPhone}</a></div>
+                </div>
+                ` : ''}
+
+                ${data.relationship ? `
+                <div class="field">
+                    <span class="label">Relatie:</span>
+                    <div class="value">${data.relationship}</div>
+                </div>
+                ` : ''}
+            </div>
+
+            ${data.message ? `
+            <div class="section">
+                <div class="section-title">Aanvullende Informatie</div>
+                <div class="message">${data.message}</div>
+            </div>
+            ` : ''}
+
+            <div style="border-top: 1px solid #e9ecef; padding-top: 20px; margin-top: 30px;">
+                <p><strong>Volgende stappen:</strong></p>
+                <ol>
+                    <li>Neem binnen 24 uur contact op met ${data.referredName}</li>
+                    <li>Referentie: "Verwezen door ${data.referrerName}"</li>
+                    <li>Update CRM met referral informatie</li>
+                    <li>Informeer ${data.referrerName} over de voortgang</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Workflo B.V.</strong> | Koivistokade 3, 1013 AC Amsterdam | 020-30 80 465</p>
+            <p>Dit is een automatisch gegenereerde e-mail van het referral formulier op workflo.nl</p>
+        </div>
+    </div>
+</body>
+</html>
+`
+  }
+
+  private generateReferralNotificationText(data: ReferralFormData): string {
+    return `
+NIEUWE REFERRAL - WORKFLO
+=========================
+
+🎉 Hete lead! ${data.referrerName} heeft ${data.referredCompany} aan ons verwezen.
+
+VERWIJZER (BESTAANDE KLANT)
+Naam: ${data.referrerName}
+E-mail: ${data.referrerEmail}
+${data.referrerPhone ? `Telefoon: ${data.referrerPhone}` : ''}
+${data.referrerCompany ? `Bedrijf: ${data.referrerCompany}` : ''}
+
+VERWEZEN BEDRIJF (NIEUWE LEAD)
+Contactpersoon: ${data.referredName}
+Bedrijf: ${data.referredCompany}
+E-mail: ${data.referredEmail}
+${data.referredPhone ? `Telefoon: ${data.referredPhone}` : ''}
+${data.relationship ? `Relatie: ${data.relationship}` : ''}
+
+${data.message ? `AANVULLENDE INFORMATIE:\n${data.message}\n` : ''}
+
+VOLGENDE STAPPEN:
+1. Neem binnen 24 uur contact op met ${data.referredName}
+2. Referentie: "Verwezen door ${data.referrerName}"
+3. Update CRM met referral informatie
+4. Informeer ${data.referrerName} over de voortgang
+
+---
+Verstuurd: ${new Date().toLocaleDateString('nl-NL')}
+
+Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam | 020-30 80 465
+`
+  }
+
+  private generateReferralThankYouHtml(data: ReferralFormData): string {
+    return `
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedankt voor je referral - Workflo</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: bold; }
+        .content { padding: 30px; }
+        .highlight { background: #d1fae5; padding: 20px; border-radius: 6px; border-left: 4px solid #10b981; margin: 20px 0; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 14px; color: #666; }
+        .benefit { background: #f0fdf4; padding: 12px; border-radius: 4px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🙏 Hartelijk Dank!</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px;">We waarderen je vertrouwen</p>
+        </div>
+
+        <div class="content">
+            <p>Beste ${data.referrerName},</p>
+
+            <p>Wat geweldig dat je <strong>${data.referredCompany}</strong> aan ons hebt verwezen! We waarderen je vertrouwen enorm en zullen er alles aan doen om ook voor hen de beste IT-partner te zijn.</p>
+
+            <div class="highlight">
+                <h3 style="margin: 0 0 10px 0;">🎁 Jouw Referral Voordelen</h3>
+                <div class="benefit">✓ 10% korting op je volgende factuur wanneer de referral klant wordt</div>
+                <div class="benefit">✓ Gratis IT-audit ter waarde van €500 na 3 succesvolle referrals</div>
+                <div class="benefit">✓ Priority support status</div>
+                <div class="benefit">✓ Toegang tot exclusieve partner events</div>
+            </div>
+
+            <div class="highlight">
+                <h3 style="margin: 0 0 10px 0;">📋 Wat gebeurt er nu?</h3>
+                <p>We gaan binnen 24 uur contact opnemen met ${data.referredName} van ${data.referredCompany}. We zullen natuurlijk vermelden dat jij ons hebt aanbevolen!</p>
+                <p>Je ontvangt van ons een update zodra we contact hebben gehad en bij elke belangrijke stap in het proces.</p>
+            </div>
+
+            <p>Ken je nog meer bedrijven die baat zouden hebben bij professionele IT-ondersteuning? We staan altijd open voor nieuwe referrals!</p>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="https://workflo.nl/referral" style="background: #10b981; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">Verwijs nog een bedrijf</a>
+            </div>
+
+            <p>Nogmaals ontzettend bedankt voor je vertrouwen en aanbeveling!</p>
+
+            <p style="margin-top: 30px;">Met vriendelijke groet,<br>
+            <strong>Het Workflo Team</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Workflo B.V.</strong> | Koivistokade 3, 1013 AC Amsterdam</p>
+            <p>📞 020-30 80 465 | 📧 <a href="mailto:info@workflo.nl">info@workflo.nl</a> | 🌐 <a href="https://workflo.nl">workflo.nl</a></p>
+        </div>
+    </div>
+</body>
+</html>
+`
+  }
+
+  private generateReferralThankYouText(data: ReferralFormData): string {
+    return `
+Beste ${data.referrerName},
+
+Wat geweldig dat je ${data.referredCompany} aan ons hebt verwezen! We waarderen je vertrouwen enorm en zullen er alles aan doen om ook voor hen de beste IT-partner te zijn.
+
+JOUW REFERRAL VOORDELEN
+- 10% korting op je volgende factuur wanneer de referral klant wordt
+- Gratis IT-audit ter waarde van €500 na 3 succesvolle referrals
+- Priority support status
+- Toegang tot exclusieve partner events
+
+WAT GEBEURT ER NU?
+We gaan binnen 24 uur contact opnemen met ${data.referredName} van ${data.referredCompany}. We zullen natuurlijk vermelden dat jij ons hebt aanbevolen!
+
+Je ontvangt van ons een update zodra we contact hebben gehad en bij elke belangrijke stap in het proces.
+
+Ken je nog meer bedrijven die baat zouden hebben bij professionele IT-ondersteuning? We staan altijd open voor nieuwe referrals!
+
+Nogmaals ontzettend bedankt voor je vertrouwen en aanbeveling!
+
+Met vriendelijke groet,
+Het Workflo Team
+
+Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam
+020-30 80 465 | info@workflo.nl | workflo.nl
+`
+  }
+
+  private generateReferralIntroductionHtml(data: ReferralFormData): string {
+    return `
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persoonlijke aanbeveling van ${data.referrerName} - Workflo</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #f2f400, #e6e600); color: #000; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: bold; }
+        .content { padding: 30px; }
+        .highlight { background: #fffbeb; padding: 20px; border-radius: 6px; border-left: 4px solid #f2f400; margin: 20px 0; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 14px; color: #666; }
+        .cta { background: #f2f400; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold; margin: 10px 0; }
+        .feature { background: #f8f9fa; padding: 12px; border-radius: 4px; margin: 8px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👋 Kennismaking via ${data.referrerName}</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px;">Persoonlijke IT-partner aanbeveling</p>
+        </div>
+
+        <div class="content">
+            <p>Beste ${data.referredName},</p>
+
+            <div class="highlight">
+                <p><strong>${data.referrerName}</strong> ${data.referrerCompany ? `van ${data.referrerCompany}` : ''} heeft Workflo aan je aanbevolen als betrouwbare IT-partner voor ${data.referredCompany}.</p>
+            </div>
+
+            <p>Bij Workflo zorgen we ervoor dat IT jouw bedrijf vooruit helpt in plaats van tegenhoudt. We begrijpen dat elke organisatie unieke IT-uitdagingen heeft, en daarom bieden we maatwerk oplossingen die perfect aansluiten bij jouw situatie.</p>
+
+            <h3 style="color: #333; margin-top: 25px;">Waarom kiezen klanten voor Workflo?</h3>
+
+            <div class="feature">✓ <strong>Proactieve aanpak:</strong> We lossen problemen op voordat ze ontstaan</div>
+            <div class="feature">✓ <strong>Vaste contactpersoon:</strong> Geen callcenter, maar een dedicated team</div>
+            <div class="feature">✓ <strong>Transparante prijzen:</strong> Geen verborgen kosten</div>
+            <div class="feature">✓ <strong>24/7 monitoring:</strong> We houden alles in de gaten</div>
+            <div class="feature">✓ <strong>Snelle response:</strong> Gemiddeld binnen 1 uur</div>
+            <div class="feature">✓ <strong>Amsterdam-based:</strong> Lokale service, persoonlijk contact</div>
+
+            <div class="highlight">
+                <h3 style="margin: 0 0 10px 0;">🎁 Speciale Referral Actie</h3>
+                <p>Als verwezen bedrijf krijg je van ons:</p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li><strong>Gratis IT-audit</strong> ter waarde van €500</li>
+                    <li><strong>10% korting</strong> op de eerste 3 maanden</li>
+                    <li><strong>Gratis on-site assessment</strong> van je huidige IT-infrastructuur</li>
+                    <li><strong>Persoonlijk strategisch IT-plan</strong> voor jouw organisatie</li>
+                </ul>
+            </div>
+
+            <p>Ik zou graag kennismaken en bespreken hoe we ${data.referredCompany} kunnen helpen met professionele IT-ondersteuning. Wanneer komt het jou uit voor een vrijblijvend gesprek?</p>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="https://workflo.nl/afspraak" class="cta">📅 Plan een kennismaking</a>
+                <br><br>
+                <p style="margin: 10px 0;">Of bel direct: <strong><a href="tel:0203080465" style="color: #000;">020-30 80 465</a></strong></p>
+            </div>
+
+            <p style="margin-top: 30px;">Ik kijk uit naar ons gesprek!</p>
+
+            <p style="margin-top: 30px;">Met vriendelijke groet,<br>
+            <strong>Het Workflo Team</strong></p>
+
+            <p style="font-size: 12px; color: #666; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e9ecef;">
+                <em>P.S. ${data.referrerName} is al enige tijd tevreden klant bij ons. Mocht je vragen hebben over hun ervaring, neem gerust contact op!</em>
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Workflo B.V.</strong> | Koivistokade 3, 1013 AC Amsterdam</p>
+            <p>📞 020-30 80 465 | 📧 <a href="mailto:info@workflo.nl">info@workflo.nl</a> | 🌐 <a href="https://workflo.nl">workflo.nl</a></p>
+        </div>
+    </div>
+</body>
+</html>
+`
+  }
+
+  private generateReferralIntroductionText(data: ReferralFormData): string {
+    return `
+Beste ${data.referredName},
+
+${data.referrerName} ${data.referrerCompany ? `van ${data.referrerCompany}` : ''} heeft Workflo aan je aanbevolen als betrouwbare IT-partner voor ${data.referredCompany}.
+
+Bij Workflo zorgen we ervoor dat IT jouw bedrijf vooruit helpt in plaats van tegenhoudt. We begrijpen dat elke organisatie unieke IT-uitdagingen heeft, en daarom bieden we maatwerk oplossingen die perfect aansluiten bij jouw situatie.
+
+WAAROM KIEZEN KLANTEN VOOR WORKFLO?
+- Proactieve aanpak: We lossen problemen op voordat ze ontstaan
+- Vaste contactpersoon: Geen callcenter, maar een dedicated team
+- Transparante prijzen: Geen verborgen kosten
+- 24/7 monitoring: We houden alles in de gaten
+- Snelle response: Gemiddeld binnen 1 uur
+- Amsterdam-based: Lokale service, persoonlijk contact
+
+SPECIALE REFERRAL ACTIE
+Als verwezen bedrijf krijg je van ons:
+- Gratis IT-audit ter waarde van €500
+- 10% korting op de eerste 3 maanden
+- Gratis on-site assessment van je huidige IT-infrastructuur
+- Persoonlijk strategisch IT-plan voor jouw organisatie
+
+Ik zou graag kennismaken en bespreken hoe we ${data.referredCompany} kunnen helpen met professionele IT-ondersteuning. Wanneer komt het jou uit voor een vrijblijvend gesprek?
+
+Plan een kennismaking: https://workflo.nl/afspraak
+Of bel direct: 020-30 80 465
+
+Ik kijk uit naar ons gesprek!
+
+Met vriendelijke groet,
+Het Workflo Team
+
+P.S. ${data.referrerName} is al enige tijd tevreden klant bij ons. Mocht je vragen hebben over hun ervaring, neem gerust contact op!
 
 Workflo B.V. | Koivistokade 3, 1013 AC Amsterdam
 020-30 80 465 | info@workflo.nl | workflo.nl

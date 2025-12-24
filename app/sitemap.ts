@@ -66,6 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     
     // News and resources
     { path: '/nieuws', priority: 0.8, changeFrequency: 'daily' as const },
+    { path: '/blog', priority: 0.8, changeFrequency: 'daily' as const },
     { path: '/downloads', priority: 0.5, changeFrequency: 'monthly' as const },
     
     // Support pages
@@ -80,9 +81,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Fetch dynamic content
-  const [articles, caseStudies] = await Promise.all([
+  const [articles, caseStudies, blogPosts] = await Promise.all([
     fetchArticles(),
     fetchCaseStudies(),
+    fetchBlogPosts(),
   ])
 
   // Build sitemap entries
@@ -115,6 +117,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(caseStudy.updated_at || caseStudy.created_at),
       changeFrequency: 'monthly',
       priority: 0.7,
+    })
+  })
+
+  // Add blog post pages
+  blogPosts.forEach(post => {
+    sitemapEntries.push({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: new Date(post.updated_at || post.created_at),
+      changeFrequency: 'monthly',
+      priority: 0.6,
     })
   })
 
@@ -154,23 +166,50 @@ async function fetchCaseStudies(): Promise<CaseStudy[]> {
     console.warn('Supabase client not available for sitemap generation')
     return []
   }
-  
+
   try {
     const { data: caseStudies, error } = await supabase
       .from('case_studies')
       .select('slug, created_at, updated_at, status')
       .eq('status', 'published')
-      .order('created_at', { ascending: false })
+      .order('created_at', { ascending: false})
       .limit(100) // Reasonable limit
-    
+
     if (error) {
       console.warn('Case studies table might not exist yet:', error.message)
       return []
     }
-    
+
     return caseStudies || []
   } catch (error) {
     console.warn('Error fetching case studies for sitemap (table might not exist):', error)
+    return []
+  }
+}
+
+// Helper function to fetch blog posts from CMS
+async function fetchBlogPosts(): Promise<Article[]> {
+  if (!supabase) {
+    console.warn('Supabase client not available for sitemap generation')
+    return []
+  }
+
+  try {
+    const { data: blogPosts, error } = await supabase
+      .from('blog_posts')
+      .select('slug, created_at, updated_at, status')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false })
+      .limit(1000) // Reasonable limit for sitemap
+
+    if (error) {
+      console.error('Error fetching blog posts for sitemap:', error)
+      return []
+    }
+
+    return blogPosts || []
+  } catch (error) {
+    console.error('Error fetching blog posts for sitemap:', error)
     return []
   }
 }

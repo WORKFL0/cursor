@@ -1,2 +1,509 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="0.5301690000000001">
+<testsuites id="" name="" tests="7" failures="1" skipped="0" errors="0" time="81.16459300000001">
+<testsuite name="e2e/pre-launch-qa.spec.ts" timestamp="2025-11-13T16:42:54.023Z" hostname="Desktop Chrome" tests="7" failures="1" skipped="0" time="86.184" errors="0">
+<testcase name="Pre-Launch QA: Homepage Critical Issues › 1. CRITICAL: Scan for dummy numbers (0+, 0., 0%, 0/)" classname="e2e/pre-launch-qa.spec.ts" time="20.953">
+<system-out>
+<![CDATA[
+🔍 Scanning for dummy numbers...
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-2735f--for-dummy-numbers-0-0-0-0--Desktop-Chrome/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Pre-Launch QA: Homepage Critical Issues › 2. HIGH: Check for duplicate client logos" classname="e2e/pre-launch-qa.spec.ts" time="0.332">
+<system-out>
+<![CDATA[
+🔍 Checking for duplicate client logos...
+
+
+================================================================================
+PRE-LAUNCH QA REPORT GENERATED
+================================================================================
+# Pre-Launch QA Report
+Generated: 13-11-2025, 17:43:22
+
+## Executive Summary
+
+Total Issues Found: **2**
+- 🔴 Critical: **2** (MUST fix before launch)
+- 🟠 High: **0** (Should fix before launch)
+- 🟡 Medium: **0** (Fix if time permits)
+
+---
+
+## 🔴 CRITICAL ISSUES (2)
+
+**These MUST be fixed before going live!**
+
+### 1. Dummy Numbers: Section: root-level, Element 1
+
+**Issue:** Found dummy number: "Mon-Fri: 9:00 - 17:00" (00 (double zero))
+
+**Fix:** Replace with actual statistics or remove if data unavailable
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/dummy-number-root-level-0.png`
+
+---
+
+### 2. Dummy Numbers: Section: root-level, Element 2
+
+**Issue:** Found dummy number: "KvK: 87460807 | BTW: NL864300852B01" (00 (double zero))
+
+**Fix:** Replace with actual statistics or remove if data unavailable
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/dummy-number-root-level-1.png`
+
+---
+
+## Summary by Category
+
+- **Dummy Numbers**: 2 issue(s)
+
+## Next Steps
+
+1. Fix all CRITICAL issues immediately
+2. Address HIGH priority issues before launch
+3. Review MEDIUM issues and fix if time allows
+4. Re-run this test suite after fixes
+5. Get stakeholder sign-off before deployment
+
+---
+
+**Test Environment:** localhost:3000
+**Test Date:** 13-11-2025, 17:43:22
+**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`
+
+================================================================================
+Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md
+================================================================================
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-bf902--for-duplicate-client-logos-Desktop-Chrome/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Pre-Launch QA: Homepage Critical Issues › 3. CRITICAL: Find empty buttons and missing text" classname="e2e/pre-launch-qa.spec.ts" time="1.443">
+<system-out>
+<![CDATA[
+🔍 Checking for empty buttons...
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-fc0a3-ty-buttons-and-missing-text-Desktop-Chrome/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Pre-Launch QA: Homepage Critical Issues › 4. MEDIUM: Check video fallback messages" classname="e2e/pre-launch-qa.spec.ts" time="0.659">
+<system-out>
+<![CDATA[
+🔍 Checking video elements...
+
+
+================================================================================
+PRE-LAUNCH QA REPORT GENERATED
+================================================================================
+# Pre-Launch QA Report
+Generated: 13-11-2025, 17:43:03
+
+## Executive Summary
+
+Total Issues Found: **4**
+- 🔴 Critical: **2** (MUST fix before launch)
+- 🟠 High: **0** (Should fix before launch)
+- 🟡 Medium: **2** (Fix if time permits)
+
+---
+
+## 🔴 CRITICAL ISSUES (2)
+
+**These MUST be fixed before going live!**
+
+### 1. Empty Buttons: Button #12 (id: none, class: inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:shadow-lg h-8 rounded-md px-3 text-xs bg-workflo-yellow hover:bg-workflo-yellow-dark text-black)
+
+**Issue:** Button has no text, aria-label, or value
+
+**Fix:** Add button text or aria-label for accessibility
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/empty-button-11.png`
+
+---
+
+### 2. Empty Buttons: Button #16 (id: none, class: fixed bottom-6 right-6 z-50 bg-workflo-yellow hover:bg-workflo-yellow/90 text-black rounded-full p-4 shadow-lg transition-colors)
+
+**Issue:** Button has no text, aria-label, or value
+
+**Fix:** Add button text or aria-label for accessibility
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/empty-button-15.png`
+
+---
+
+## 🟡 MEDIUM PRIORITY ISSUES (2)
+
+### 1. Video Fallbacks: Video element 1
+
+**Issue:** Default browser fallback message visible
+
+**Fix:** Replace with custom Dutch fallback message or ensure video loads properly
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/video-fallback-0.png`
+
+---
+
+### 2. Video Fallbacks: Video element 2
+
+**Issue:** Default browser fallback message visible
+
+**Fix:** Replace with custom Dutch fallback message or ensure video loads properly
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/video-fallback-1.png`
+
+---
+
+## Summary by Category
+
+- **Empty Buttons**: 2 issue(s)
+- **Video Fallbacks**: 2 issue(s)
+
+## Next Steps
+
+1. Fix all CRITICAL issues immediately
+2. Address HIGH priority issues before launch
+3. Review MEDIUM issues and fix if time allows
+4. Re-run this test suite after fixes
+5. Get stakeholder sign-off before deployment
+
+---
+
+**Test Environment:** localhost:3000
+**Test Date:** 13-11-2025, 17:43:03
+**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`
+
+================================================================================
+Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md
+================================================================================
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-d84df-eck-video-fallback-messages-Desktop-Chrome/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Pre-Launch QA: Homepage Critical Issues › 5. HIGH: Analyze CTA inconsistencies" classname="e2e/pre-launch-qa.spec.ts" time="60.001">
+<failure message="pre-launch-qa.spec.ts:284:7 5. HIGH: Analyze CTA inconsistencies" type="FAILURE">
+<![CDATA[  [Desktop Chrome] › e2e/pre-launch-qa.spec.ts:284:7 › Pre-Launch QA: Homepage Critical Issues › 5. HIGH: Analyze CTA inconsistencies 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.textContent: Target page, context or browser has been closed
+
+      303 |
+      304 |       for (const element of elements) {
+    > 305 |         const text = (await element.textContent())?.trim();
+          |                                     ^
+      306 |         if (text && text.length > 3) { // Ignore very short text
+      307 |           ctaTexts.set(text, (ctaTexts.get(text) || 0) + 1);
+      308 |
+        at /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/e2e/pre-launch-qa.spec.ts:305:37
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/test-finished-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.textContent: Target page, context or browser has been closed
+
+      303 |
+      304 |       for (const element of elements) {
+    > 305 |         const text = (await element.textContent())?.trim();
+          |                                     ^
+      306 |         if (text && text.length > 3) { // Ignore very short text
+      307 |           ctaTexts.set(text, (ctaTexts.get(text) || 0) + 1);
+      308 |
+        at /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/tests/e2e/pre-launch-qa.spec.ts:305:37
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/test-finished-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+🔍 Analyzing CTAs for consistency...
+
+
+================================================================================
+PRE-LAUNCH QA REPORT GENERATED
+================================================================================
+# Pre-Launch QA Report
+Generated: 13-11-2025, 17:43:31
+
+## Executive Summary
+
+Total Issues Found: **0**
+- 🔴 Critical: **0** (MUST fix before launch)
+- 🟠 High: **0** (Should fix before launch)
+- 🟡 Medium: **0** (Fix if time permits)
+
+---
+
+## Summary by Category
+
+
+## Next Steps
+
+1. Fix all CRITICAL issues immediately
+2. Address HIGH priority issues before launch
+3. Review MEDIUM issues and fix if time allows
+4. Re-run this test suite after fixes
+5. Get stakeholder sign-off before deployment
+
+---
+
+**Test Environment:** localhost:3000
+**Test Date:** 13-11-2025, 17:43:31
+**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`
+
+================================================================================
+Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md
+================================================================================
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/test-finished-1.png]]
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/error-context.md]]
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome/trace.zip]]
+
+🔍 Analyzing CTAs for consistency...
+
+
+================================================================================
+PRE-LAUNCH QA REPORT GENERATED
+================================================================================
+# Pre-Launch QA Report
+Generated: 13-11-2025, 17:44:06
+
+## Executive Summary
+
+Total Issues Found: **0**
+- 🔴 Critical: **0** (MUST fix before launch)
+- 🟠 High: **0** (Should fix before launch)
+- 🟡 Medium: **0** (Fix if time permits)
+
+---
+
+## Summary by Category
+
+
+## Next Steps
+
+1. Fix all CRITICAL issues immediately
+2. Address HIGH priority issues before launch
+3. Review MEDIUM issues and fix if time allows
+4. Re-run this test suite after fixes
+5. Get stakeholder sign-off before deployment
+
+---
+
+**Test Environment:** localhost:3000
+**Test Date:** 13-11-2025, 17:44:06
+**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`
+
+================================================================================
+Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md
+================================================================================
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/test-finished-1.png]]
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/error-context.md]]
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-80d50-Analyze-CTA-inconsistencies-Desktop-Chrome-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Pre-Launch QA: Homepage Critical Issues › 6. HIGH: Check for English words in Dutch content" classname="e2e/pre-launch-qa.spec.ts" time="1.375">
+<system-out>
+<![CDATA[
+🔍 Checking for language inconsistencies...
+
+
+================================================================================
+PRE-LAUNCH QA REPORT GENERATED
+================================================================================
+# Pre-Launch QA Report
+Generated: 13-11-2025, 17:44:12
+
+## Executive Summary
+
+Total Issues Found: **6**
+- 🔴 Critical: **0** (MUST fix before launch)
+- 🟠 High: **6** (Should fix before launch)
+- 🟡 Medium: **0** (Fix if time permits)
+
+---
+
+## 🟠 HIGH PRIORITY ISSUES (6)
+
+**Strongly recommended to fix before launch**
+
+### 1. Language Inconsistency: Found 1 occurrence(s)
+
+**Issue:** English word "remote working" found in Dutch content
+
+**Fix:** Replace with Dutch equivalent: "thuiswerken"
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-remote-working.png`
+
+---
+
+### 2. Language Inconsistency: Found 2 occurrence(s)
+
+**Issue:** English word "setup" found in Dutch content
+
+**Fix:** Replace with Dutch equivalent: "installatie"
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-setup.png`
+
+---
+
+### 3. Language Inconsistency: Found 2 occurrence(s)
+
+**Issue:** English word "remote" found in Dutch content
+
+**Fix:** Replace with Dutch equivalent: "op afstand"
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-remote.png`
+
+---
+
+### 4. Language Inconsistency: Found 5 occurrence(s)
+
+**Issue:** English word "business" found in Dutch content
+
+**Fix:** Replace with Dutch equivalent: "bedrijf"
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-business.png`
+
+---
+
+### 5. Language Inconsistency: Found 7 occurrence(s)
+
+**Issue:** English word "support" found in Dutch content
+
+**Fix:** Replace with Dutch equivalent: "ondersteuning"
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-support.png`
+
+---
+
+### 6. Language Inconsistency: Found 16 occurrence(s)
+
+**Issue:** English word "service" found in Dutch content
+
+**Fix:** Replace with Dutch equivalent: "dienst"
+
+**Screenshot:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/language-service.png`
+
+---
+
+## Summary by Category
+
+- **Language Inconsistency**: 6 issue(s)
+
+## Next Steps
+
+1. Fix all CRITICAL issues immediately
+2. Address HIGH priority issues before launch
+3. Review MEDIUM issues and fix if time allows
+4. Re-run this test suite after fixes
+5. Get stakeholder sign-off before deployment
+
+---
+
+**Test Environment:** localhost:3000
+**Test Date:** 13-11-2025, 17:44:12
+**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`
+
+================================================================================
+Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md
+================================================================================
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-4ea6e-lish-words-in-Dutch-content-Desktop-Chrome/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Pre-Launch QA: Homepage Critical Issues › 7. COMPREHENSIVE: Full page screenshot for reference" classname="e2e/pre-launch-qa.spec.ts" time="1.421">
+<system-out>
+<![CDATA[
+📸 Capturing full page screenshot...
+
+✅ Full page screenshot saved
+
+
+================================================================================
+PRE-LAUNCH QA REPORT GENERATED
+================================================================================
+# Pre-Launch QA Report
+Generated: 13-11-2025, 17:43:02
+
+## Executive Summary
+
+Total Issues Found: **0**
+- 🔴 Critical: **0** (MUST fix before launch)
+- 🟠 High: **0** (Should fix before launch)
+- 🟡 Medium: **0** (Fix if time permits)
+
+---
+
+## Summary by Category
+
+
+## Next Steps
+
+1. Fix all CRITICAL issues immediately
+2. Address HIGH priority issues before launch
+3. Review MEDIUM issues and fix if time allows
+4. Re-run this test suite after fixes
+5. Get stakeholder sign-off before deployment
+
+---
+
+**Test Environment:** localhost:3000
+**Test Date:** 13-11-2025, 17:43:02
+**Screenshots Location:** `/Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa`
+
+================================================================================
+Full report saved to: /Users/florian/Library/CloudStorage/OneDrive-WorkfloB.V/Documenten/code/Cursor/new-project/test-results/pre-launch-qa/QA-REPORT.md
+================================================================================
+
+
+[[ATTACHMENT|e2e-pre-launch-qa-Pre-Laun-5d936-ge-screenshot-for-reference-Desktop-Chrome/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
 </testsuites>

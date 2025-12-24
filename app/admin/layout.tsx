@@ -5,19 +5,21 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Image, 
-  BarChart3, 
-  Mail, 
-  MessageSquare, 
-  Settings, 
+import {
+  LayoutDashboard,
+  FileText,
+  Image,
+  BarChart3,
+  Mail,
+  MessageSquare,
+  Settings,
   LogOut,
   Menu,
   X,
   User,
-  Bell
+  Bell,
+  Star,
+  Briefcase
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -43,9 +45,19 @@ const sidebarItems = [
     icon: LayoutDashboard,
   },
   {
-    title: 'Articles',
-    href: '/admin/articles',
+    title: 'Blog',
+    href: '/admin/blog',
     icon: FileText,
+  },
+  {
+    title: 'Features',
+    href: '/admin/features',
+    icon: Star,
+  },
+  {
+    title: 'Cases',
+    href: '/admin/cases',
+    icon: Briefcase,
   },
   {
     title: 'Media Library',
@@ -90,24 +102,26 @@ export default function AdminLayout({
   const router = useRouter()
   const pathname = usePathname()
 
-  // Skip authentication for login page
-  if (pathname === '/admin/login') {
-    return children
-  }
-
   useEffect(() => {
+    // Skip authentication for login page
+    if (pathname === '/admin/login') {
+      setIsLoading(false)
+      return
+    }
+
     const checkAuth = async () => {
       const token = localStorage.getItem('admin_token')
       const userData = localStorage.getItem('admin_user')
 
       if (!token || !userData) {
         router.replace(`/admin/login?redirect=${encodeURIComponent(pathname)}`)
+        setIsLoading(false)
         return
       }
 
       try {
-        // Validate token
-        const response = await fetch('/api/cms/auth/validate', {
+        // Validate token with new API
+        const response = await fetch('/api/admin/auth/validate', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -115,10 +129,11 @@ export default function AdminLayout({
 
         const data = await response.json()
 
-        if (!data.success || !data.user || (data.user.role !== 'admin' && data.user.role !== 'editor')) {
+        if (!data.valid || !data.user) {
           localStorage.removeItem('admin_token')
           localStorage.removeItem('admin_user')
           router.replace(`/admin/login?redirect=${encodeURIComponent(pathname)}`)
+          setIsLoading(false)
           return
         }
 
@@ -140,7 +155,7 @@ export default function AdminLayout({
     try {
       const token = localStorage.getItem('admin_token')
       if (token) {
-        await fetch('/api/cms/auth/logout', {
+        await fetch('/api/admin/auth/logout', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -154,6 +169,11 @@ export default function AdminLayout({
       localStorage.removeItem('admin_user')
       router.replace('/admin/login')
     }
+  }
+
+  // Show login page without layout
+  if (pathname === '/admin/login') {
+    return children
   }
 
   if (isLoading) {
@@ -180,12 +200,12 @@ export default function AdminLayout({
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0",
+        "fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-lg",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
           {/* Sidebar header */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">W</span>
@@ -202,8 +222,8 @@ export default function AdminLayout({
             </Button>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 px-4 py-4 space-y-2">
+          {/* Navigation - with scroll */}
+          <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
             {sidebarItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))
               return (
@@ -223,7 +243,7 @@ export default function AdminLayout({
           </nav>
 
           {/* User section */}
-          <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+          <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex-shrink-0">
             <div className="flex items-center space-x-3">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="" />
@@ -245,9 +265,9 @@ export default function AdminLayout({
       </div>
 
       {/* Main content */}
-      <div className="lg:ml-64">
+      <div className="lg:ml-64 flex flex-col min-h-screen">
         {/* Top navigation */}
-        <div className="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between h-16 px-4">
             <Button
               variant="ghost"
@@ -276,7 +296,7 @@ export default function AdminLayout({
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 z-50">
                   <DropdownMenuLabel>
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium">{user.username || user.email}</p>
@@ -304,7 +324,7 @@ export default function AdminLayout({
         </div>
 
         {/* Page content */}
-        <main className="p-6">
+        <main className="flex-1 p-6">
           {children}
         </main>
       </div>

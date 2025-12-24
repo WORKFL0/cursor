@@ -34,31 +34,32 @@ export default function CalculatorPage() {
     setEstimatedHours(users[0] || 10)
   }, [users])
   
-  // Correct pricing logic based on Diensten omschrijving.md
+  // Correct pricing logic from /config/pricing.ts
   const fixedFeePrice = supportType === 'remote' ? 60 : 90
   const serverPrice = fixedFeePrice // Servers cost same as users
-  const adHocHourlyRate = 110  
+  const adHocHourlyRate = 110  // Correct price
   const adHocEveningWeekendRate = adHocHourlyRate * 1.5  // 150% after 19:00 and weekends
-  
-  // Pre-paid packages
+
+  // Pre-paid packages - Correct pricing
   const prePaidPackages = {
     '10': { hours: 10, price: 1000, hourlyRate: 100 },
     '20': { hours: 20, price: 1800, hourlyRate: 90 }
   }
   
-  // Office 365 pricing (monthly vs yearly commitment) - CORRECT PRICES
+  // Office 365 pricing (monthly vs yearly commitment) - Updated 2025 prices
+  // Monthly payments have 5% surcharge vs yearly commitment (Microsoft policy 2025)
   const officePricing = {
     monthly: {
       none: 0,
-      basic: 6.70,     // Business Basic (monthly commitment)
-      standard: 14.00, // Business Standard (monthly commitment)
-      premium: 24.70   // Business Premium (monthly commitment)
+      basic: 5.76,     // Business Basic: €5.49 + 5% = €5.76
+      standard: 12.06, // Business Standard: €11.49 + 5% = €12.06
+      premium: 19.53   // Business Premium: €18.60 + 5% = €19.53
     },
     yearly: {
       none: 0,
-      basic: 5.60,     // Business Basic (yearly commitment)
-      standard: 11.70, // Business Standard (yearly commitment)
-      premium: 20.60   // Business Premium (yearly commitment)
+      basic: 5.49,     // Business Basic (yearly commitment - official Microsoft price)
+      standard: 11.49, // Business Standard (yearly commitment - official Microsoft price)
+      premium: 18.60   // Business Premium (yearly commitment - official Microsoft price)
     }
   }
   
@@ -134,55 +135,89 @@ export default function CalculatorPage() {
           }
         }
       `}</style>
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Hero Section */}
-      <section className="bg-[#0F172A] py-12 sm:py-16 overflow-hidden relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A8A]/20 via-transparent to-[#1E3A8A]/10"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center">
-            <Link href="/" className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-6 transition-colors group">
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      {/* Hero Section - Modern Style */}
+      <section className="relative py-20 px-4 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] overflow-hidden">
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
+        {/* Gradient Orbs */}
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#f2f400]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#1E3A8A]/10 rounded-full blur-3xl" />
+
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="text-center mb-12">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-[#f2f400] mb-8 transition-colors group"
+            >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               {language === 'nl' ? 'Terug naar home' : 'Back to home'}
             </Link>
-            
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-              {language === 'nl' ? 'IT Kosten Calculator' : 'IT Cost Calculator'}
+
+            <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-[#f2f400]/10 border border-[#f2f400]/20 backdrop-blur-sm">
+              <Calculator className="w-4 h-4 text-[#f2f400]" />
+              <span className="text-sm font-medium text-[#f2f400]">
+                {language === 'nl' ? 'Transparante Prijzen' : 'Transparent Pricing'}
+              </span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              <span className="inline-block bg-gradient-to-r from-[#f2f400] via-[#ffd700] to-[#f2f400] bg-clip-text text-transparent">
+                {language === 'nl' ? 'IT Kosten Calculator' : 'IT Cost Calculator'}
+              </span>
             </h1>
-            <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto mb-6">
-              {language === 'nl' 
-                ? 'Bereken precies wat onze Fixed-Fee IT-ondersteuning voor jouw bedrijf kost' 
-                : 'Calculate exactly what our Fixed-Fee IT support costs for your business'}
+            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-10">
+              {language === 'nl'
+                ? 'Bereken direct wat Fixed-Fee IT-ondersteuning kost voor jouw bedrijf'
+                : 'Calculate directly what Fixed-Fee IT support costs for your business'}
             </p>
-            
-            {/* Instructions */}
-            <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <h3 className="text-lg font-semibold text-[#f2f400] mb-3 flex items-center gap-2">
-                <Info className="w-5 h-5" />
-                {language === 'nl' ? 'Hoe werkt het?' : 'How does it work?'}
-              </h3>
-              <div className="grid md:grid-cols-3 gap-4 text-sm text-white/80">
-                <div className="bg-white/10 rounded-lg p-4 transform transition-all duration-700 hover:scale-105 hover:bg-white/15 animate-[fadeInUp_0.6s_ease-out] opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards]">
-                  <div className="font-medium text-white mb-2">1. {language === 'nl' ? 'Configureer' : 'Configure'}</div>
-                  <p>{language === 'nl' 
-                    ? 'Voer het aantal medewerkers en servers in. Kies optioneel voor Office 365 licenties.'
-                    : 'Enter the number of employees and servers. Optionally choose Office 365 licenses.'
-                  }</p>
+
+            {/* How it Works Cards */}
+            <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-[#f2f400]/30 transition-all">
+                <div className="w-12 h-12 rounded-lg bg-[#f2f400]/10 flex items-center justify-center mb-4 mx-auto">
+                  <span className="text-2xl font-bold text-[#f2f400]">1</span>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4 transform transition-all duration-700 hover:scale-105 hover:bg-white/15 animate-[fadeInUp_0.6s_ease-out] opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards]">
-                  <div className="font-medium text-white mb-2">2. {language === 'nl' ? 'Commitment keuze' : 'Commitment choice'}</div>
-                  <p>{language === 'nl' 
-                    ? 'Maandelijks = flexibel. Jaarlijks = eerste maand gratis + 10% korting maar 12 maanden commitment. Je betaalt altijd per maand!'
-                    : 'Monthly = flexible. Yearly = first month free + 10% discount but 12-month commitment. You always pay monthly!'
-                  }</p>
+                <h3 className="font-semibold text-white mb-2">
+                  {language === 'nl' ? 'Configureer' : 'Configure'}
+                </h3>
+                <p className="text-sm text-white/70">
+                  {language === 'nl'
+                    ? 'Stel je omgeving in: gebruikers, servers en Office 365 licenties'
+                    : 'Set up your environment: users, servers and Office 365 licenses'
+                  }
+                </p>
+              </div>
+
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-[#f2f400]/30 transition-all">
+                <div className="w-12 h-12 rounded-lg bg-[#f2f400]/10 flex items-center justify-center mb-4 mx-auto">
+                  <span className="text-2xl font-bold text-[#f2f400]">2</span>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4 transform transition-all duration-700 hover:scale-105 hover:bg-white/15 animate-[fadeInUp_0.6s_ease-out] opacity-0 [animation-delay:0.6s] [animation-fill-mode:forwards]">
-                  <div className="font-medium text-white mb-2">3. {language === 'nl' ? 'Automatische kortingen' : 'Automatic discounts'}</div>
-                  <p>{language === 'nl' 
-                    ? 'Volume kortingen vanaf 5 gebruikers. Hoe meer gebruikers, hoe meer korting!'
-                    : 'Volume discounts from 5 users. More users = more discount!'
-                  }</p>
+                <h3 className="font-semibold text-white mb-2">
+                  {language === 'nl' ? 'Commitment keuze' : 'Commitment choice'}
+                </h3>
+                <p className="text-sm text-white/70">
+                  {language === 'nl'
+                    ? 'Maandelijks flexibel of jaarlijks met 10% korting + 1e maand gratis'
+                    : 'Monthly flexible or yearly with 10% discount + 1st month free'
+                  }
+                </p>
+              </div>
+
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-[#f2f400]/30 transition-all">
+                <div className="w-12 h-12 rounded-lg bg-[#f2f400]/10 flex items-center justify-center mb-4 mx-auto">
+                  <span className="text-2xl font-bold text-[#f2f400]">3</span>
                 </div>
+                <h3 className="font-semibold text-white mb-2">
+                  {language === 'nl' ? 'Volume korting' : 'Volume discount'}
+                </h3>
+                <p className="text-sm text-white/70">
+                  {language === 'nl'
+                    ? 'Automatische korting: 5-10% vanaf 5 gebruikers, tot 20% bij 50+'
+                    : 'Automatic discount: 5-10% from 5 users, up to 20% at 50+'
+                  }
+                </p>
               </div>
             </div>
           </div>
@@ -627,12 +662,12 @@ export default function CalculatorPage() {
                                 <div className="text-2xl font-bold text-gray-900 mb-1">20</div>
                                 <div className="text-sm text-gray-600 mb-2">{language === 'nl' ? 'uren' : 'hours'}</div>
                                 <div className="text-xl font-semibold text-[#0F172A] mb-1">€1.800</div>
-                                <div className="text-sm text-green-600 font-medium">€90/uur • 10% besparing</div>
+                                <div className="text-sm text-green-600 font-medium">€90/uur • 18% besparing</div>
                               </div>
                             </button>
                           </div>
                           <p className="text-sm text-gray-600 mt-4">
-                            • {language === 'nl' ? 'Uren verlopen nooit' : 'Hours never expire'}<br />
+                            • {language === 'nl' ? '12 maanden geldig' : '12 months validity'}<br />
                             • {language === 'nl' ? '4 uur gegarandeerde responstijd' : '4 hour guaranteed response'}<br />
                             • {language === 'nl' ? 'Hoge prioriteit' : 'High priority'}
                           </p>
@@ -668,6 +703,11 @@ export default function CalculatorPage() {
                             <li className="text-red-600">• {language === 'nl' ? 'Geen monitoring' : 'No monitoring'}</li>
                             <li className="text-red-600">• {language === 'nl' ? 'Geen garanties' : 'No guarantees'}</li>
                           </ul>
+                          <p className="text-xs text-gray-500 mt-3">
+                            {language === 'nl'
+                              ? '⚠️ Let op: Uren verlopen na 12 maanden'
+                              : '⚠️ Note: Hours expire after 12 months'}
+                          </p>
                         </div>
                       </TabsContent>
                     </Tabs>

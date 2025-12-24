@@ -15,10 +15,10 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-muted/50 border-t border-border">
-      <div className="container mx-auto px-4 py-16">
+    <footer className="bg-muted/50 border-t border-neutral-200 dark:border-neutral-800">
+      <div className="container mx-auto px-4 py-20">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           {/* Company Info & Contact */}
           <div className="lg:col-span-2">
             <div className="mb-6">
@@ -36,29 +36,30 @@ export function Footer() {
                 height={70}
                 className="mb-4 hidden dark:block"
               />
-              <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                {language === 'nl' 
-                  ? 'Jouw betrouwbare IT-partner in Amsterdam. Wij zorgen ervoor dat jouw technologie gewoon werkt, zodat jij je kunt concentreren op wat echt belangrijk is voor jouw bedrijf.' 
+              <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed mb-6">
+                {language === 'nl'
+                  ? 'Jouw betrouwbare IT-partner in Amsterdam. Wij zorgen ervoor dat jouw technologie gewoon werkt, zodat jij je kunt concentreren op wat echt belangrijk is voor jouw bedrijf.'
                   : 'Your trusted IT partner in Amsterdam. We make sure your technology just works, so you can focus on what really matters for your business.'}
               </p>
             </div>
             
             {/* Contact Information */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-foreground text-lg mb-4">
+              <h4 className="text-sm font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-50 mb-4">
                 {language === 'nl' ? 'Contact' : 'Get in Touch'}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex items-center">
                   <Phone className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
                   <div>
-                    <a 
-                      href={`tel:${companyInfo.location.phone.replace(/\s/g, '')}`} 
-                      className="font-medium text-foreground hover:text-primary transition-colors"
+                    <a
+                      href={`tel:${companyInfo.location.phone.replace(/\s/g, '')}`}
+                      className="font-medium text-neutral-900 dark:text-neutral-50 hover:text-primary transition-colors"
+                      suppressHydrationWarning
                     >
                       {companyInfo.location.phone}
                     </a>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
                       {language === 'nl' ? 'Ma-vr 9:00-17:00' : 'Mon-Fri 9:00-17:00'}
                     </p>
                   </div>
@@ -66,13 +67,13 @@ export function Footer() {
                 <div className="flex items-center">
                   <Mail className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
                   <div>
-                    <a 
-                      href={`mailto:${companyInfo.location.email}`} 
-                      className="font-medium text-foreground hover:text-primary transition-colors"
+                    <a
+                      href={`mailto:${companyInfo.location.email}`}
+                      className="font-medium text-neutral-900 dark:text-neutral-50 hover:text-primary transition-colors"
                     >
                       {companyInfo.location.email}
                     </a>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
                       {language === 'nl' ? 'Binnen 24u reactie' : 'Reply within 24h'}
                     </p>
                   </div>
@@ -82,10 +83,10 @@ export function Footer() {
               <div className="flex items-start">
                 <MapPin className="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-foreground">
+                  <p className="font-medium text-neutral-900 dark:text-neutral-50">
                     {companyInfo.location.address}
                   </p>
-                  <p className="text-muted-foreground">
+                  <p className="text-neutral-700 dark:text-neutral-300">
                     {companyInfo.location.postalCode} {companyInfo.location.city}
                   </p>
                 </div>
@@ -103,10 +104,10 @@ export function Footer() {
                   ? 'Download ons support tool voor directe hulp van onze specialisten.'
                   : 'Download our support tool for direct assistance from our specialists.'}
               </p>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 onClick={() => {
-                  window.open('https://get.teamviewer.com/workflo', '_blank')
+                  window.open('https://get.teamviewer.com/workflo-support', '_blank')
                 }}
                 className="text-sm"
               >
@@ -118,33 +119,43 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="font-semibold text-foreground text-lg mb-6">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-50 mb-6">
               {language === 'nl' ? 'Onze Diensten' : 'Our Services'}
             </h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/diensten" className="text-muted-foreground hover:text-primary transition-colors font-medium">
+                <Link href="/diensten" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors font-medium">
                   {language === 'nl' ? 'Alle Diensten' : 'All Services'}
                 </Link>
               </li>
               <li>
-                <Link href="/diensten/managed-it" className="text-muted-foreground hover:text-primary transition-colors">
-                  Managed IT Services
+                <Link href="/diensten/managed-it" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
+                  Managed IT
                 </Link>
               </li>
               <li>
-                <Link href="/diensten/cloud" className="text-muted-foreground hover:text-primary transition-colors">
-                  {language === 'nl' ? 'Cloud Oplossingen' : 'Cloud Solutions'}
+                <Link href="/diensten/cloud-oplossingen" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
+                  Cloud Oplossingen
                 </Link>
               </li>
               <li>
-                <Link href="/diensten/cybersecurity" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/diensten/cybersecurity" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
                   Cybersecurity
                 </Link>
               </li>
               <li>
-                <Link href="/servicedesk" className="text-muted-foreground hover:text-primary transition-colors">
-                  Servicedesk
+                <Link href="/diensten/backup-disaster-recovery" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
+                  Backup & Disaster Recovery
+                </Link>
+              </li>
+              <li>
+                <Link href="/diensten/microsoft-365" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
+                  Microsoft 365
+                </Link>
+              </li>
+              <li>
+                <Link href="/diensten/hardware-as-a-service" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
+                  Hardware as a Service
                 </Link>
               </li>
             </ul>
@@ -152,36 +163,31 @@ export function Footer() {
 
           {/* Company & Resources */}
           <div>
-            <h4 className="font-semibold text-foreground text-lg mb-6">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-50 mb-6">
               {language === 'nl' ? 'Meer over Workflo' : 'More about Workflo'}
             </h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/over-ons" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/over-ons" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
                   {language === 'nl' ? 'Over Ons' : 'About Us'}
                 </Link>
               </li>
               <li>
-                <Link href="/case-studies" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/case-studies" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
                   Case Studies
                 </Link>
               </li>
               <li>
-                <Link href="/werken-bij" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/werken-bij" className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors">
                   {language === 'nl' ? 'Werken Bij Workflo' : 'Careers'}
                 </Link>
               </li>
               <li>
-                <Link href="/referral" className="text-muted-foreground hover:text-primary transition-colors">
-                  {language === 'nl' ? 'Referral Programma' : 'Referral Program'}
-                </Link>
-              </li>
-              <li>
-                <a 
-                  href="https://uptime.workflo.it/status/workflo" 
-                  target="_blank" 
+                <a
+                  href="https://uptime.workflo.it/status/workflo"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2"
+                  className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors inline-flex items-center gap-2"
                 >
                   {language === 'nl' ? 'Status Pagina' : 'System Status'}
                   <span className="inline-flex items-center gap-1">
@@ -195,13 +201,13 @@ export function Footer() {
         </div>
 
         {/* Newsletter Section */}
-        <div className="border-t border-border pt-12 mb-12">
+        <div className="border-t border-neutral-200 dark:border-neutral-800 pt-12 mb-12">
           <div className="max-w-2xl">
-            <h4 className="font-semibold text-foreground text-lg mb-3">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-50 mb-3">
               {language === 'nl' ? 'Blijf op de hoogte' : 'Stay Updated'}
             </h4>
-            <p className="text-muted-foreground mb-6">
-              {language === 'nl' 
+            <p className="text-neutral-700 dark:text-neutral-300 mb-6">
+              {language === 'nl'
                 ? 'Ontvang maandelijks tips, updates en inzichten over IT-beveiliging en productiviteit.'
                 : 'Receive monthly tips, updates and insights about IT security and productivity.'}
             </p>
@@ -210,19 +216,19 @@ export function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-border pt-8">
+        <div className="border-t border-neutral-200 dark:border-neutral-800 pt-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <p className="text-muted-foreground text-sm mb-2">
+              <p className="text-neutral-700 dark:text-neutral-300 text-sm mb-2">
                 &copy; {currentYear} {companyInfo.name}. {language === 'nl' ? 'Alle rechten voorbehouden.' : 'All rights reserved.'}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-neutral-600 dark:text-neutral-400">
                 Workflo B.V. | KvK: 87460807 | BTW: NL864300852B01
               </p>
             </div>
-            
+
             {/* Legal Links */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-neutral-600 dark:text-neutral-400">
               <Link href="/privacy" className="hover:text-primary transition-colors">
                 Privacy Policy
               </Link>

@@ -35,14 +35,14 @@ export default function AdminLoginPage() {
     const token = localStorage.getItem('admin_token')
     if (token) {
       // Validate token
-      fetch('/api/cms/auth/validate', {
+      fetch('/api/admin/auth/validate', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
       .then(res => res.json())
       .then(data => {
-        if (data.success && data.user?.role === 'admin') {
+        if (data.valid && data.user) {
           const redirectTo = searchParams.get('redirect') || '/admin'
           router.replace(redirectTo)
         }
@@ -50,6 +50,7 @@ export default function AdminLoginPage() {
       .catch(() => {
         // Token is invalid, remove it
         localStorage.removeItem('admin_token')
+        localStorage.removeItem('admin_user')
       })
     }
   }, [router, searchParams])
@@ -60,7 +61,7 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/cms/auth/simple-login', {
+      const response = await fetch('/api/admin/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,12 +72,6 @@ export default function AdminLoginPage() {
       const data: LoginResponse = await response.json()
 
       if (data.success && data.token && data.user) {
-        // Check if user has admin role
-        if (data.user.role !== 'admin' && data.user.role !== 'editor') {
-          setError('Access denied. Admin or editor permissions required.')
-          return
-        }
-
         // Store token
         localStorage.setItem('admin_token', data.token)
         localStorage.setItem('admin_user', JSON.stringify(data.user))
@@ -85,11 +80,11 @@ export default function AdminLoginPage() {
         const redirectTo = searchParams.get('redirect') || '/admin'
         router.replace(redirectTo)
       } else {
-        setError(data.message || data.error || 'Login failed')
+        setError(data.error || 'Inloggen mislukt')
       }
     } catch (error) {
       console.error('Login error:', error)
-      setError('An error occurred while logging in. Please try again.')
+      setError('Er is een fout opgetreden bij het inloggen. Probeer het opnieuw.')
     } finally {
       setIsLoading(false)
     }

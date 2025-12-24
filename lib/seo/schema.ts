@@ -153,7 +153,7 @@ export interface SchemaFAQ {
 }
 
 class SchemaGenerator {
-  private baseUrl = 'https://workflo.nl'
+  private baseUrl = 'https://workflo.it'
 
   /**
    * Generate organization schema

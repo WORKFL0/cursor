@@ -4,7 +4,7 @@
 import { motion } from '@/lib/framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Shield, AlertTriangle, ArrowRight, CheckCircle, Phone, Mail, Star, Euro } from 'lucide-react'
+import { Shield, AlertTriangle, ArrowRight, CheckCircle, Phone, Mail, Star, Euro, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -14,7 +14,6 @@ import { getServiceBySlug, calculateServicePrice } from '@/lib/data/services-dat
 
 export default function CybersecurityPage() {
   const service = getServiceBySlug('cybersecurity')!
-  const examplePricing = calculateServicePrice(service, 10)
 
   return (
     <div className="min-h-screen bg-background">
@@ -184,65 +183,42 @@ export default function CybersecurityPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-16 bg-background">
+      {/* MSP Inclusion Banner */}
+      <section className="py-16 bg-gradient-to-br from-workflo-yellow/20 to-transparent">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold mb-4">Transparante Prijzen</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Bescherm je bedrijf tegen cybercriminelen
+          <div className="max-w-3xl mx-auto text-center">
+            <Badge className="mb-4 bg-green-600">Inbegrepen in MSP Pakketten</Badge>
+            <h2 className="text-3xl font-bold mb-4">
+              Volledige Cybersecurity vanaf €60/gebruiker/maand
+            </h2>
+            <p className="text-lg text-muted-foreground mb-6">
+              Alle cybersecurity features zijn standaard inbegrepen in onze Managed Services pakketten.
+              Geen extra kosten, geen verrassingen.
             </p>
-          </motion.div>
-          
-          <div className="max-w-md mx-auto">
-            <Card className="shadow-lg">
-              <CardHeader className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">
-                  €{service.pricing.basePrice}
-                  <span className="text-sm font-normal text-muted-foreground ml-1">per gebruiker/maand</span>
-                </div>
-                <CardTitle className="text-2xl">{service.title}</CardTitle>
-                <CardDescription>{service.shortDescription}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span>Setup kosten</span>
-                    <span className="font-semibold">€{service.pricing.setup}</span>
-                  </div>
-                  <div className="border-t pt-4">
-                    <p className="text-sm text-muted-foreground mb-4">Voorbeeld voor 10 gebruikers:</p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>Maandelijks (10 users)</span>
-                        <span>€{examplePricing.monthly}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Setup (eenmalig)</span>
-                        <span>€{examplePricing.setup}</span>
-                      </div>
-                      {examplePricing.discount > 0 && (
-                        <div className="flex justify-between text-green-600">
-                          <span>Volume korting</span>
-                          <span>-€{examplePricing.discount}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <Button asChild className="w-full" size="lg">
-                    <Link href="/prijzen">
-                      Bereken Je Prijs <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="bg-white dark:bg-gray-900 rounded-lg p-8 shadow-lg">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground mb-3">Inbegrepen in MSP pakket:</p>
+                <p className="text-4xl font-bold text-green-600 mb-2">GRATIS*</p>
+                <p className="text-sm text-muted-foreground">*Vanaf €60/gebruiker/maand MSP pakket</p>
+              </div>
+              <div className="mt-6 p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+                <p className="text-sm font-semibold text-green-700 dark:text-green-400 text-center">
+                  Volledige cybersecurity bescherming zonder extra kosten
+                </p>
+              </div>
+            </div>
+            <div className="mt-8 flex gap-4 justify-center flex-wrap">
+              <Button asChild size="lg">
+                <Link href="/prijzen">
+                  Bereken Je MSP Pakket
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/contact">
+                  Vraag Gratis Security Scan
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -292,7 +268,7 @@ export default function CybersecurityPage() {
             <p className="text-muted-foreground mb-8">
               Neem contact op voor een gratis security scan en persoonlijk advies
             </p>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
@@ -310,7 +286,7 @@ export default function CybersecurityPage() {
                   </Button>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <div className="flex items-center gap-2">
@@ -328,6 +304,25 @@ export default function CybersecurityPage() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Social Proof */}
+            <div className="mt-8 flex items-center justify-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Users className="w-4 h-4" />
+                <span>100+ tevreden klanten</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 text-workflo-yellow fill-current" />
+                <span>4.8/5 gemiddelde</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Shield className="w-4 h-4" />
+                <span>ISO 27001 gecertificeerd</span>
+              </div>
+            </div>
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              Geen verplichtingen • Gratis consult • 30 dagen opzegtermijn
+            </p>
           </motion.div>
         </div>
       </section>

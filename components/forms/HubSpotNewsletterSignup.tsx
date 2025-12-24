@@ -536,12 +536,13 @@ export function HubSpotNewsletterSignup({
                       required
                       className="flex-1 px-3 py-2 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-workflo-yellow/50"
                     />
-                    <Button 
+                    <Button
                       type="submit"
                       size="sm"
-                      className="bg-workflo-yellow hover:bg-workflo-yellow-dark text-black"
+                      className="bg-workflo-yellow hover:bg-workflo-yellow-dark text-black font-semibold"
                     >
-                      <Send className="w-4 h-4" />
+                      <Send className="w-4 h-4 mr-1" />
+                      {language === 'nl' ? 'Inschrijven' : 'Subscribe'}
                     </Button>
                   </form>
                 )}
@@ -559,7 +560,7 @@ export function HubSpotNewsletterSignup({
             </div>
             <div className="flex items-center gap-1 text-muted-foreground">
               <Clock className="w-3 h-3 text-blue-500" />
-              <span>{language === 'nl' ? 'Wekelijks' : 'Weekly'}</span>
+              <span>{language === 'nl' ? 'Maandelijks' : 'Monthly'}</span>
             </div>
             <div className="flex items-center gap-1 text-muted-foreground">
               <ArrowRight className="w-3 h-3 text-workflo-yellow-dark" />
@@ -680,16 +681,16 @@ export function HubSpotNewsletterSignup({
           </motion.span>
           <br />
           <span className="text-white">
-            {language === 'nl' ? 'Met IT Expertise 🚀' : 'With IT Expertise 🚀'}
+            {language === 'nl' ? 'Met IT Expertise' : 'With IT Expertise'}
           </span>
         </motion.h3>
         
         {/* Enhanced value proposition */}
         <motion.div className="space-y-4 mb-10" variants={itemVariants}>
           <p className="text-xl text-gray-300 leading-relaxed">
-            {language === 'nl' 
-              ? 'Wekelijkse cybersecurity waarschuwingen, praktische IT-tips en exclusieve inzichten van Workflo experts.'
-              : 'Weekly cybersecurity alerts, practical IT tips and exclusive insights from Workflo experts.'
+            {language === 'nl'
+              ? 'Maandelijkse cybersecurity waarschuwingen, praktische IT-tips en exclusieve inzichten van Workflo experts.'
+              : 'Monthly cybersecurity alerts, practical IT tips and exclusive insights from Workflo experts.'
             }
           </p>
           
@@ -858,11 +859,11 @@ export function HubSpotNewsletterSignup({
                 detail: language === 'nl' ? '100% relevant' : '100% relevant',
                 color: 'text-green-400' 
               },
-              { 
-                icon: Clock, 
-                text: language === 'nl' ? 'Wekelijks' : 'Weekly', 
-                detail: language === 'nl' ? 'Dinsdag 9:00' : 'Tuesday 9:00',
-                color: 'text-blue-400' 
+              {
+                icon: Clock,
+                text: language === 'nl' ? 'Maandelijks' : 'Monthly',
+                detail: language === 'nl' ? 'Elke maand' : 'Every month',
+                color: 'text-blue-400'
               },
               { 
                 icon: ArrowRight, 
@@ -889,34 +890,6 @@ export function HubSpotNewsletterSignup({
               </motion.div>
             ))}
           </div>
-          
-          {/* Social proof testimonial */}
-          <motion.div 
-            className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 max-w-2xl mx-auto"
-            variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
-          >
-            <div className="flex items-center gap-1 mb-3">
-              {[1,2,3,4,5].map((star) => (
-                <Star key={star} className="w-4 h-4 text-yellow-400 fill-current" />
-              ))}
-            </div>
-            <p className="text-gray-300 italic mb-3 text-sm leading-relaxed">
-              {language === 'nl' 
-                ? '"Deze nieuwsbrief heeft mijn IT-kennis echt naar een hoger niveau getild. De cybersecurity tips zijn goud waard!"'
-                : '"This newsletter has truly elevated my IT knowledge. The cybersecurity tips are worth their weight in gold!"'
-              }
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-workflo-yellow to-workflo-yellow-dark rounded-full flex items-center justify-center">
-                <span className="text-xs font-bold text-workflo-black">MK</span>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-white">Mark K.</p>
-                <p className="text-xs text-gray-400">IT Manager, Amsterdam</p>
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </motion.div>

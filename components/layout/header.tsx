@@ -1,553 +1,580 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Menu, X, Phone, HeadphonesIcon, ChevronRight, Globe, Monitor, Shield, Cloud, Settings2, Mail, MapPin, ChevronDown, Calendar, Building2, Heart, Megaphone, User, Camera, ShoppingCart, Building, HardDrive } from 'lucide-react'
-import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
-import { navigation, serviceNavigationCategories, sectors } from '@/lib/data/workflo-data'
-import LanguageSwitcher from '@/components/shared/language-switcher'
-import { ThemeToggle } from '@/components/shared/theme-toggle'
+  Phone, Menu, X, ChevronDown, SlidersHorizontal,
+  Sun, Moon, Monitor, Globe, ExternalLink, Download
+} from 'lucide-react'
+import { useLanguage } from '@/lib/contexts/language-context'
+import { useTheme } from 'next-themes'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { language } = useLanguage()
-  const { getLocalizedValue } = useLocalizedContent()
+  const [mobileAccordion, setMobileAccordion] = useState<string | null>(null)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const { language, setLanguage } = useLanguage()
+  const { theme, setTheme } = useTheme()
   const pathname = usePathname()
 
-  const getNavTitle = (item: typeof navigation[0]) => {
-    return getLocalizedValue(item as any, 'title')
+  const navigation = {
+    diensten: [
+      { label: 'Managed IT', href: '/diensten/managed-it' },
+      { label: 'Cloud Oplossingen', href: '/diensten/cloud-oplossingen' },
+      { label: 'Cybersecurity', href: '/diensten/cybersecurity' },
+      { label: 'Backup & Disaster Recovery', href: '/diensten/backup-disaster-recovery' },
+      { label: 'Microsoft 365', href: '/diensten/microsoft-365' },
+      { label: 'Hardware as a Service', href: '/diensten/hardware-as-a-service' },
+      { label: 'VoIP Telefonie', href: '/diensten/voip-telefonie' }
+    ],
+    sectoren: [
+      { label: 'Gezondheidszorg', href: '/sectoren/gezondheidszorg' },
+      { label: 'Financiële Sector', href: '/sectoren/financiele-sector' },
+      { label: 'Retail', href: '/sectoren/retail' },
+      { label: 'Media', href: '/sectoren/media' },
+      { label: 'Marketing & Reclame', href: '/sectoren/marketing-reclame' },
+      { label: 'Alle sectoren →', href: '/sectoren' }
+    ],
+    overOns: [
+      { label: 'Over Workflo', href: '/over-ons' },
+      { label: 'Blog & Nieuws', href: '/blog' },
+      { label: 'Cases', href: '/case-studies' },
+      { label: 'Werken bij', href: '/werken-bij' },
+      { label: 'Referral', href: '/referral' }
+    ],
+    contact: [
+      { label: 'Contact formulier', href: '/contact' },
+      { label: 'Servicedesk', href: 'https://servicedesk.workflo.it/portal/home', external: true },
+      { label: 'Download TeamViewer', href: 'https://get.teamviewer.com/workflo-support', external: true }
+    ]
   }
 
-  const isActivePage = (href: string) => {
-    if (href === '/' && pathname === '/') return true
-    if (href !== '/' && pathname?.startsWith(href)) return true
-    return false
-  }
-
-  // Icon mapping for services and sectors
-  const iconMap = {
-    Monitor: Monitor,
-    Shield: Shield,
-    Phone: Phone,
-    HardDriveIcon: HardDrive,
-    Building2: Building2,
-    Heart: Heart,
-    Megaphone: Megaphone,
-    User: User,
-    Camera: Camera,
-    ShoppingCart: ShoppingCart,
-    Building: Building,
-    Cloud: Cloud
-  }
+  const themeOptions = [
+    { value: 'light', label: 'Light', icon: Sun },
+    { value: 'dark', label: 'Dark', icon: Moon },
+    { value: 'system', label: 'System', icon: Monitor }
+  ]
 
   return (
-    <header className="bg-background/95 backdrop-blur-md sticky top-0 z-50 border-b border-workflo-yellow/20 shadow-lg shadow-workflo-yellow/5 transition-all duration-300">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo - Clickable Home Link */}
-          <Link 
-            href="/" 
-            className="flex items-center group transition-transform duration-200 hover:scale-105"
-            aria-label="Workflo Home"
-          >
+    <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 shadow-sm">
+      <div className="mx-auto px-6 md:px-10 lg:px-20">
+        <div className="flex items-center justify-between h-[72px]">
+
+          {/* Logo */}
+          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity" aria-label="Workflo Home">
             <Image
               src="/images/workflo-logo-dark.png"
               alt="Workflo"
               width={120}
-              height={60}
-              className="h-12 w-auto dark:hidden"
+              height={40}
+              className="h-10 w-auto dark:hidden"
               priority
             />
             <Image
               src="/images/workflo-logo-new.png"
               alt="Workflo"
               width={120}
-              height={60}
-              className="h-12 w-auto hidden dark:block"
+              height={40}
+              className="h-10 w-auto hidden dark:block"
               priority
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-2">
-            <NavigationMenu>
-              <NavigationMenuList>
-                {navigation.map((item) => (
-                  <NavigationMenuItem key={item.href}>
-                    {item.children ? (
-                      <>
-                        <NavigationMenuTrigger 
-                          className={`h-10 px-4 text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:scale-[1.02] ${
-                            isActivePage(item.href) 
-                              ? 'text-primary bg-primary/5 border-b-2 border-primary rounded-b-none' 
-                              : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                          }`}
-                          aria-label={`${getNavTitle(item)} menu`}>
-                          {getNavTitle(item)}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          {/* Services Mega Menu */}
-                          {item.href === '/diensten' ? (
-                            <div className="w-[900px] p-6">
-                              <div className="grid grid-cols-4 gap-6">
-                                {Object.entries(serviceNavigationCategories).map(([key, category]) => {
-                                  const IconComponent = iconMap[category.icon as keyof typeof iconMap]
-                                  return (
-                                    <div key={key} className="space-y-3">
-                                      <div className="flex items-center space-x-2 mb-4">
-                                        <div className="flex-shrink-0 w-6 h-6 rounded-md bg-workflo-yellow/20 flex items-center justify-center">
-                                          {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
-                                        </div>
-                                        <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                                          {language === 'nl' ? category.titleNL : category.title}
-                                        </h4>
-                                      </div>
-                                      <div className="space-y-1">
-                                        {category.services.map((service) => (
-                                          <Link
-                                            key={service.href}
-                                            href={service.href}
-                                            className="group block p-2 rounded-md hover:bg-muted/50 hover:scale-[1.01] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                            aria-describedby={`service-${service.href.replace(/\//g, '-')}-desc`}
-                                          >
-                                            <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                              {language === 'nl' ? service.titleNL : service.title}
-                                            </div>
-                                            <div 
-                                              className="text-xs text-muted-foreground mt-1 line-clamp-2"
-                                              id={`service-${service.href.replace(/\//g, '-')}-desc`}
-                                            >
-                                              {language === 'nl' ? service.descriptionNL : service.description}
-                                            </div>
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  )
-                                })}
-                              </div>
-                              <div className="border-t border-border mt-6 pt-4 flex justify-between items-center">
-                                <Link href="/diensten" className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-                                  {language === 'nl' ? 'Alle diensten bekijken' : 'View all services'}
-                                  <ChevronRight className="ml-1 w-4 h-4" />
-                                </Link>
-                                <Link href="/prijzen" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-                                  {language === 'nl' ? 'Prijzen & Pakketten' : 'Pricing & Packages'}
-                                  <ChevronRight className="ml-1 w-4 h-4" />
-                                </Link>
-                              </div>
-                            </div>
-                          ) : item.href === '/sectoren' ? (
-                            <div className="w-[700px] p-6">
-                              <div className="grid grid-cols-3 gap-4">
-                                {sectors.map((sector) => {
-                                  const IconComponent = iconMap[sector.icon as keyof typeof iconMap]
-                                  return (
-                                    <Link
-                                      key={sector.href}
-                                      href={sector.href}
-                                      className="group flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/50 hover:scale-[1.01] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                      aria-label={`IT solutions for ${language === 'nl' ? sector.titleNL : sector.title}`}
-                                    >
-                                      <div className="flex-shrink-0 w-8 h-8 rounded-md bg-workflo-yellow/20 flex items-center justify-center group-hover:bg-workflo-yellow/30 transition-colors">
-                                        {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
-                                      </div>
-                                      <div>
-                                        <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                                          {language === 'nl' ? sector.titleNL : sector.title}
-                                        </div>
-                                      </div>
-                                    </Link>
-                                  )
-                                })}
-                              </div>
-                              <div className="border-t border-border mt-6 pt-4">
-                                <Link href="/sectoren" className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-                                  {language === 'nl' ? 'Alle sectoren bekijken' : 'View all sectors'}
-                                  <ChevronRight className="ml-1 w-4 h-4" />
-                                </Link>
-                              </div>
-                            </div>
-                          ) : (
-                            <ul className="grid w-[500px] gap-3 p-4 md:grid-cols-2">
-                              {item.children?.map((child) => (
-                                <li key={child.href}>
-                                  <NavigationMenuLink asChild>
-                                    <Link
-                                      href={child.href}
-                                      className="block select-none space-y-1 rounded-lg p-3 leading-none no-underline outline-none transition-colors hover:bg-muted/50 hover:text-primary focus:bg-muted/50 focus:text-primary"
-                                    >
-                                      <div className="text-sm font-medium leading-none">
-                                        {getLocalizedValue(child as any, 'title')}
-                                      </div>
-                                      {child.description && (
-                                        <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
-                                          {getLocalizedValue(child as any, 'description')}
-                                        </p>
-                                      )}
-                                    </Link>
-                                  </NavigationMenuLink>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </NavigationMenuContent>
-                      </>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className={`h-10 px-4 inline-flex items-center text-sm font-medium transition-all duration-200 rounded-md ${
-                          isActivePage(item.href) 
-                            ? 'text-primary bg-primary/10 font-semibold' 
-                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                        }`}
-                      >
-                        {getNavTitle(item)}
-                      </Link>
-                    )}
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </nav>
+          <nav className="hidden lg:flex items-center gap-12" aria-label="Main navigation">
 
-          {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center space-x-2">
-            {/* Servicedesk Quick Link */}
-            <Button 
-              asChild
-              variant="ghost"
-              size="sm"
-              className="h-9 px-3 text-sm font-medium text-muted-foreground hover:text-primary hover:bg-primary/10"
-            >
-              <a 
-                href="https://servicedesk.workflo.it/portal" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2"
+            {/* Diensten Dropdown */}
+            <div className="relative group">
+              <button
+                className="flex items-center gap-1 text-[15px] font-semibold tracking-tight text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100 transition-all duration-150 ease-out"
+                aria-expanded="false"
+                aria-haspopup="true"
               >
-                <HeadphonesIcon className="h-4 w-4" />
-                <span>Servicedesk</span>
-              </a>
-            </Button>
+                {language === 'nl' ? 'Diensten' : 'Services'}
+                <ChevronDown className="h-4 w-4" />
+              </button>
 
-            {/* Settings - Compact */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
-                  <Settings2 className="h-4 w-4" />
-                  <span className="sr-only">Settings</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <div className="px-3 py-2">
-                  <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-2">
-                    <Globe className="h-4 w-4" />
-                    <span>Language</span>
-                  </div>
-                  <LanguageSwitcher />
-                </div>
-                <div className="border-t px-3 py-2">
-                  <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-2">
-                    <Settings2 className="h-4 w-4" />
-                    <span>Theme</span>
-                  </div>
-                  <ThemeToggle />
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Phone Number with Dropdown - Primary CTA */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  className="bg-gradient-to-r from-workflo-yellow to-workflo-yellow-dark hover:from-workflo-yellow-dark hover:to-workflo-yellow text-workflo-black font-semibold shadow-lg shadow-workflo-yellow/30 hover:shadow-xl hover:shadow-workflo-yellow/40 transition-all group"
-                >
-                  <Phone className="h-4 w-4 mr-2" />
-                  <span>020-30 80 465</span>
-                  <ChevronDown className="h-4 w-4 ml-1 group-data-[state=open]:rotate-180 transition-transform" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem asChild className="cursor-pointer py-3">
-                  <a href="tel:+31203080465" className="flex items-center space-x-3">
-                    <Phone className="h-4 w-4 text-primary" />
-                    <div className="flex flex-col">
-                      <span className="font-medium">{language === 'nl' ? 'Bel Direct' : 'Call Now'}</span>
-                      <span className="text-xs text-muted-foreground">020-30 80 465</span>
-                    </div>
-                  </a>
-                </DropdownMenuItem>
-                
-                <DropdownMenuItem asChild className="cursor-pointer py-3">
-                  <Link href="/contact" className="flex items-center space-x-3">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    <div className="flex flex-col">
-                      <span className="font-medium">{language === 'nl' ? 'Contact Pagina' : 'Contact Page'}</span>
-                      <span className="text-xs text-muted-foreground">{language === 'nl' ? 'Alle contactopties' : 'All contact options'}</span>
-                    </div>
-                  </Link>
-                </DropdownMenuItem>
-                
-                <DropdownMenuItem asChild className="cursor-pointer py-3">
-                  <a href="mailto:info@workflo.it" className="flex items-center space-x-3">
-                    <Mail className="h-4 w-4 text-primary" />
-                    <div className="flex flex-col">
-                      <span className="font-medium">Email</span>
-                      <span className="text-xs text-muted-foreground">info@workflo.it</span>
-                    </div>
-                  </a>
-                </DropdownMenuItem>
-                
-                <div className="border-t my-1" />
-                
-                <DropdownMenuItem asChild className="cursor-pointer py-3">
-                  <Link href="/afspraak" className="flex items-center space-x-3">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    <div className="flex flex-col">
-                      <span className="font-medium">{language === 'nl' ? 'Plan Afspraak' : 'Schedule Meeting'}</span>
-                      <span className="text-xs text-muted-foreground">{language === 'nl' ? 'Gratis adviesgesprek' : 'Free consultation'}</span>
-                    </div>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center space-x-2">
-            <a
-              href="tel:+31203080465"
-              className="p-2 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Phone className="h-5 w-5" />
-            </a>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle mobile menu"
-              className="h-10 w-10 p-0"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile Menu Overlay */}
-        {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <div 
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-            
-            {/* Mobile Menu Panel */}
-            <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-background z-50 lg:hidden shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-border">
-              <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-workflo-yellow/30 bg-gradient-to-r from-workflo-yellow-light/20 to-workflo-yellow-light/10">
-                  <div className="text-lg font-bold bg-gradient-to-r from-workflo-yellow-dark to-primary bg-clip-text text-transparent">Workflo</div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                    aria-label="Close menu"
-                    className="h-8 w-8 p-0"
-                  >
-                    <X className="h-5 w-5" />
-                  </Button>
-                </div>
-                
-                {/* Navigation */}
-                <nav className="flex-1 overflow-y-auto p-4">
-                  <div className="space-y-2">
-                    {navigation.map((item) => (
-                      <div key={item.href} className="space-y-1">
-                        {item.children ? (
-                          <>
-                            <Link
-                              href={item.href}
-                              className={`flex items-center justify-between px-3 py-3 text-sm font-semibold rounded-lg transition-colors ${
-                                isActivePage(item.href) 
-                                  ? 'text-primary bg-primary/10' 
-                                  : 'text-foreground hover:text-primary hover:bg-muted/50'
-                              }`}
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              <span>{getNavTitle(item)}</span>
-                              <ChevronRight className="w-4 h-4" />
-                            </Link>
-                            
-                            {/* Services submenu with categories */}
-                            {item.href === '/diensten' && (
-                              <div className="ml-4 space-y-3 pb-2">
-                                {Object.entries(serviceNavigationCategories).map(([key, category]) => {
-                                  const IconComponent = iconMap[category.icon as keyof typeof iconMap]
-                                  return (
-                                    <div key={key} className="space-y-1">
-                                      <div className="flex items-center space-x-2 px-2 py-1">
-                                        <div className="flex-shrink-0 w-5 h-5 rounded bg-workflo-yellow/20 flex items-center justify-center">
-                                          {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
-                                        </div>
-                                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                          {language === 'nl' ? category.titleNL : category.title}
-                                        </span>
-                                      </div>
-                                      {category.services.map((service) => (
-                                        <Link
-                                          key={service.href}
-                                          href={service.href}
-                                          className={`block px-3 py-2 ml-2 text-sm rounded-lg transition-colors ${
-                                            isActivePage(service.href)
-                                              ? 'text-primary bg-primary/10 font-medium'
-                                              : 'text-foreground hover:text-primary hover:bg-muted/50'
-                                          }`}
-                                          onClick={() => setMobileMenuOpen(false)}
-                                        >
-                                          {language === 'nl' ? service.titleNL : service.title}
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  )
-                                })}
-                              </div>
-                            )}
-                            
-                            {/* Sectors submenu */}
-                            {item.href === '/sectoren' && (
-                              <div className="ml-4 space-y-1 pb-2">
-                                {sectors.map((sector) => {
-                                  const IconComponent = iconMap[sector.icon as keyof typeof iconMap]
-                                  return (
-                                    <Link
-                                      key={sector.href}
-                                      href={sector.href}
-                                      className={`flex items-center space-x-2 px-3 py-2 text-sm rounded-lg transition-colors ${
-                                        isActivePage(sector.href)
-                                          ? 'text-primary bg-primary/10 font-medium'
-                                          : 'text-foreground hover:text-primary hover:bg-muted/50'
-                                      }`}
-                                      onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                      <div className="flex-shrink-0 w-4 h-4 rounded bg-workflo-yellow/20 flex items-center justify-center">
-                                        {IconComponent && <IconComponent className="w-4 h-4 text-workflo-yellow-dark" />}
-                                      </div>
-                                      <span>{language === 'nl' ? sector.titleNL : sector.title}</span>
-                                    </Link>
-                                  )
-                                })}
-                              </div>
-                            )}
-                            
-                            {/* Other children (e.g., About Us) */}
-                            {item.href !== '/diensten' && item.href !== '/sectoren' && (
-                              <div className="ml-4 space-y-1 pb-2">
-                                {item.children.map((child) => (
-                                  <Link
-                                    key={child.href}
-                                    href={child.href}
-                                    className={`block px-3 py-2 text-sm rounded-lg transition-colors ${
-                                      isActivePage(child.href)
-                                        ? 'text-primary bg-primary/10 font-medium'
-                                        : 'text-foreground hover:text-primary hover:bg-muted/50'
-                                    }`}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                  >
-                                    {getLocalizedValue(child as any, 'title')}
-                                  </Link>
-                                ))}
-                              </div>
-                            )}
-                          </>
-                        ) : (
-                          <Link
-                            href={item.href}
-                            className={`block px-3 py-3 text-sm font-semibold rounded-lg transition-colors ${
-                              isActivePage(item.href)
-                                ? 'text-primary bg-primary/10'
-                                : 'text-foreground hover:text-primary hover:bg-muted/50'
-                            }`}
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            {getNavTitle(item)}
-                          </Link>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </nav>
-                
-                {/* Quick Actions */}
-                <div className="p-4 border-t border-workflo-yellow/30 bg-gradient-to-r from-workflo-yellow-light/20 to-workflo-yellow-light/10 space-y-3">
-                  <Button 
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start"
-                  >
-                    <a 
-                      href="https://servicedesk.workflo.it/portal"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center space-x-2"
+              <div className="absolute left-0 top-full pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 ease-out pointer-events-none group-hover:pointer-events-auto">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-2xl border border-neutral-200/40 dark:border-neutral-800 p-6">
+                  {navigation.diensten.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center gap-2 px-4 py-3 text-base text-neutral-700 hover:bg-accent hover:text-accent-foreground dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 rounded-lg transition-all duration-150 ease-out mb-1 last:mb-0"
                     >
-                      <HeadphonesIcon className="h-4 w-4" />
-                      <span>Servicedesk</span>
-                    </a>
-                  </Button>
-                  
-                  <Button 
-                    asChild
-                    className="w-full"
-                  >
-                    <Link 
-                      href="/contact"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {language === 'nl' ? 'Contact' : 'Get Started'}
+                      {item.label}
                     </Link>
-                  </Button>
-                  
-                  {/* Settings */}
-                  <div className="pt-3 border-t border-border">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <LanguageSwitcher />
-                        <ThemeToggle />
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </>
-        )}
+
+            {/* Sectoren Dropdown */}
+            <div className="relative group">
+              <button
+                className="flex items-center gap-1 text-[15px] font-semibold tracking-tight text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100 transition-all duration-150 ease-out"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {language === 'nl' ? 'Sectoren' : 'Sectors'}
+                <ChevronDown className="h-4 w-4" />
+              </button>
+
+              <div className="absolute left-0 top-full pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 ease-out pointer-events-none group-hover:pointer-events-auto">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-2xl border border-neutral-200/40 dark:border-neutral-800 p-6">
+                  {navigation.sectoren.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center gap-2 px-4 py-3 text-base text-neutral-700 hover:bg-accent hover:text-accent-foreground dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 rounded-lg transition-all duration-150 ease-out mb-1 last:mb-0"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Over ons Dropdown */}
+            <div className="relative group">
+              <button
+                className="flex items-center gap-1 text-[15px] font-semibold tracking-tight text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100 transition-all duration-150 ease-out"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {language === 'nl' ? 'Over ons' : 'About us'}
+                <ChevronDown className="h-4 w-4" />
+              </button>
+
+              <div className="absolute left-0 top-full pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 ease-out pointer-events-none group-hover:pointer-events-auto">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-2xl border border-neutral-200/40 dark:border-neutral-800 p-6">
+                  {navigation.overOns.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center gap-2 px-4 py-3 text-base text-neutral-700 hover:bg-accent hover:text-accent-foreground dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 rounded-lg transition-all duration-150 ease-out mb-1 last:mb-0"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Dropdown */}
+            <div className="relative group">
+              <button
+                className="flex items-center gap-1 text-[15px] font-semibold tracking-tight text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100 transition-all duration-150 ease-out"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                Contact
+                <ChevronDown className="h-4 w-4" />
+              </button>
+
+              <div className="absolute left-0 top-full pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 ease-out pointer-events-none group-hover:pointer-events-auto">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-2xl border border-neutral-200/40 dark:border-neutral-800 p-6">
+                  {navigation.contact.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      target={item.external ? '_blank' : undefined}
+                      rel={item.external ? 'noopener noreferrer' : undefined}
+                      className="flex items-center gap-2 px-4 py-3 text-base text-neutral-700 hover:bg-accent hover:text-accent-foreground dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 rounded-lg transition-all duration-150 ease-out mb-1 last:mb-0"
+                    >
+                      {item.external && item.label.includes('TeamViewer') && (
+                        <Download className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      )}
+                      {item.external && !item.label.includes('TeamViewer') && (
+                        <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      )}
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </nav>
+
+          {/* CTA + Phone + Settings */}
+          <div className="hidden lg:flex items-center gap-6 ml-10">
+            <a
+              href="tel:+31203080465"
+              className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100 transition-all duration-150 ease-out"
+              suppressHydrationWarning
+            >
+              <Phone className="h-4 w-4" />
+              020-30 80 465
+            </a>
+            <Link
+              href="/contact"
+              className="px-8 py-4 bg-workflo-yellow text-neutral-900 font-semibold tracking-tight text-[15px] rounded-lg hover:bg-workflo-yellow-dark transition-all duration-150 ease-out hover:shadow-lg hover:scale-105"
+            >
+              Gratis Consult
+            </Link>
+
+            {/* Settings Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setSettingsOpen(!settingsOpen)}
+                className="p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-all duration-150"
+                aria-label="Settings"
+                aria-expanded={settingsOpen}
+              >
+                <SlidersHorizontal className="h-5 w-5" />
+              </button>
+
+              {settingsOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setSettingsOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-neutral-900 rounded-xl shadow-2xl border border-neutral-200/40 dark:border-neutral-800 p-4 z-50">
+                    <div className="mb-4">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">⚙️ Instellingen</p>
+
+                      {/* Theme Settings */}
+                      <div className="mb-4">
+                        <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">Thema</p>
+                        <div className="space-y-1">
+                          {themeOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              onClick={() => {
+                                setTheme(option.value)
+                                setSettingsOpen(false)
+                              }}
+                              className={`flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-all duration-150 ${
+                                theme === option.value
+                                  ? 'bg-accent text-accent-foreground'
+                                  : 'text-neutral-700 dark:text-neutral-300 hover:bg-accent/50'
+                              }`}
+                            >
+                              <option.icon className="h-4 w-4 shrink-0" />
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Language Settings */}
+                      <div className="mb-4">
+                        <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">Taal</p>
+                        <div className="space-y-1">
+                          <button
+                            onClick={() => {
+                              setLanguage('nl')
+                              setSettingsOpen(false)
+                            }}
+                            className={`flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-all duration-150 ${
+                              language === 'nl'
+                                ? 'bg-accent text-accent-foreground'
+                                : 'text-neutral-700 dark:text-neutral-300 hover:bg-accent/50'
+                            }`}
+                          >
+                            <Globe className="h-4 w-4 shrink-0" />
+                            Nederlands
+                          </button>
+                          <button
+                            onClick={() => {
+                              setLanguage('en')
+                              setSettingsOpen(false)
+                            }}
+                            className={`flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-all duration-150 ${
+                              language === 'en'
+                                ? 'bg-accent text-accent-foreground'
+                                : 'text-neutral-700 dark:text-neutral-300 hover:bg-accent/50'
+                            }`}
+                          >
+                            <Globe className="h-4 w-4 shrink-0" />
+                            English
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tools */}
+                    <div className="border-t border-neutral-200 dark:border-neutral-800 pt-4">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">💻 Tools</p>
+                      <div className="space-y-1">
+                        <a
+                          href="https://servicedesk.workflo.it/portal/home"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-accent-foreground rounded-lg transition-all duration-150"
+                          onClick={() => setSettingsOpen(false)}
+                        >
+                          <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          Servicedesk
+                        </a>
+                        <a
+                          href="https://get.teamviewer.com/workflo-support"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-accent hover:text-accent-foreground rounded-lg transition-all duration-150"
+                          onClick={() => setSettingsOpen(false)}
+                        >
+                          <Download className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          Download TeamViewer
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100 transition-colors"
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-y-0 right-0 w-full max-w-sm bg-white dark:bg-neutral-900 shadow-2xl overflow-y-auto z-50">
+          <div className="p-6">
+
+            {/* Mobile CTA */}
+            <Link
+              href="/contact"
+              className="block w-full mb-6 px-6 py-3 bg-workflo-yellow text-neutral-900 font-semibold rounded-lg hover:bg-workflo-yellow-dark transition-all duration-200 text-center"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Gratis Consult
+            </Link>
+
+            <a
+              href="tel:+31203080465"
+              className="flex items-center justify-center gap-2 w-full mb-8 px-6 py-3 border-2 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 font-semibold rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              <Phone className="h-5 w-5" />
+              020-30 80 465
+            </a>
+
+            {/* Mobile Accordions */}
+            <div className="space-y-4">
+
+              {/* Diensten Accordion */}
+              <div>
+                <button
+                  onClick={() => setMobileAccordion(mobileAccordion === 'diensten' ? null : 'diensten')}
+                  className="flex items-center justify-between w-full text-left px-4 py-3 text-neutral-900 dark:text-neutral-100 font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                  aria-expanded={mobileAccordion === 'diensten'}
+                >
+                  Diensten
+                  <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${mobileAccordion === 'diensten' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileAccordion === 'diensten' && (
+                  <div className="mt-2 pl-4 space-y-1">
+                    {navigation.diensten.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-accent rounded-lg transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Sectoren Accordion */}
+              <div>
+                <button
+                  onClick={() => setMobileAccordion(mobileAccordion === 'sectoren' ? null : 'sectoren')}
+                  className="flex items-center justify-between w-full text-left px-4 py-3 text-neutral-900 dark:text-neutral-100 font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                  aria-expanded={mobileAccordion === 'sectoren'}
+                >
+                  Sectoren
+                  <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${mobileAccordion === 'sectoren' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileAccordion === 'sectoren' && (
+                  <div className="mt-2 pl-4 space-y-1">
+                    {navigation.sectoren.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-accent rounded-lg transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Over ons Accordion */}
+              <div>
+                <button
+                  onClick={() => setMobileAccordion(mobileAccordion === 'over-ons' ? null : 'over-ons')}
+                  className="flex items-center justify-between w-full text-left px-4 py-3 text-neutral-900 dark:text-neutral-100 font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                  aria-expanded={mobileAccordion === 'over-ons'}
+                >
+                  Over ons
+                  <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${mobileAccordion === 'over-ons' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileAccordion === 'over-ons' && (
+                  <div className="mt-2 pl-4 space-y-1">
+                    {navigation.overOns.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-accent rounded-lg transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Contact Accordion */}
+              <div>
+                <button
+                  onClick={() => setMobileAccordion(mobileAccordion === 'contact' ? null : 'contact')}
+                  className="flex items-center justify-between w-full text-left px-4 py-3 text-neutral-900 dark:text-neutral-100 font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                  aria-expanded={mobileAccordion === 'contact'}
+                >
+                  Contact
+                  <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${mobileAccordion === 'contact' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileAccordion === 'contact' && (
+                  <div className="mt-2 pl-4 space-y-1">
+                    {navigation.contact.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        target={item.external ? '_blank' : undefined}
+                        rel={item.external ? 'noopener noreferrer' : undefined}
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-accent rounded-lg transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.external && item.label.includes('TeamViewer') && (
+                          <Download className="h-4 w-4 shrink-0 text-muted-foreground" />
+                        )}
+                        {item.external && !item.label.includes('TeamViewer') && (
+                          <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+                        )}
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Settings Accordion (Mobile) */}
+              <div>
+                <button
+                  onClick={() => setMobileAccordion(mobileAccordion === 'settings' ? null : 'settings')}
+                  className="flex items-center justify-between w-full text-left px-4 py-3 text-neutral-900 dark:text-neutral-100 font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                  aria-expanded={mobileAccordion === 'settings'}
+                >
+                  <span className="flex items-center gap-2">
+                    <SlidersHorizontal className="h-5 w-5" />
+                    Instellingen
+                  </span>
+                  <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${mobileAccordion === 'settings' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileAccordion === 'settings' && (
+                  <div className="mt-2 pl-4 space-y-3">
+                    {/* Theme */}
+                    <div>
+                      <p className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Thema</p>
+                      <div className="space-y-1">
+                        {themeOptions.map((option) => (
+                          <button
+                            key={option.value}
+                            onClick={() => setTheme(option.value)}
+                            className={`flex items-center gap-2 w-full px-4 py-2.5 text-sm rounded-lg transition-colors ${
+                              theme === option.value
+                                ? 'bg-accent text-accent-foreground'
+                                : 'text-neutral-600 dark:text-neutral-400 hover:bg-accent'
+                            }`}
+                          >
+                            <option.icon className="h-4 w-4 shrink-0" />
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Language */}
+                    <div>
+                      <p className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Taal</p>
+                      <div className="space-y-1">
+                        <button
+                          onClick={() => setLanguage('nl')}
+                          className={`flex items-center gap-2 w-full px-4 py-2.5 text-sm rounded-lg transition-colors ${
+                            language === 'nl'
+                              ? 'bg-accent text-accent-foreground'
+                              : 'text-neutral-600 dark:text-neutral-400 hover:bg-accent'
+                          }`}
+                        >
+                          <Globe className="h-4 w-4 shrink-0" />
+                          Nederlands
+                        </button>
+                        <button
+                          onClick={() => setLanguage('en')}
+                          className={`flex items-center gap-2 w-full px-4 py-2.5 text-sm rounded-lg transition-colors ${
+                            language === 'en'
+                              ? 'bg-accent text-accent-foreground'
+                              : 'text-neutral-600 dark:text-neutral-400 hover:bg-accent'
+                          }`}
+                        >
+                          <Globe className="h-4 w-4 shrink-0" />
+                          English
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Tools */}
+                    <div>
+                      <p className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tools</p>
+                      <div className="space-y-1">
+                        <a
+                          href="https://servicedesk.workflo.it/portal/home"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-accent rounded-lg transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          Servicedesk
+                        </a>
+                        <a
+                          href="https://get.teamviewer.com/workflo-support"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-accent rounded-lg transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <Download className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          Download TeamViewer
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   )
 }

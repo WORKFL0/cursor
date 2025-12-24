@@ -6,7 +6,6 @@ import { analytics } from '@/lib/analytics'
 import { GoogleAnalytics } from './google-analytics'
 import { MicrosoftClarity } from './microsoft-clarity'
 import Hotjar from './hotjar'
-import { ErrorBoundary } from '@/components/error/error-boundary'
 
 /**
  * Analytics Tracker Component
@@ -94,18 +93,18 @@ function AnalyticsTracker() {
  */
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   return (
-    <ErrorBoundary level="component" name="AnalyticsProvider">
+    <>
       {/* Third-party analytics scripts */}
       <GoogleAnalytics />
       <MicrosoftClarity />
       <Hotjar />
-      
+
       {/* Custom analytics tracker */}
       <Suspense fallback={null}>
         <AnalyticsTracker />
       </Suspense>
-      
+
       {children}
-    </ErrorBoundary>
+    </>
   )
 }

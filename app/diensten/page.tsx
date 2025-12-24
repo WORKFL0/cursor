@@ -1,19 +1,38 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle, Monitor, Cloud, Shield, Network, Users, Calendar, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useLanguage, useLocalizedContent } from '@/lib/contexts/language-context'
 import { servicesPageData, serviceCategories } from '@/lib/data/workflo-data'
+import { getPublishedFeatures } from '@/lib/features-api'
+import type { Feature } from '@/types/features'
 
 export default function ServicesPage() {
   const { language } = useLanguage()
   const { getLocalizedValue } = useLocalizedContent()
+  const [features, setFeatures] = useState<Feature[]>([])
+  const [loadingFeatures, setLoadingFeatures] = useState(true)
+
+  useEffect(() => {
+    async function loadFeatures() {
+      try {
+        const response = await getPublishedFeatures({ limit: 10 })
+        setFeatures(response.features)
+      } catch (error) {
+        console.error('Error loading features:', error)
+      } finally {
+        setLoadingFeatures(false)
+      }
+    }
+    loadFeatures()
+  }, [])
 
   const iconMap = {
     'managed-it': Monitor,
-    'cloud-solutions': Cloud, 
+    'cloud-solutions': Cloud,
     'cybersecurity': Shield,
     'network': Network,
     'consultancy': Users
@@ -29,7 +48,7 @@ export default function ServicesPage() {
               {language === 'nl' ? 'Onze Diensten' : 'Our Services'}
             </h1>
             <p className="text-xl lg:text-2xl text-muted-foreground">
-              {language === 'nl' 
+              {language === 'nl'
                 ? 'Uitgebreide IT-diensten ontworpen om Amsterdamse bedrijven te laten groeien en bloeien'
                 : 'Comprehensive IT services designed to help Amsterdam businesses grow and thrive'
               }
@@ -47,7 +66,7 @@ export default function ServicesPage() {
                 {language === 'nl' ? 'Eén partner. Alle IT-oplossingen.' : 'One Partner. Every IT Solution.'}
               </h2>
               <p className="text-xl text-muted-foreground">
-                {language === 'nl' 
+                {language === 'nl'
                   ? 'Van managed IT tot cybersecurity, wij hebben alles wat je nodig hebt'
                   : 'From managed IT to cybersecurity, we have everything you need'
                 }
@@ -57,7 +76,7 @@ export default function ServicesPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {serviceCategories.map((category) => {
                 const IconComponent = iconMap[category.id as keyof typeof iconMap] || Monitor
-                
+
                 return (
                   <Card key={category.id} className="bg-card rounded-xl shadow-lg border-2 border-border hover:border-primary transition-all group">
                     <CardHeader>
@@ -87,7 +106,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* How It Works - Features from CMS */}
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
@@ -96,36 +115,67 @@ export default function ServicesPage() {
                 {language === 'nl' ? 'Zo werkt het' : 'How it works'}
               </h2>
               <p className="text-xl text-muted-foreground">
-                {language === 'nl' 
+                {language === 'nl'
                   ? 'In 3 simpele stappen naar zorgeloze IT'
                   : 'In 3 simple steps to worry-free IT'
                 }
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {servicesPageData.processes.map((process, index) => {
-                const iconMap = [Calendar, FileText, CheckCircle]
-                const IconComponent = iconMap[index] || CheckCircle
-                
-                return (
-                  <div key={index} className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-workflo-yellow/30">
-                      <IconComponent className="w-8 h-8 text-workflo-black" />
+            {loadingFeatures ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+              </div>
+            ) : features.length > 0 ? (
+              <div className="grid md:grid-cols-3 gap-8">
+                {features.slice(0, 3).map((feature, index) => {
+                  const iconMap = [Calendar, FileText, CheckCircle]
+                  const IconComponent = iconMap[index] || CheckCircle
+
+                  return (
+                    <div key={feature.id} className="text-center">
+                      <div className="w-16 h-16 bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-workflo-yellow/30">
+                        <IconComponent className="w-8 h-8 text-workflo-black" />
+                      </div>
+                      <div className="flex items-center justify-center gap-2 mb-4">
+                        <span className="w-8 h-8 bg-workflo-yellow rounded-full flex items-center justify-center text-workflo-black font-bold text-sm">{index + 1}</span>
+                        <h3 className="text-xl font-bold text-foreground">
+                          {feature.title}
+                        </h3>
+                      </div>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                      <span className="w-8 h-8 bg-workflo-yellow rounded-full flex items-center justify-center text-workflo-black font-bold text-sm">{process.step}</span>
-                      <h3 className="text-xl font-bold text-foreground">
-                        {getLocalizedValue(process, 'title')}
-                      </h3>
+                  )
+                })}
+              </div>
+            ) : (
+              /* Fallback to hardcoded data if no features */
+              <div className="grid md:grid-cols-3 gap-8">
+                {servicesPageData.processes.map((process, index) => {
+                  const iconMap = [Calendar, FileText, CheckCircle]
+                  const IconComponent = iconMap[index] || CheckCircle
+
+                  return (
+                    <div key={index} className="text-center">
+                      <div className="w-16 h-16 bg-gradient-to-br from-workflo-yellow to-workflo-yellow-dark rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-workflo-yellow/30">
+                        <IconComponent className="w-8 h-8 text-workflo-black" />
+                      </div>
+                      <div className="flex items-center justify-center gap-2 mb-4">
+                        <span className="w-8 h-8 bg-workflo-yellow rounded-full flex items-center justify-center text-workflo-black font-bold text-sm">{process.step}</span>
+                        <h3 className="text-xl font-bold text-foreground">
+                          {getLocalizedValue(process, 'title')}
+                        </h3>
+                      </div>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {getLocalizedValue(process, 'description')}
+                      </p>
                     </div>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {getLocalizedValue(process, 'description')}
-                    </p>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -137,12 +187,12 @@ export default function ServicesPage() {
             <h2 className="text-3xl font-bold text-foreground mb-8">
               {getLocalizedValue(servicesPageData.pricing, 'title')}
             </h2>
-            
+
             <div className="bg-card rounded-2xl shadow-xl p-8 border-4 border-primary mb-8">
               <div className="text-5xl font-bold text-foreground mb-4">
                 €{servicesPageData.pricing.basePrice}
                 <span className="text-lg text-muted-foreground font-normal">
-                  {language === 'nl' ? '/maand per computer' : '/month per computer'}
+                  {language === 'nl' ? '/maand per gebruiker' : '/month per user'}
                 </span>
               </div>
               <p className="text-xl text-muted-foreground mb-6">
@@ -198,7 +248,7 @@ export default function ServicesPage() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">50+</div>
+                <div className="text-4xl font-bold text-primary mb-2">100+</div>
                 <div className="text-sm opacity-90">
                   {language === 'nl' ? 'Tevreden klanten' : 'Happy clients'}
                 </div>
@@ -209,31 +259,24 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-workflo-yellow text-black">
+      <section className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
               {language === 'nl' ? 'Klaar om te beginnen?' : 'Ready to get started?'}
             </h2>
-            <p className="text-xl mb-8">
-              {language === 'nl' 
-                ? 'Plan een gratis gesprek en ontdek hoe wij je IT-partner kunnen worden'
-                : 'Schedule a free consultation and discover how we can become your IT partner'
+            <p className="text-xl opacity-90 mb-8">
+              {language === 'nl'
+                ? 'Neem vandaag nog contact met ons op voor een vrijblijvend gesprek'
+                : 'Contact us today for a no-obligation consultation'
               }
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" asChild>
-                <Link href="/contact">
-                  {language === 'nl' ? 'Plan gratis gesprek' : 'Schedule free consultation'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild className="border-foreground text-foreground hover:bg-foreground hover:text-primary">
-                <Link href="/over-ons">
-                  {language === 'nl' ? 'Over Workflo' : 'About Workflo'}
-                </Link>
-              </Button>
-            </div>
+            <Button size="lg" variant="secondary" asChild>
+              <Link href="/contact">
+                {language === 'nl' ? 'Plan een afspraak' : 'Schedule a meeting'}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
