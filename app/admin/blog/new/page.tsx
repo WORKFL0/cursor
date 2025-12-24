@@ -96,7 +96,7 @@ export default function NewBlogPostPage() {
 
       const { data, error } = await supabase
         .from('blog_posts')
-        .insert([postData as any])
+        .insert([postData] as any)
         .select()
         .single()
 
