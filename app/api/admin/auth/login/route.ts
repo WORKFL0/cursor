@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is active
-    if (!user.is_active) {
+    if (!(user as any).is_active) {
       return NextResponse.json<LoginResponse>(
         { success: false, error: 'Account is gedeactiveerd' },
         { status: 401 }
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    const isValidPassword = await bcrypt.compare(password, user.password_hash)
+    const isValidPassword = await bcrypt.compare(password, (user as any).password_hash)
 
     if (!isValidPassword) {
       return NextResponse.json<LoginResponse>(
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     const { error: sessionError } = await supabase
       .from('admin_sessions')
       .insert({
-        user_id: user.id,
+        user_id: (user as any).id,
         token,
         expires_at: expiresAt.toISOString(),
         ip_address: request.ip || request.headers.get('x-forwarded-for'),
@@ -78,20 +78,20 @@ export async function POST(request: NextRequest) {
       .from('admin_users')
       .update({
         last_login_at: new Date().toISOString(),
-        login_count: user.login_count + 1,
+        login_count: (user as any).login_count + 1,
       })
-      .eq('id', user.id)
+      .eq('id', (user as any).id)
 
     // Log activity
     await supabase.rpc('log_admin_activity', {
-      p_user_id: user.id,
+      p_user_id: (user as any).id,
       p_action: 'login',
       p_ip_address: request.ip || request.headers.get('x-forwarded-for'),
       p_user_agent: request.headers.get('user-agent'),
     })
 
     // Remove password_hash from response
-    const { password_hash, ...userWithoutPassword } = user
+    const { password_hash, ...userWithoutPassword } = user as any
 
     return NextResponse.json<LoginResponse>({
       success: true,
