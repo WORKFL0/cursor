@@ -268,7 +268,7 @@ function aggregateTrafficSources(data: any[]) {
     if (!sourceCounts[source]) {
       sourceCounts[source] = new Set()
     }
-    sourceCounts[source].add(item.visitor_id)
+    sourceCounts[source]!.add(item.visitor_id)
   })
 
   const total = data.length
