@@ -71,7 +71,7 @@ export default function NewBlogPostPage() {
 
       // Set default author
       if (authorsRes.data && authorsRes.data.length > 0) {
-        setFormData(prev => ({ ...prev, author_id: authorsRes.data![0]?.id || '' }))
+        setFormData(prev => ({ ...prev, author_id: (authorsRes.data![0] as any).id || '' }))
       }
     } catch (error) {
       console.error('Error loading metadata:', error)
