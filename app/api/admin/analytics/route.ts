@@ -17,7 +17,7 @@ async function validateAdminAuth(request: NextRequest): Promise<boolean> {
       .single()
 
     if (!session) return false
-    if (new Date(session.expires_at) < new Date()) return false
+    if (new Date((session as any).expires_at) < new Date()) return false
 
     return true
   } catch {
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
       .order('view_count', { ascending: false })
       .limit(10)
 
-    const topArticlesFormatted = (topArticles || []).map((article) => ({
+    const topArticlesFormatted = ((topArticles as any[]) || []).map((article: any) => ({
       id: article.id,
       title: article.title,
       slug: article.slug,
@@ -227,7 +227,7 @@ function aggregateTrafficByDay(data: any[], days: number) {
   for (let i = days - 1; i >= 0; i--) {
     const date = new Date()
     date.setDate(date.getDate() - i)
-    const dateStr = date.toISOString().split('T')[0]
+    const dateStr = date.toISOString().split('T')[0] as string
     dailyStats[dateStr] = {
       date: dateStr,
       views: 0,
@@ -237,7 +237,7 @@ function aggregateTrafficByDay(data: any[], days: number) {
 
   // Aggregate data
   data.forEach((item) => {
-    const dateStr = item.viewed_at.split('T')[0]
+    const dateStr = (item as any).viewed_at.split('T')[0]
     if (dailyStats[dateStr]) {
       dailyStats[dateStr].views++
       dailyStats[dateStr].visitors.add(item.visitor_id)
