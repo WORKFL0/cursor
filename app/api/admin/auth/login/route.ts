@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
         user_id: (user as any).id,
         token,
         expires_at: expiresAt.toISOString(),
-        ip_address: request.ip || request.headers.get('x-forwarded-for'),
+        ip_address: (request as any).ip || request.headers.get('x-forwarded-for'),
         user_agent: request.headers.get('user-agent'),
-      })
+      } as any)
 
     if (sessionError) {
       console.error('Session creation error:', sessionError)
@@ -79,14 +79,14 @@ export async function POST(request: NextRequest) {
       .update({
         last_login_at: new Date().toISOString(),
         login_count: (user as any).login_count + 1,
-      })
+      } as any)
       .eq('id', (user as any).id)
 
     // Log activity
     await supabase.rpc('log_admin_activity', {
       p_user_id: (user as any).id,
       p_action: 'login',
-      p_ip_address: request.ip || request.headers.get('x-forwarded-for'),
+      p_ip_address: (request as any).ip || request.headers.get('x-forwarded-for'),
       p_user_agent: request.headers.get('user-agent'),
     })
 
